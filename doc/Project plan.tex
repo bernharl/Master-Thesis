@@ -1,0 +1,63 @@
+
+% REMEMBER TO SET LANGUAGE!
+\documentclass[a4paper,12pt,english]{article}
+\usepackage{gensymb}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, vmargin=0.75in, hmargin=0.7in]{geometry}
+
+% Standard stuff
+\usepackage{amsmath,graphicx,varioref,verbatim,amsfonts}
+% colors in text
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+% Hyper refs
+\usepackage[colorlinks]{hyperref}
+\usepackage{float}
+% Document formatting
+\setlength{\parindent}{0mm}
+\setlength{\parskip}{1.5mm}
+\usepackage{tikz}
+%Color scheme for listings
+\usepackage{textcomp}
+\definecolor{listinggray}{gray}{0.9}
+\definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
+
+%Listings configuration
+\usepackage{listings}
+\usepackage{subcaption}
+\usepackage{physics}
+%Hvis du bruker noe annet enn python, endre det her for å få riktig highlighting.
+\lstset{
+	backgroundcolor=\color{lbcolor},
+	tabsize=4,
+	rulecolor=,
+	language=python,
+        basicstyle=\scriptsize,
+        upquote=true,
+        aboveskip={1.5\baselineskip},
+        columns=fixed,
+	numbers=left,
+        showstringspaces=false,
+        extendedchars=true,
+        breaklines=true,
+        prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+        frame=single,
+        showtabs=false,
+        showspaces=false,
+        showstringspaces=false,
+        identifierstyle=\ttfamily,
+        keywordstyle=\color[rgb]{0,0,1},
+        commentstyle=\color[rgb]{0.133,0.545,0.133},
+        stringstyle=\color[rgb]{0.627,0.126,0.941}
+        }
+
+
+
+
+%opening
+\title{Algorithms and applications for machine learning based physical modelling}
+\author{Bernhard Nornes Lotsberg}
+
+\begin{document}
+\maketitle
+
+\end{document}
