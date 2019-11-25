@@ -59,5 +59,47 @@
 
 \begin{document}
 \maketitle
+This report describes the master project for Bernhard Nornes Lotsberg, supervised by Simon Wolfgang Funke from the Scientific Computing group at the Simula Research Facility. The work will be performed from the spring of 2019 to the end of the spring of 2020.
 
+The aim of this project is to investigate whether we can use machine learning algorithms to improve existing numerical models for physical phenomena. The model in question is the Shyft model (\url{https://gitlab.com/shyft-os/shyft}). This model is used for predicting the amount of water that will need to be stored in hydro power facilities. The problem is that it has lacking prediction power for some facilities located in specific places.
+ The final goal of this project is to use additional metadata provided by Statkraft containing information about the environment around these facilities and apply Machine Learning to improve the prediction power of the model. If we manage to improve the model by use of Machine Learning, one could get an indicator of what parts of the metadata are important and this could hopefully give the developers of Shyft the ability to improve their physical modeling by taking into account this additional information.
+
+\section{Work plan}
+\subsection{Fall 2019}
+\begin{enumerate}
+\item STK-IN4300 - Statistical Learning Methods in Data Science. Theoretical introduction to machine learning.
+\item FYS-STK4300 - Applied Data Analysis and Machine Learning. Hands-on introduction to machine learning.
+\item FYS4150 - Computational Physics. Hand on introduction to numerical analysis. 
+\end{enumerate}
+\subsection{Spring 2020}
+\begin{enumerate}
+\item IN5400 - Image Analysis with Machine Learning. This course is highly relevant because of its high focus on neural networks.
+\item IN4200 - High Performance Computing with Numerical Projects. This course is mandatory for the Computational Science master's program.
+\item Do initial groundwork for thesis. Mainly literature study. Spend approximately two days per week at Simula, Fornebu for this.
+\end{enumerate}
+\subsection{Fall 2020}
+\begin{enumerate}
+\item IN4110 - Problem solving with high level languages. More Python coding is well suited for the thesis work. This course acts as a placeholder right now and can be switched out with a different one if necessary. Another possibility could be 10 credits special curriculum on Machine Learning applied on differential equation under Morten Hjorth-Jensen.
+\item Start thesis work by applying promising neural network configurations from literature study to simplified physical systems with lacking prediction capabilities because of lacking data. Find out how to get best results on this. This part of the research is crucial for success on the actual Shyft model.
+\item If results from point 2 are promising, start applying the best learning method on the full Shyft model.
+\end{enumerate}
+\subsection{Spring 2021} 
+\begin{enumerate}
+\item Finish up research on machine learning applied on the Shyft model. Report performance, what went wrong and what can be improved.
+\item Finish thesis by May 15th.
+\end{enumerate}
+
+\subsection{Supervision}
+The main supervisor will be Simon Funke, and most research time will be spent at Simula to get supervision from him and his Phd. student Sebastian Mitusch. 
+
+\subsection{Signatures}
+Simon Wolfgang Funke: \\
+\noindent\rule[0.5ex]{\linewidth}{1pt}\\
+
+Kent-Andre Mardal: \\
+\noindent\rule[0.5ex]{\linewidth}{1pt}\\
+
+Morten Hjorth-Jensen: \\
+\noindent\rule[0.5ex]{\linewidth}{1pt}\\
 \end{document}
+
