@@ -12,6 +12,7 @@
 % Hyper refs
 \usepackage[colorlinks]{hyperref}
 \usepackage{float}
+\usepackage{cite}
 % Document formatting
 \setlength{\parindent}{0mm}
 \setlength{\parskip}{1.5mm}
@@ -61,9 +62,18 @@
 \maketitle
 This report describes the master project for Bernhard Nornes Lotsberg, supervised by Simon Wolfgang Funke from the Scientific Computing group at the Simula Research Facility. The work will be performed from the spring of 2019 to the end of the spring of 2020.
 
-The aim of this project is to investigate whether we can use machine learning algorithms to improve existing numerical models for physical phenomena. The model in question is the Shyft model (\url{https://gitlab.com/shyft-os/shyft}). This model is used for predicting the amount of water that will need to be stored in hydro power facilities. The problem is that it has lacking prediction power for some facilities located in specific places.
- The final goal of this project is to use additional metadata provided by Statkraft containing information about the environment around these facilities and apply Machine Learning to improve the prediction power of the model. If we manage to improve the model by use of Machine Learning, one could get an indicator of what parts of the metadata are important and this could hopefully give the developers of Shyft the ability to improve their physical modeling by taking into account this additional information.
-
+The aim of this project is to investigate whether we can use machine learning algorithms to improve existing numerical models for physical phenomena. The model we will in particular investigate is the The Statkraft Hydrologic Forecasting Toolbox (Shyft) model \cite{burkhart2016operational}. This model is used for predicting the amount of water that will need to be stored in hydro power facilities. The problem is that it has lacking prediction power for some facilities described in the CAMELS data set \cite{newman2014large}.
+ The final goal of this project is to use additional meta data provided by Statkraft containing information about the environment around these facilities and apply Machine Learning to improve the prediction power of the model. If we manage to improve the model by use of Machine Learning, one could get an indicator of what parts of the meta data are important and this could hopefully give the developers of Shyft the ability to improve their physical modeling by taking into account this additional information.
+ 
+ \section{Method}
+ It is important to find out how to best implement a neural network to improve a physical model, and several configurations have to be tested. First off, the data is a time series, so we will employ a Recurrent Neural Network. Currently we have three potential ideas for how to train the network:
+ \begin{enumerate}
+ \item Train network on outcome data, using the physical model and the extra meta data as inputs.
+ \item Train a neural network on the entire system, including the original inputs of the physical model. Then learn difference between neural network and the original model, assuming the neural network does better than the model.
+ \item Same as point 2, but with some form of regularization using the physical model.
+ \end{enumerate}
+ 
+Most if not all code will be written in the Python programming language. For all these ideas and others, it is necessary to find out what kind of neural network that performs the best. To find this out, we will resort to a literature study. 
 \section{Work plan}
 \subsection{Fall 2019}
 \begin{enumerate}
@@ -75,12 +85,12 @@ The aim of this project is to investigate whether we can use machine learning al
 \begin{enumerate}
 \item IN5400 - Image Analysis with Machine Learning. This course is highly relevant because of its high focus on neural networks.
 \item IN4200 - High Performance Computing with Numerical Projects. This course is mandatory for the Computational Science master's program.
-\item Do initial groundwork for thesis. Mainly literature study. Spend approximately two days per week at Simula, Fornebu for this.
+\item Do initial groundwork for thesis. Literature study to find promising neural network configuration for this problem, mainly recurrent neural networks. Identify ideas for simplified physical models to test neural network configurations on. Spend approximately two days per week at Simula, Fornebu for this.
 \end{enumerate}
 \subsection{Fall 2020}
 \begin{enumerate}
 \item IN4110 - Problem solving with high level languages. More Python coding is well suited for the thesis work. This course acts as a placeholder right now and can be switched out with a different one if necessary. Another possibility could be 10 credits special curriculum on Machine Learning applied on differential equation under Morten Hjorth-Jensen.
-\item Start thesis work by applying promising neural network configurations from literature study to simplified physical systems with lacking prediction capabilities because of lacking data. Find out how to get best results on this. This part of the research is crucial for success on the actual Shyft model.
+\item Apply promising neural networks to identified physical systems. Identify best way to train network.
 \item If results from point 2 are promising, start applying the best learning method on the full Shyft model.
 \end{enumerate}
 \subsection{Spring 2021} 
@@ -88,6 +98,13 @@ The aim of this project is to investigate whether we can use machine learning al
 \item Finish up research on machine learning applied on the Shyft model. Report performance, what went wrong and what can be improved.
 \item Finish thesis by May 15th.
 \end{enumerate}
+\section{Milestones}
+\begin{description}
+\item[Jun 2020] Have list of potential neural network configuration and simplified physical systems ready for implementation and evaluation.
+\item[Oct 2020] Have functioning neural network code. Have a well thought out physical system as test case.
+\item[Dec 2020] Have performance of potential neural network configurations measured, decide what to implement for Shyft if results are promising.
+\item[May 2021] Finish report.
+\end{description}
 
 \subsection{Supervision}
 The main supervisor will be Simon Funke, and most research time will be spent at Simula to get supervision from him and his Phd. student Sebastian Mitusch. 
@@ -101,5 +118,8 @@ Kent-Andre Mardal: \\
 
 Morten Hjorth-Jensen: \\
 \noindent\rule[0.5ex]{\linewidth}{1pt}\\
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
 \end{document}
 
