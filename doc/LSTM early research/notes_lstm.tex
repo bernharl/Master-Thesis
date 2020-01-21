@@ -62,13 +62,18 @@
 \maketitle
 \section*{LSTM}
 \begin{itemize}
-\item RNN with long and short term memory
-\item wow
+\item RNN with long and short term memory.
+\item Long term memory not possible in ordinary RNN's because of vanishing gradients.
+\item Long term memory is very important for runoff modelling, as some features take a long time to impact. Snow for example.
 \end{itemize}
 
 \section*{Usage of existing code}
 \begin{itemize}
 \item Notebook tutorial for using LSTM used in paper \cite{lstm_first_paper} can be found at \url{https://github.com/kratzert/pangeo_lstm_example}
+\begin{itemize}
+\item This repository includes a binder link for running the notebook in browser.
+\item Notebook shows easy to understand examples of how to use Pytorch and how to load the CAMELS dataset.
+\end{itemize}
 \item Code for paper \cite{lstm_second_paper} can be found at \url{https://github.com/kratzert/ealstm_regional_modeling}
 \item Code for paper \cite{lstm_third_paper} can be found at \url{https://github.com/kratzert/lstm_for_pub}
 \item Spend most time on the first paper in the beginning, it is important to actually understand how an LSTM model works (not to mention RNNs in general!).
