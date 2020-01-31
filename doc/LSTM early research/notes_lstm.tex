@@ -79,13 +79,20 @@
 \begin{itemize}
 \item This repository includes a binder link for running the notebook in browser.
 \item Notebook shows easy to understand examples of how to use Pytorch and how to load the CAMELS dataset.
+\item Only the first experiment in the paper.
 \end{itemize}
 \item Code for paper \cite{lstm_second_paper} can be found at \url{https://github.com/kratzert/ealstm_regional_modeling}
 \begin{itemize}
 \item This github page contains links to datasets used as well as pre trained models. 
-\item Need stronger computer to recreate the models, but should hopefully be possible to used the pre trained models from laptop.
+\item Need stronger computer to recreate the models, but should hopefully be possible to use the pre trained models from laptop.
+\item Runs fine on my home desktop.
+\item All results in the paper and all relevant code is here, including pre-trained models and code for creating and training models yourself.
 \end{itemize}
 \item Code for paper \cite{lstm_third_paper} can be found at \url{https://github.com/kratzert/lstm_for_pub}
+\begin{itemize}
+\item Includes step-by-step guide on how to recreate results from article. (Including bash scripts for automation)
+\item Need Matlab for a few plots, but unsure if this is important
+\end{itemize}
 \item Spend most time on the first paper in the beginning, it is important to actually understand how an LSTM model works (not to mention RNNs in general!).
 \end{itemize}
 
@@ -95,6 +102,7 @@
 \item First thing to try is to explicitly provide snow data (which is not done by papers cited in this document).
 \item Possibly unreliable as we have less physical intuition, but unsure if a hybrid model performs better.
 \item LSTM or EA-LSTM
+\item There is room for improvement in a basic manner as well, as the papers state that a proper hyperparameter search hasn't been performed. This is probably time consuming and boring, though.
 \end{itemize}
 
 \section*{Hybrid model}
@@ -110,6 +118,8 @@
 \item I think starting with a purely data driven model and then try introducing output from Shyft along with data not used by Shyft.
 \item Several configurations need to be tested.
 \item Before any of this I need to actually learn how to use Pytorch.
+\item Paper \citep{lstm_third_paper} suggests that physical constraints applied to the LSTM models could improve results.
+\item Hybrid model should at least be attempted!
 \end{itemize}
 
 \bibliographystyle{IEEEtran}
