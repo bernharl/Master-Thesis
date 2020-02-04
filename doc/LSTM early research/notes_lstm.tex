@@ -94,6 +94,7 @@
 \item Need Matlab for a few plots, but unsure if this is important
 \end{itemize}
 \item Spend most time on the first paper in the beginning, it is important to actually understand how an LSTM model works (not to mention RNNs in general!).
+\item Paper \cite{lstm_third_paper} seems to take a lot more computational resources to recreate. It performs tuning of hyperparameters as well as using an ensemble of ten independently trained LSTMs.
 \end{itemize}
 
 \section*{Purely data driven model}
@@ -102,7 +103,10 @@
 \item First thing to try is to explicitly provide snow data (which is not done by papers cited in this document).
 \item Possibly unreliable as we have less physical intuition, but unsure if a hybrid model performs better.
 \item LSTM or EA-LSTM
-\item There is room for improvement in a basic manner as well, as the papers state that a proper hyperparameter search hasn't been performed. This is probably time consuming and boring, though.
+\item There is room for improvement in a basic manner as well, as the papers state that a proper hyperparameter search hasn't been performed. This is probably time consuming and boring, though. (Kratzert has done this better in later research according to the talk)
+\item Also, only simple single and double layer LSTMs have been used, with few hidden cells. Parameters in the lower hundreds.
+\item Humidity should be considered, as it is not provided to the model right now according to the talk given my Kratzert.
+\item Integrated gradients can be used to interpret model. \url{https://github.com/hiranumn/IntegratedGradients}
 \end{itemize}
 
 \section*{Hybrid model}
@@ -117,9 +121,10 @@
 \begin{itemize}
 \item I think starting with a purely data driven model and then try introducing output from Shyft along with data not used by Shyft.
 \item Several configurations need to be tested.
-\item Before any of this I need to actually learn how to use Pytorch.
-\item Paper \citep{lstm_third_paper} suggests that physical constraints applied to the LSTM models could improve results.
+\item Before any of this I need to actually learn how to use Pytorch and how LSTMs work.
+\item Paper \cite{lstm_third_paper} suggests that physical constraints applied to the LSTM models could improve results.
 \item Hybrid model should at least be attempted!
+\item All papers referenced use the CAMELS dataset, could be interesting to try data from Statkraft.
 \end{itemize}
 
 \bibliographystyle{IEEEtran}
