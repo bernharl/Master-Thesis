@@ -127,6 +127,39 @@
 \item All papers referenced use the CAMELS dataset, could be interesting to try data from Statkraft.
 \end{itemize}
 
+\section*{Meaning of "physical constraints" in paper \cite{lstm_third_paper}}
+\begin{itemize}
+\item The SAC-SMA model performs better than the LSTM models in some cases, likely because some physical phenomena aren't learned by the LSTM. 
+\item Not much to go by here really, need to find out where to start from if this is the way I want to go forward.
+\item A main point of paper \cite{lstm_third_paper} is that there is still a lot of data not used by the traditional physical models that the LSTM models benefit from, while there are some cases where the physical models outperform the LSTM because of overfitting to catchments where this isn't the case.
+\item "Most effective strategy" will be theory-guided data science, main conclusion of article.
+\item Many sciences suffer from the curse of dimensionality.
+\item Scientific discoveries aren't just ways to make predictions, we actually wish to understand underlying processes. This is very important in fields where wrong predictions are dangerous or costly (as with our case).
+\end{itemize}
+
+\section*{Theory-guided data science (TGDS)}
+\begin{itemize}
+\item Described in paper \cite{hybrid_paper}
+\item The paper proposes strategies for using existing scientific knowledge along with machine learning. Likely to be a very important source for this thesis.
+\item A way to limit model space without increasing model bias as much as ordinary regularization. In other words: Reducing variance while not affecting bias using existing knowledge of a scientific problem.
+\item Performance $\propto$ Accuracy $+$ Simplicity $+$ \textit{Consistency}
+\item Consistency here refers to consistency with existing knowledge.
+\item Paper mentions five TGDS strategies:
+\begin{enumerate}
+\item Using scientific knowledge to design models specifically for a given scientific problem or by designing a desirable custom loss function. (Se the usage of NSE in Paper \cite{lstm_first_paper} - \cite{lstm_third_paper}). The EA-LSTM could perhaps be seen as an example of a specifically designed model. Another example is CNNs for image analysis.
+\item Guiding a model by for example initializing it with meaningful parameters or implementing a specialized form of regularization.
+\item Refining the output of a model using scientific knowledge.
+\item Hybrid model where a physical model works in tandem with a machine learning model. 
+\item data science methods can also help in augmenting theory-based models to make effective use of observational data. (Don't understand what this means, just copy/pasted it.)
+\end{enumerate}
+\item Point 3 and 4 here sound somewhat similar to what we discussed in brainstorm.
+\end{itemize}
+
+\section*{Plan forward}
+\begin{enumerate}
+\item Brainstorm with Miro and/or Simon. Discuss the idea of training the model on a simple dataset and how this would work in practice. This would also give me better insight in how to use Pytorch and LSTM models. Paper \cite{hybrid_paper} suggests that training on a simple but relevant dataset before training on a more specific and complex case has been shown to be beneficial.
+\end{enumerate}
+
 \bibliographystyle{IEEEtran}
 \bibliography{references_notes_lstm}
 \end{document}
