@@ -160,7 +160,10 @@
 \item Modern pure physical models are prone to overfitting and often employ exhaustive search for parameters.
 \item Based on paper \cite{hybrid_paper}.
 \item Introduces new RNN called Physics-Guided Recurrent Neural Network (PGRNN)
-\item Need to read more
+\item Makes LSTM take energy conservation into account via a penalty term in the loss function.
+\item Pre-train an LSTM on uncalibrated physical model, then train on small sample of real data. Perhaps an adoptable strategy on Shyft and the CAMELS dataset? 
+\item Pre-training is a well known concept used when data is lacking.
+\item This article uses technique 1 or 2 from paper \cite{hybrid_paper}.
 \end{itemize}
 
 \section*{Plan forward}
