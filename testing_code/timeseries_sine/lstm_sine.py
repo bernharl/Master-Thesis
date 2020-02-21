@@ -26,18 +26,27 @@ class Model(nn.Module):
         self.output = nn.Linear(hidden, 1)
 
     def forward(self, x):
-        print(x.shape)
-        output, (h_n, c_n) = self.lstm(x)
+        #print(x.shape)
+        out = []
+        for i in range(x.size(1)):
+            output, (h_n, c_n) = self.lstm(x[:, i, :])
+            print(output.shape)
+            exit()
+            out += [output]
         #print(output.shape, self.output(h_n).shape, self.output(output).shape)
         #exit()
-        print(h_n.shape)
-        out = self.output(h_n)
-        print(out)
+        #print(h_n.shape)
+        #out = self.output(output)
+        #print(out)
+        #print(self.output(output).shape)
+        #exit()
+        out = torch.stack(out, 1).squeeze(2)
+        print(out.shape)
         exit()
         return out
 
 data = SineData()
-model = Model(hidden=51, layers=1).to(device)
+model = Model(hidden=51, layers=2).to(device)
 optimizer = torch.optim.Adam(model.parameters(), lr=0.2)
 loss_func = nn.MSELoss()
 model.train()
