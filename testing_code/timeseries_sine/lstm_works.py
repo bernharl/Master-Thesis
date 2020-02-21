@@ -7,6 +7,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+device = "cuda:1"
 
 class Sequence(nn.Module):
     def __init__(self):
@@ -17,24 +18,29 @@ class Sequence(nn.Module):
 
     def forward(self, input, future=0):
         outputs = []
-        h_t = torch.zeros(input.size(0), 51, dtype=torch.double)
-        c_t = torch.zeros(input.size(0), 51, dtype=torch.double)
-        h_t2 = torch.zeros(input.size(0), 51, dtype=torch.double)
-        c_t2 = torch.zeros(input.size(0), 51, dtype=torch.double)
-
+        h_t = torch.zeros(input.size(0), 51, dtype=torch.double, device=device)
+        c_t = torch.zeros(input.size(0), 51, dtype=torch.double, device=device)
+        h_t2 = torch.zeros(input.size(0), 51, dtype=torch.double, device=device)
+        c_t2 = torch.zeros(input.size(0), 51, dtype=torch.double, device=device)
+        #print(input.chunk(input.size(1)))
+        #print(input.size(1))
         for i, input_t in enumerate(input.chunk(input.size(1), dim=1)):
             h_t, c_t = self.lstm1(input_t, (h_t, c_t))
             h_t2, c_t2 = self.lstm2(h_t, (h_t2, c_t2))
+            #print(h_t2.shape)
             output = self.linear(h_t2)
+            #print(output.shape)
+            #exit()
             outputs += [output]
         for i in range(future):  # if we should predict the future
             h_t, c_t = self.lstm1(output, (h_t, c_t))
             h_t2, c_t2 = self.lstm2(h_t, (h_t2, c_t2))
             output = self.linear(h_t2)
             outputs += [output]
+        #print(outputs)    
         outputs = torch.stack(outputs, 1).squeeze(2)
-        print(outputs.shape)
-        exit()
+        #print(outputs.shape)
+        #exit()
         return outputs
 
 
@@ -44,12 +50,14 @@ if __name__ == "__main__":
     torch.manual_seed(0)
     # load data and make training set
     data = torch.load("traindata.pt")
-    input = torch.from_numpy(data[3:, :-1])
-    target = torch.from_numpy(data[3:, 1:])
-    test_input = torch.from_numpy(data[:3, :-1])
-    test_target = torch.from_numpy(data[:3, 1:])
+    input = torch.from_numpy(data[3:, :-1]).to(device)
+    print(input.shape)
+    target = torch.from_numpy(data[3:, 1:]).to(device)
+    print(target.shape)
+    test_input = torch.from_numpy(data[:3, :-1]).to(device)
+    test_target = torch.from_numpy(data[:3, 1:]).to(device)
     # build the model
-    seq = Sequence()
+    seq = Sequence().to(device)
     seq.double()
     criterion = nn.MSELoss()
     # use LBFGS as optimizer since we can load the whole data to train
@@ -73,7 +81,7 @@ if __name__ == "__main__":
             pred = seq(test_input, future=future)
             loss = criterion(pred[:, :-future], test_target)
             print("test loss:", loss.item())
-            y = pred.detach().numpy()
+            y = pred.detach().cpu().numpy()
         # draw the result
         plt.figure(figsize=(30, 10))
         plt.title(

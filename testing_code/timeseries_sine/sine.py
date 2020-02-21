@@ -1,7 +1,7 @@
 import numpy as np
 import torch
 
-sample = 100
+sample = 169
 #test_sample = 50
 f = 8
 
