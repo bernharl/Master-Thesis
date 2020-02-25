@@ -9,8 +9,10 @@ device="cuda:1"
 class SineData(torch.utils.data.Dataset):
     def __init__(self):
         tmp = torch.load("train_dataset.pt")
-        self.y = torch.from_numpy(tmp[1].reshape(1, -1, 1)).float().to(device)
-        self.x = torch.from_numpy(tmp[0].reshape(1, -1, 1)).float().to(device)
+        self.y = torch.from_numpy(tmp[1][:, :, np.newaxis]).float().to(device)
+        self.x = torch.from_numpy(tmp[0][:, :, np.newaxis]).float().to(device)
+        #print(self.y.shape)
+        #exit()
         self.num_samples = self.y.shape[0]
     
     def __len__(self):
@@ -27,12 +29,15 @@ class Model(nn.Module):
 
     def forward(self, x):
         #print(x.shape)
-        out = []
-        for i in range(x.size(1)):
+        #out = []
+        """for i in range(x.size(1)):
             output, (h_n, c_n) = self.lstm(x[:, i, :])
-            print(output.shape)
+            #print(output.shape)
             exit()
-            out += [output]
+            out += [output]"""
+        output, (h_n, c_n) = self.lstm(x)
+        #print(output.shape, h_n.shape, c_n.shape)
+        #exit()
         #print(output.shape, self.output(h_n).shape, self.output(output).shape)
         #exit()
         #print(h_n.shape)
@@ -40,13 +45,13 @@ class Model(nn.Module):
         #print(out)
         #print(self.output(output).shape)
         #exit()
-        out = torch.stack(out, 1).squeeze(2)
-        print(out.shape)
-        exit()
-        return out
+        #out = torch.stack(out, 1).squeeze(2)
+        #print(out.shape)
+        #exit()
+        return self.output(output)
 
 data = SineData()
-model = Model(hidden=51, layers=2).to(device)
+model = Model(51, 2).to(device)
 optimizer = torch.optim.Adam(model.parameters(), lr=0.2)
 loss_func = nn.MSELoss()
 model.train()
@@ -63,9 +68,9 @@ for i in range(1500):
     optimizer.step()
     
 with torch.no_grad():
-    y_pred = model(data.x).detach().flatten().cpu()
-plt.plot(data.x.detach().flatten().cpu(), data.y.detach().flatten().cpu(), label="true")
-plt.plot(data.x.detach().flatten().cpu(), y_pred, label="pred")
+    y_pred = model(data.x).detach()[0].flatten().cpu()
+plt.plot(data.x.detach()[0].flatten().cpu(), data.y.detach()[0].flatten().cpu(), label="true")
+plt.plot(data.x.detach()[0].flatten().cpu(), y_pred, label="pred")
 plt.legend()
 plt.savefig("split.png")
 plt.close()
