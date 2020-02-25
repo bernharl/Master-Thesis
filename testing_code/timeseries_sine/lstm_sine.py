@@ -4,6 +4,7 @@ import torch.optim as optim
 import matplotlib.pyplot as plt
 import numpy as np
 
+torch.manual_seed(0)
 device="cuda:1"
 
 class SineData(torch.utils.data.Dataset):
@@ -74,7 +75,9 @@ for i in range(50):
         loss.backward()
         return loss
     optimizer.step(closure)
+
     
+# Split    
 with torch.no_grad():
     y_pred = model(data.x).detach()[0].flatten().cpu()
     y_pred_test = model(data.x_test).detach()[0].flatten().cpu()
@@ -87,4 +90,19 @@ plt.plot(data.x_test.detach()[0].flatten().cpu(), y_pred_test, label="pred test"
 plt.legend()
 plt.savefig("split.png")
 plt.close()
+
+
+# Combined
+x_comb = torch.cat([data.x, data.x_test], 1)
+y_comb = torch.cat([data.y, data.y_test], 1)
+with torch.no_grad():
+    y_pred = model(x_comb).detach()[0].flatten().cpu()
+plt.plot(x_comb.detach()[0].flatten().cpu(), y_comb.detach()[0].flatten().cpu(), label="true")
+plt.plot(x_comb.detach()[0].flatten().cpu(), y_pred, label="pred")
+
+
+plt.legend()
+plt.savefig("combined.png")
+plt.close()
+
     
