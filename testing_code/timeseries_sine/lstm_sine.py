@@ -11,6 +11,10 @@ class SineData(torch.utils.data.Dataset):
         tmp = torch.load("train_dataset.pt")
         self.y = torch.from_numpy(tmp[1][:, :, np.newaxis]).float().to(device)
         self.x = torch.from_numpy(tmp[0][:, :, np.newaxis]).float().to(device)
+        
+        tmp = torch.load("test_dataset.pt")
+        self.y_test = torch.from_numpy(tmp[1][:, :, np.newaxis]).float().to(device)
+        self.x_test = torch.from_numpy(tmp[0][:, :, np.newaxis]).float().to(device)
         #print(self.y.shape)
         #exit()
         self.num_samples = self.y.shape[0]
@@ -52,25 +56,34 @@ class Model(nn.Module):
 
 data = SineData()
 model = Model(51, 2).to(device)
-optimizer = torch.optim.Adam(model.parameters(), lr=0.2)
+optimizer = torch.optim.LBFGS(model.parameters(), lr=0.1)
 loss_func = nn.MSELoss()
 model.train()
-#print(data.x.shape)
+#print(data.y.shape)
 #exit()
-for i in range(1500):
-    optimizer.zero_grad()
-    #print(x)
-    #exit()
-    y_pred = model.forward(data.x)
-    loss = loss_func(data.y, y_pred)
-    print(f"Epoch {i}: {loss.item()}")
-    loss.backward()
-    optimizer.step()
+for i in range(50):
+    def closure():
+        optimizer.zero_grad()
+        #print(x)
+        #exit()
+        y_pred = model.forward(data.x)
+        #print(y_pred.shape)
+        #exit()
+        loss = loss_func(data.y, y_pred)
+        print(f"Epoch {i}: {loss.item()}")
+        loss.backward()
+        return loss
+    optimizer.step(closure)
     
 with torch.no_grad():
     y_pred = model(data.x).detach()[0].flatten().cpu()
+    y_pred_test = model(data.x_test).detach()[0].flatten().cpu()
 plt.plot(data.x.detach()[0].flatten().cpu(), data.y.detach()[0].flatten().cpu(), label="true")
 plt.plot(data.x.detach()[0].flatten().cpu(), y_pred, label="pred")
+
+plt.plot(data.x_test.detach()[0].flatten().cpu(), data.y_test.detach()[0].flatten().cpu(), label="true test")
+plt.plot(data.x_test.detach()[0].flatten().cpu(), y_pred_test, label="pred test")
+
 plt.legend()
 plt.savefig("split.png")
 plt.close()
