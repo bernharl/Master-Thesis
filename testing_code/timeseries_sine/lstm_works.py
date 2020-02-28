@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 
 device = "cuda:1"
 
+
 class Sequence(nn.Module):
     def __init__(self):
         super(Sequence, self).__init__()
@@ -22,25 +23,25 @@ class Sequence(nn.Module):
         c_t = torch.zeros(input.size(0), 51, dtype=torch.double, device=device)
         h_t2 = torch.zeros(input.size(0), 51, dtype=torch.double, device=device)
         c_t2 = torch.zeros(input.size(0), 51, dtype=torch.double, device=device)
-        #print(input.chunk(input.size(1)))
-        #print(input.size(1))
+        # print(input.chunk(input.size(1)))
+        # print(input.size(1))
         for i, input_t in enumerate(input.chunk(input.size(1), dim=1)):
             h_t, c_t = self.lstm1(input_t, (h_t, c_t))
             h_t2, c_t2 = self.lstm2(h_t, (h_t2, c_t2))
-            #print(h_t2.shape)
+            # print(h_t2.shape)
             output = self.linear(h_t2)
-            #print(output.shape)
-            #exit()
+            # print(output.shape)
+            # exit()
             outputs += [output]
         for i in range(future):  # if we should predict the future
             h_t, c_t = self.lstm1(output, (h_t, c_t))
             h_t2, c_t2 = self.lstm2(h_t, (h_t2, c_t2))
             output = self.linear(h_t2)
             outputs += [output]
-        #print(outputs)    
+        # print(outputs)
         outputs = torch.stack(outputs, 1).squeeze(2)
-        #print(outputs.shape)
-        #exit()
+        # print(outputs.shape)
+        # exit()
         return outputs
 
 
