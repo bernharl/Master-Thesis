@@ -12,6 +12,8 @@ matplotlib = "*"
 jupyter = "*"
 black = "*"
 torchvision = "*"
+nb-black = "*"
+jupyterlab = "*"
 
 [requires]
 python_version = "3.7"
