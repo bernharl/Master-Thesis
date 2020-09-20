@@ -4,7 +4,7 @@ import torch.nn as nn
 class Model(nn.Module):
     """Implementation of a single layer LSTM network"""
 
-    def __init__(self, hidden_size: int, dropout_rate: float = 0.0):
+    def __init__(self, hidden_size: int, input_size: int, dropout_rate: float = 0.0):
         """Initialize model
 
         :param hidden_size: Number of hidden units/LSTM cells
@@ -17,7 +17,7 @@ class Model(nn.Module):
 
         # create required layer
         self.lstm = nn.LSTM(
-            input_size=7,
+            input_size=input_size,
             hidden_size=self.hidden_size,
             num_layers=1,
             bias=True,

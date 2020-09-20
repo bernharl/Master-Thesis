@@ -5,7 +5,7 @@ import numpy as np
 from tqdm import tqdm
 
 
-def train_epoch(model, optimizer, loader, loss_func, epoch):
+def train_epoch(model, optimizer, loader, loss_func, epoch, device):
     """Train model for a single epoch.
 
     :param model: A torch.nn.Module implementing the LSTM model
@@ -17,14 +17,14 @@ def train_epoch(model, optimizer, loader, loss_func, epoch):
     """
     # set model to train mode (important for dropout)
     model.train()
-    pbar = tqdm.tqdm_notebook(loader)
+    pbar = tqdm(loader)
     pbar.set_description(f"Epoch {epoch}")
     # request mini-batch of data from the loader
     for xs, ys in pbar:
         # delete previously stored gradients from the model
         optimizer.zero_grad()
         # push data to GPU (if available)
-        xs, ys = xs.to(DEVICE), ys.to(DEVICE)
+        xs, ys = xs.to(device), ys.to(device)
         # get model predictions
         y_hat = model(xs)
         # calculate loss
@@ -37,7 +37,7 @@ def train_epoch(model, optimizer, loader, loss_func, epoch):
         pbar.set_postfix_str(f"Loss: {loss.item():.4f}")
 
 
-def eval_model(model, loader) -> Tuple[torch.Tensor, torch.Tensor]:
+def eval_model(model, loader, device) -> Tuple[torch.Tensor, torch.Tensor]:
     """Evaluate the model.
 
     :param model: A torch.nn.Module implementing the LSTM model
@@ -56,7 +56,7 @@ def eval_model(model, loader) -> Tuple[torch.Tensor, torch.Tensor]:
         # request mini-batch of data from the loader
         for xs, ys in loader:
             # push data to GPU (if available)
-            xs = xs.to(DEVICE)
+            xs = xs.to(device)
             # get model predictions
             y_hat = model(xs)
             obs.append(ys)

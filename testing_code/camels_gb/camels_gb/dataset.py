@@ -18,6 +18,7 @@ class CamelsTXT(Dataset):
     def __init__(
         self,
         basin: str,
+        features: List[str],
         camels_root: Path,
         seq_length: int = 365,
         period: str = None,
@@ -42,6 +43,7 @@ class CamelsTXT(Dataset):
             retrieved if calling .get_stds() on the data set.
         """
         self.basin = basin
+        self.features = features
         self.camels_root = camels_root
         self.seq_length = seq_length
         self.period = period
@@ -63,8 +65,10 @@ class CamelsTXT(Dataset):
 
     def _load_data(self):
         """Load input and output data from text files."""
-        df, area = load_forcing(self.basin, self.camels_root)
-        df["discharge_spec"] = load_discharge(self.basin, self.camels_root, area, df.index.to_series())
+        df, area = load_forcing(self.basin, self.camels_root, self.features)
+        df["discharge_spec"] = load_discharge(
+            self.basin, self.camels_root, area, df.index.to_series()
+        )
         # df.dropna(inplace=True)
         # print(df)
 
@@ -83,17 +87,8 @@ class CamelsTXT(Dataset):
             self.means = df.mean()
             self.stds = df.std()
 
-        features = [
-            "precipitation",  # Precipitation
-            "temperature",  # Avg temp
-            "peti",  # Grass water
-            "humidity",  # Humidity
-            "shortwave_rad",  # Short-wave radiation
-            "longwave_rad",  # Long-wave radiation
-            "windspeed",  # Wind speed
-        ]
         # extract input and output features from DataFrame
-        x = np.array(
+        """x = np.array(
             [
                 df["precipitation"].values,
                 df["temperature"].values,
@@ -103,7 +98,8 @@ class CamelsTXT(Dataset):
                 df["longwave_rad"].values,
                 df["windspeed"].values,
             ]
-        ).T
+        ).T"""
+        x = np.array([df[key].values for key in self.features]).T
         y = np.array([df["discharge_spec"].values]).T
 
         # normalize data, reshape for LSTM training and remove invalid samples
@@ -138,18 +134,9 @@ class CamelsTXT(Dataset):
             be normalized
         :return: array containing the normalized feature
         """
-        features = [
-            "precipitation",  # Precipitation
-            "temperature",  # Avg temp
-            "peti",  # Grass water
-            "humidity",  # Humidity
-            "shortwave_rad",  # Short-wave radiation
-            "longwave_rad",  # Long-wave radiation
-            "windspeed",  # Wind speed
-        ]
         if variable == "inputs":
             # print(self.means)
-            means = np.array(
+            """means = np.array(
                 [
                     self.means["precipitation"],
                     self.means["temperature"],
@@ -170,7 +157,9 @@ class CamelsTXT(Dataset):
                     self.stds["longwave_rad"],
                     self.stds["windspeed"],
                 ]
-            )
+            )"""
+            means = np.array([self.means[key] for key in self.features])
+            stds = np.array([self.stds[key] for key in self.features])
             feature = (feature - means) / stds
         elif variable == "output":
             feature = (feature - self.means["discharge_spec"]) / self.stds[
@@ -190,7 +179,7 @@ class CamelsTXT(Dataset):
         :return: array containing the normalized feature
         """
         if variable == "inputs":
-            means = np.array(
+            """means = np.array(
                 [
                     self.means["precipitation"],
                     self.means["temperature"],
@@ -211,7 +200,9 @@ class CamelsTXT(Dataset):
                     self.stds["longwave_rad"],
                     self.stds["windspeed"],
                 ]
-            )
+            )"""
+            means = np.array([self.means[key] for key in self.features])
+            stds = np.array([self.stds[key] for key in self.features])
             feature = feature * stds + means
         elif variable == "output":
             feature = (
@@ -257,7 +248,9 @@ class CamelsTXT(Dataset):
         return x_new, y_new
 
 
-def load_forcing(basin: str, camels_root: Path) -> Tuple[pd.DataFrame, int]:
+def load_forcing(
+    basin: str, camels_root: Path, features: List[str]
+) -> Tuple[pd.DataFrame, int]:
     """Load the meteorological forcing data of a specific basin.
 
     :param basin: 8-digit code of basin as string.
@@ -271,7 +264,12 @@ def load_forcing(basin: str, camels_root: Path) -> Tuple[pd.DataFrame, int]:
         / f"CAMELS_GB_hydromet_timeseries_{basin}_19701001-20150930.csv"
     )
     exclude = ["pet", "discharge_vol", "discharge_spec"]
-    df = pd.read_csv(path).dropna().drop(exclude, axis=1)
+    df = pd.read_csv(path).dropna()
+    columns = df.columns.values
+    for feature in columns:
+        if feature not in features and feature != "date":
+            exclude.append(feature)
+    df = df.drop(exclude, axis=1)
     dates = pd.to_datetime(df["date"])
     year = []
     day = []
