@@ -1,0 +1,47 @@
+\documentclass[a4paper,english]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{subfiles}
+\usepackage{babel,duomasterforside}
+
+\title{Jeff}
+\subtitle{Jeff}
+\author{Bernhard Nornes Lotsberg}
+
+\begin{document}
+\duoforside[
+    dept={Department of Physics},
+    program={Computational Science: physics},
+    long]
+    
+\section{Introduction}
+\subfile{introduction}
+
+\newpage
+\section{Theory}
+\subfile{theory}
+
+\newpage
+\section{Method}
+\subfile{method}
+
+\newpage
+\section{Results} 
+\subfile{results}
+
+\newpage
+\section{Discussion}
+\subfile{discussion}
+
+\newpage
+\section{Conclusion}
+\subfile{conclusion}
+
+\bibliographystyle{plain}
+\bibliography{references.bib}
+
+\newpage
+\section{Appendix}
+\subfile{appendix}
+
+
+\end{document}

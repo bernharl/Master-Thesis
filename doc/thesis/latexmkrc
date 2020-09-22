@@ -1,0 +1,2 @@
+$ENV{'TEXINPUTS'}='./include//:' . $ENV{'TEXINPUTS'}; 
+$ENV{'TEXINPUTS'}='./sections//:' . $ENV{'TEXINPUTS'}; 
