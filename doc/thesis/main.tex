@@ -2,46 +2,69 @@
 \usepackage[utf8]{inputenc}
 \usepackage{subfiles}
 \usepackage{babel,duomasterforside}
-
+\usepackage{color}
 \title{Algorithms and applications for machine learning based physical modelling}
 \subtitle{In cooperation with Simula and Statkraft}
 \author{Bernhard Nornes Lotsberg}
+
+
+\newcounter{undefinedreferences}
+\setcounter{undefinedreferences}{0}
+\newcommand{\citationneeded}[1][None]{\stepcounter{undefinedreferences}\textsuperscript{\color{blue} [Citation needed: #1]}}
+
+\newcommand{\checkreferences}{
+	\ifnum\value{undefinedreferences} > 0
+	\begin{center}
+	\begin{Large}
+	Found undefined references
+	\end{Large}
+	\end{center}
+	\else
+	No undefined references. Good!
+	\fi
+}
 
 \begin{document}
 \duoforside[
     dept={Department of Physics},
     program={Computational Science: physics},
     long]
-    
-\section{Introduction}
+\chapter{Introduction}
 \subfile{introduction}
 
 \newpage
-\section{Theory}
+\chapter{Theory}
 \subfile{theory}
 
 \newpage
-\section{Method}
+\chapter{Data}
+\subfile{Data}
+
+\newpage
+\chapter{Method}
 \subfile{method}
 
 \newpage
-\section{Results} 
+\chapter{Results} 
 \subfile{results}
 
 \newpage
-\section{Discussion}
+\chapter{Discussion}
 \subfile{discussion}
 
 \newpage
 \section{Conclusion}
 \subfile{conclusion}
+\nocite{lstm_first_paper}
+\nocite{lstm_second_paper}
+\nocite{lstm_third_paper}
 
 \bibliographystyle{plain}
 \bibliography{references.bib}
 
 \newpage
-\section{Appendix}
+\appendix
+\chapter{}
 \subfile{appendix}
-
-
+\checkreferences
 \end{document}
