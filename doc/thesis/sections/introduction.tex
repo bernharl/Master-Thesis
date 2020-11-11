@@ -1,5 +1,5 @@
-\section{Motivation}
-\subsection{Value of accurate rainfall-runoff modelling}
+%\section{Motivation}
+%\subsection{Value of accurate rainfall-runoff modelling}
 Rainfall-runoff modelling is a very important problem for scientists and 
 companies in the field of hydrology.
 Results found by \cite{lstm_first_paper} indicate that given a good dataset,
@@ -19,7 +19,7 @@ a time, they did outperform traditional models when used for generalisation.
 
 In addition to the benefits of LSTM models performing well on several basins, 
 one of the most sought after concepts in the field of hydrology right now is the 
-ability to do predictions on basins where no prior streamflow data is available. 
+ability to do predictions on basins where no prior streamflow data is available. \citationneeded
 This would grant companies the ability to model older basins without proper sensors
 and would allow companies to model the basins of their competitors to better price 
 their produced electricity as a response to this. There has been made some initial 
@@ -43,4 +43,36 @@ were created. The two most well known are the GRU and LSTM models. \citationneed
 \subsection{Recent developements and the resurgence of machine learning}
 \subsection{Usage in rainfall-runoff modelling}
 
-\section{Aim of this thesis}
+\section{Goals}
+Riding on the promising results from \cite{lstm_second_paper} and \cite{lstm_third_paper}
+we want to see if LSTM models are generally applicable for rainfall-runoff modelling 
+and not just in the special case of the CAMELS US \cite{CAMELS_US} dataset. This 
+is important as one of the main drawbacks to the machine learning approach is that 
+it is difficult if not impossible to mathematically prove your results, meaning 
+we have to approach the issue with extensive imperic research preferably on as 
+many datasts as possible. 
+\section{Our contribution}
+We show that there is potential for more accurate general models in hydrology. 
+In addition we show that there is likely enough informaiton in the CAMELS GB \cite{CAMELS_GB}
+dataset to get better results if one were to apply a more robust and time consuming 
+approach than what there was time for in a one year Master thesis. 
+
+\section{Thesis structure}
+This thesis is divided into 7 chapters, most chapters also being sub-divided into
+sections. 
+\begin{enumerate}
+\item  The introduction. Here we explain the importance of this work and briefly summarize what has been done by others before us.
+\item Theory. This chapter is divided into two parts:
+    \begin{enumerate}
+    \item Rainfall-runoff modelling. Here we explain the relevant hydrological concepts needed to understand the data, results and analysis in this thesis.
+    \item Machine learning. Here we try to give a thorough overview of the concepts needed to understand the models and methods we apply in this thesis.
+    \end{enumerate}
+    \item Data. Here we explain and analyze several aspects of the dataset(s???) \citationneeded  we use. This gives important context for why and how we employ the methods described in the method chapter.
+    \item Method. Here we describe in detail how we structure our model, what programming frameworks we use and how we analyze our results.
+    \item Results. Here we present our most interesting results and give initial comments.
+    \item Discussion. This chapter presents analysis of our results.
+    \item Conclusion. A short summary of our most interesting findings along with what we feel will be a logical next step for further research.
+In addition the thesis also has an appendix which presents longer mathematical 
+calculations which will be referenced to in the main body of the thesis. 
+
+\end{enumerate}

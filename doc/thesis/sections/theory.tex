@@ -1,12 +1,43 @@
-\subsection{Rainfall-Runoff modelling}
-\subsubsection{Physical modelling}
-\subsubsection{Drawbacks}
+\section{Rainfall-Runoff modelling}
+\subsection{Physical modelling}
+\subsection{Drawbacks}
 
-\subsection{Machine Learning}
-\subsubsection{The simple case of linear regression}
-\subsubsection{Bias-Variance tradeoff}
-\subsubsection{Neural Networks}
-\subsubsection{Recurrent Neural Networks}
-\subsubsection{Long- Short-Term Memory}
-\subsubsection{Strategies for including static features}
-\subsubsection{Drawbacks}
+\section{Machine Learning}
+We give a brief explanation of the basics in Machine Learning here for better context 
+before elaborating on the LSTM model central to this thesis.
+The term Machine Learning was coined in \citationneeded by .... 
+Machine Learning is a type of frequentist approach to statistical analysis where 
+one creates a statistical model, often with several million parameters and finds 
+the value of each parameter that makes the model approximate the data in the most 
+accurate manner. How to find these parameters and how they are used differ for each 
+model type. 
+\subsection{Linear regression}
+In the simple case of the Ordinary Least Squares (OLS) model we have a model on the form 
+\begin{equation}
+\mathbf{\hat{y}} = \mathbf{\beta} \mathbf{X}
+\label{OLS}
+\end{equation}
+This assumes that the outcome $\mathbf{\hat{y}}$ can we represented as a linear combination 
+of some fitted parameters $\mathbf{\beta}$ and the input features $\mathbf{X}$.
+The goal here is then to find the minimum of the mean squared error (MSE) of this.
+The MSE is defined as 
+\begin{equation}
+MSE = |\mathbf{y} - \mathbf{\hat{y}}|^2
+\label{MSE}
+\end{equation}
+Here $\mathbf{y}$ is the observed outcome, in many cases called the ground truth.
+$\mathbf{\hat{y}}$ is the prediction made by (\ref{OLS}). The goal is to find the
+$\mathbf{\beta}$ that minimizes (\ref{MSE}). For this there is an alalytical solution 
+as long as the matrix in (\ref{OLS}) is reversible. In other words: This can be solved
+analytically as long as there are more datapoints than there are variables (features, inputs).
+The solution to the equation can be written as 
+\begin{equation}
+\mathbf{\beta} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^{T}\mathbf{y}
+\label{OLS solution}
+\end{equation}
+\subsection{Bias-Variance tradeoff}
+\subsection{Neural Networks}
+\subsection{Recurrent Neural Networks}
+\subsection{Long- Short-Term Memory}
+\subsection{Strategies for including static features}
+\subsection{Drawbacks}
