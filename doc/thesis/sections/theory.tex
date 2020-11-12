@@ -36,8 +36,38 @@ The solution to the equation can be written as
 \label{OLS solution}
 \end{equation}
 \subsection{Bias-Variance tradeoff}
+When training any kind of machine learning model, one usually divides the data 
+into at least two parts: The training dataset and the testing dataset. The training 
+dataset is for training a given model, while the testing dataset is to be kept separate 
+from the training process so as to not make the performance metrics of the model too optimistic. 
+By "optimistic" what is meant is that the error, for scalar values (\ref{MSE}) is 
+lower on the data the model is trained on than on data the model has not seen under 
+training. The function that is minimized under machine learning is called a 
+cost function and while (\ref{MSE}) is very commonly used for scalar outcomes 
+there exist many other cost functions all with different characteristics. \citationneeded
+
+To explain 
+why this is important we need to have a quick look at what is known as the 
+bias variance tradeoff.
+In the case of the OLS model the MSE can be rewritten into three parts:
+\begin{equation}
+    MSE = \text{Bias}^2 + \text{Variance} + \sigma^2
+    \label{Bias Variance Decomp}
+\end{equation}
+For a full derivation of this, see \cite{vijayakumar2007bias}. When selecting and 
+configuring machine learning models this tradeoff is essential. The following is 
+a qualitative explanation of what each term in (\ref{Bias Variance Decomp})
+represents:
+\begin{itemize}
+\item Bias: The bias is the part of the error that comes from a model's lack of complexity.  If one were to try and represent a non-linear system on the form of (\ref{OLS}) for instance one would struggle to model the more complex interactions between input and outcome.
+\item Variance: In many ways this error is the opposite of bias. It comes from a given model having too much complexity. This could come from the model having too many parameters to train compared to how much data is available for training. 
+\item $\sigma^2$: This is known as the irreducible error. It is the inherent error in the data that is used for training. The model cannot reduce the error below this value as it is indepentent from the model. To reduce this error one would have to gather more accurate data using better instruments for instance. 
+\end{itemize}
+The aim of training a machine learning model is to find the best tradeoff between model
+complexity and stability in search of the minimum of (\ref{Bias Variance Decomp}).
 \subsection{Neural Networks}
+\subsubsection{Gradient Descent}
 \subsection{Recurrent Neural Networks}
-\subsection{Long- Short-Term Memory}
-\subsection{Strategies for including static features}
+\subsection{Long Short-Term Memory}
+\label{LSTM Theory}
 \subsection{Drawbacks}
