@@ -70,4 +70,21 @@ complexity and stability in search of the minimum of (\ref{Bias Variance Decomp}
 \subsection{Recurrent Neural Networks}
 \subsection{Long Short-Term Memory}
 \label{LSTM Theory}
+\subsection{Feature selection}
+\subsubsection{Permutation test}
+One of the critisisms of machine learning methods
+is that they are not easily interpretable. This 
+is especially true if one wants to train a model 
+on a dataset with an overwhelming amount of 
+features. There are several strategies for 
+selecting a smaller subset of features in a dataset.
+The method we briefly describe here is called the 
+permutation test:
+Given a feature $j$, the permutation importance 
+$i_j$ is equal to 
+\begin{equation}
+i_j = s - \frac{1}{K} \sum_{k=1}^K s_{k,j}\quad \cite{permutation}.
+\label{Permutation equation}
+\end{equation}
+
 \subsection{Drawbacks}
