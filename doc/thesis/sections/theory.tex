@@ -86,5 +86,28 @@ $i_j$ is equal to
 i_j = s - \frac{1}{K} \sum_{k=1}^K s_{k,j}\quad \cite{permutation}.
 \label{Permutation equation}
 \end{equation}
+Here $K$ denotes how many permutations we average over for each feature, $s$ is
+the model's score on the original data and $s_{k,j}$ is the score of permutation 
+number $k$ of the feature $j$. In essence (\ref{Permutation equation}) describes 
+how much the performance of a model varies when "destroying" the information 
+contained in a feature, therefore explaining the importance of the feature 
+according to the current model. It is then important to remember that this is not 
+the true importance of the feature, only the importance the model thinks the feature 
+has. The scoring method $s$ can be any model scoring statistic, often the $R^2$
+score for regression.
+A major problem for this method is that (\ref{Permutation equation}) could give 
+unrealistically low significance to features that are highly correlated to other 
+features. In this case the feature may very well be important, but the information 
+contained in it is also contained in one or more other correlated features, meaning 
+the model doesn't lose as much information as one may think.
 
+A way around this is to first remove unneeded correlated features so that the model 
+contains as little duplicate information as possible. Reducing the amount of 
+features also has the added benefit of reducing the model variance because of 
+decreased complexity and improving model interpretability as getting an intuitive 
+understanding of what a model needs to properly approximate a system is easier when 
+there are fewer features.
+
+A method to remove static feature that is fairly simple to use is clustering on 
+Spearman rank-oder correlations \cite{permutation_clustering}.
 \subsection{Drawbacks}
