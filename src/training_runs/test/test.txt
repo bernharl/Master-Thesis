@@ -5,7 +5,6 @@ train_end: 30092015
 val_start: 01101971
 val_end: 30092015
 epochs: 30
-# device: cuda:1
 learning_rate: 1e-3
 seq_length: 270
 batch_size: 1536
@@ -20,7 +19,7 @@ cache_data: False
 # num_workers: 8
 no_static: False
 concat_static: False
-# split_train_test_folder
-# cross_validation_run
 # If evaluating:
-eval_epoch: 30
+# eval_epoch: 30
+train_basin_file: /home/bernhard/git/Master-Thesis/src/training_runs/split_seed_1010/basin_split_train.txt
+test_basin_file: /home/bernhard/git/Master-Thesis/src/training_runs/split_seed_1010/basin_split_test.txt
