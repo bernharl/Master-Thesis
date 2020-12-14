@@ -19,7 +19,7 @@ cache_data: False
 no_static: False
 concat_static: False
 # If evaluating:
-# eval_epoch: 30
-train_basin_file: /home/bernhard/git/Master-Thesis/src/basin_splits/basin_train.txt
-validation_basin_file: /home/bernhard/git/Master-Thesis/src/basin_split/basin_split_validation.txt
-test_basin_file: /home/bernhard/git/Master-Thesis/src/basin_split/basin_split_test.txt
+evaluate_on_epoch: True
+train_basin_file: /home/bernhard/git/Master-Thesis/runs/correlation_reduction/basin_splits/split_seed_1337/basins_train.txt
+val_basin_file: /home/bernhard/git/Master-Thesis/runs/correlation_reduction/basin_splits/split_seed_1337/basins_validation.txt
+test_basin_file: /home/bernhard/git/Master-Thesis/runs/correlation_reduction/basin_splits/split_seed_1337/basins_test.txt

@@ -20,6 +20,7 @@ cache_data: False
 no_static: False
 concat_static: False
 # If evaluating:
-# eval_epoch: 30
-train_basin_file: /home/bernhard/git/Master-Thesis/src/training_runs/split_seed_1010/basin_split_train.txt
-test_basin_file: /home/bernhard/git/Master-Thesis/src/training_runs/split_seed_1010/basin_split_test.txt
+evaluate_on_epoch: True
+train_basin_file: /home/bernhard/git/Master-Thesis/src/training_runs/split_seed_1010/basins_train.txt
+test_basin_file: /home/bernhard/git/Master-Thesis/src/training_runs/split_seed_1010/basins_test.txt
+val_basin_file: /home/bernhard/git/Master-Thesis/src/training_runs/split_seed_1010/basins_test.txt
