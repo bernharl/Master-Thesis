@@ -1,4 +1,4 @@
-run_dir: /home/bernhard/git/Master-Thesis/src/training_runs/test
+run_dir: /home/bernhard/git/Master-Thesis/runs/correlation_reduction/all_features
 camels_root: /home/bernhard/git/datasets_masters/camels_gb
 train_start: 01101971
 train_end: 30092015
