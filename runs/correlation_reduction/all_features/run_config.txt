@@ -14,12 +14,12 @@ log_interval: 50
 clip_norm: True
 clip_value: 1
 dropout: 0.4
-seed: 1001
+seed: 19970204
 cache_data: False
 no_static: False
 concat_static: False
 # If evaluating:
 evaluate_on_epoch: True
-train_basin_file: /home/bernhard/git/Master-Thesis/runs/correlation_reduction/basin_splits/split_seed_1337/basins_train.txt
-val_basin_file: /home/bernhard/git/Master-Thesis/runs/correlation_reduction/basin_splits/split_seed_1337/basins_validation.txt
-test_basin_file: /home/bernhard/git/Master-Thesis/runs/correlation_reduction/basin_splits/split_seed_1337/basins_test.txt
+train_basin_file: /home/bernhard/git/Master-Thesis/runs/correlation_reduction/basin_splits/split_seed_19970204/basins_train.txt
+val_basin_file: /home/bernhard/git/Master-Thesis/runs/correlation_reduction/basin_splits/split_seed_19970204/basins_validation.txt
+test_basin_file: /home/bernhard/git/Master-Thesis/runs/correlation_reduction/basin_splits/split_seed_19970204/basins_test.txt
