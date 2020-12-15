@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 camelsml = {editable = true, path = "/home/bernhard/git/ealstm_regional_modeling_camels_gb"}
+jupyterlab = "*"
+nb-black = "*"
 
 [dev-packages]
 
