@@ -1,0 +1,14 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+camelsml = {editable = true, path = "/home/bernhard/git/ealstm_regional_modeling_camels_gb"}
+jupyterlab = "*"
+nb-black = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"

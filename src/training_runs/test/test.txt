@@ -1,0 +1,26 @@
+run_dir: /home/bernhard/git/Master-Thesis/src/training_runs/test
+camels_root: /home/bernhard/git/datasets_masters/camels_gb
+train_start: 01101971
+train_end: 30092015
+val_start: 01101971
+val_end: 30092015
+epochs: 30
+learning_rate: 1e-3
+seq_length: 270
+batch_size: 1536
+hidden_size:  256
+initial_forget_gate_bias: 5
+log_interval: 50
+clip_norm: True
+clip_value: 1
+dropout: 0.4
+seed: 1001
+cache_data: False
+# num_workers: 8
+no_static: False
+concat_static: False
+# If evaluating:
+evaluate_on_epoch: True
+train_basin_file: /home/bernhard/git/Master-Thesis/src/training_runs/split_seed_1010/basins_train.txt
+test_basin_file: /home/bernhard/git/Master-Thesis/src/training_runs/split_seed_1010/basins_test.txt
+val_basin_file: /home/bernhard/git/Master-Thesis/src/training_runs/split_seed_1010/basins_test.txt
