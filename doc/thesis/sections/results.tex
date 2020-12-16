@@ -1,14 +1,29 @@
+In this chapter we present our results in chronological order. Many of the results 
+are found based on earlier results, so we find it natural to include some amount 
+of discussion of the results as they are presented to be able to argue for why we 
+approach the problem the way we do further down.
+\section{Feature reduction}
 \begin{table}
     \begin{adjustbox}{width=\textwidth}
     \input{tables/linreg_no_static.tex}
     \end{adjustbox}
-    \caption{"My name jeff"}
+    \caption{Table for attempt at linear regression. This model is fit on the static
+    features as input values, and the NSE of an LSTM trained without static features
+    for each basin in the validation set. The $R^2$ score of this model is $\approx 0.5$}
     \label{linreg_no_static_table}
 \end{table}
-
+In table \ref{linreg_no_static_table} we can see that our linear regression used to model 
+the relationship between NSE value of models and static features has decided that 
+several features are important. All these coefficients have a p-value $<0.5$. The 
+problem with this model was that it achieved an $R^2$ score of $\approx 0.5$, meaning 
+it does not actually explain the relationship well. We therefore choose to change 
+strategy for feature selection. 
 \begin{figure}
-    \includegraphics{full_matrix.pdf}
-    \caption{Full correlation matrix, before backwards selection}
+    \includegraphics{{correlation_reduction/all_features/corr_and_dendrogram}.pdf}
+    \caption{The Pearson correlation matrix and the corresponding hierarchial
+    cluster of the training set before removing correlated features. The process
+    of creating the dendrogrogram is described in chapter \ref{Feature selection}. 
+    For readability's sake we cannot include every label in the correlation matrix.}
     \label{corr_matrix_full}
 \end{figure}
 

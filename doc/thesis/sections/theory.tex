@@ -72,6 +72,7 @@ complexity and stability in search of the minimum of (\ref{Bias Variance Decomp}
 \label{LSTM Theory}
 \subsection{Feature selection}
 \subsubsection{Permutation test}
+\label{Feature selection}
 One of the critisisms of machine learning methods
 is that they are not easily interpretable. This 
 is especially true if one wants to train a model 
@@ -108,6 +109,28 @@ decreased complexity and improving model interpretability as getting an intuitiv
 understanding of what a model needs to properly approximate a system is easier when 
 there are fewer features.
 
-A method to remove static feature that is fairly simple to use is clustering on 
-Spearman rank-oder correlations \cite{permutation_clustering}.
+A method to remove correlated static feature that is fairly simple to use is clustering on 
+\begin{Huge}
+    Spearman or Pearson, please decide!!
+\end{Huge}    rank-order correlations \cite{permutation_clustering}. The most 
+well known algorithm for finding correlation is called Pearson correlation. It has 
+the drawback of only finding linear correlation. Spearman correlation on the other 
+hand is more general and can find non-linear correlation \cite{spearman}. After 
+finding the correlations of the features one then uses a clustering method to 
+visualize these correlations. The source at \cite{permutation_clustering} suggests 
+using hirerarchial clustering and choosing a single feature from each branch below 
+a chosen treshold. For illustational purposes we include such a clustering figure
+created on synthetic data, it can be seen in figure \ref{wald example}.
+\begin{figure}
+	\includegraphics{{examples}/cluster_example.pdf}
+	\caption{Example of a hierarchical plot created on some simple gaussian distributions. \large{REMEMBER TO DOUBLE CHECK WHETHER YOU WANT NP.ABS OF PEARSON CORR!!}}
+    \label{wald example}
+\end{figure}
+The idea here is to set a level at the y-axis of the plot, each branch that is
+"cut off" will then only get to contribute one single feature, discarding all others.
+For instance: In figure \ref{wald example} we may want to set the level at 0.1. 
+This would lead to only 4 features being included, which would make sense as we 
+for instance do not need $2x$, $x$ and $-x$ in the same model, those features 
+represent the same information.
+
 \subsection{Drawbacks}
