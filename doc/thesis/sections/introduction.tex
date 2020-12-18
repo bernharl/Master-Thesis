@@ -52,10 +52,8 @@ it is difficult if not impossible to mathematically prove your results, meaning
 we have to approach the issue with extensive imperic research preferably on as 
 many datasts as possible. 
 \section{Our contribution}
-We show that there is potential for more accurate general models in hydrology. 
-In addition we show that there is likely enough informaiton in the CAMELS GB \cite{CAMELS_GB}
-dataset to get better results if one were to apply a more robust and time consuming 
-approach than what there was time for in a one year Master thesis. 
+We show that there is potential for more accurate general physical models based on
+available data that is not taken into account by traditional models.
 
 \section{Thesis structure}
 This thesis is divided into 7 chapters, most chapters also being sub-divided into
@@ -64,11 +62,11 @@ sections.
 \item  The introduction. Here we explain the importance of this work and briefly summarize what has been done by others before us.
 \item Theory. This chapter is divided into two parts:
     \begin{enumerate}
-    \item Rainfall-runoff modelling. Here we explain the relevant hydrological concepts needed to understand the data, results and analysis in this thesis.
-    \item Machine learning. Here we try to give a thorough overview of the concepts needed to understand the models and methods we apply in this thesis.
+    \item Rainfall-runoff modelling. This section describes the relevant theory for understanding the physics captured in today's popular rainfall-runoff models. We present several 
+    \item Machine learning. Here we try to give a thorough overview of the concepts needed to understand the models and methods we apply in this thesis. We give a brief mathematical and physical explanation of the model, and try to present physical effects that are parametrized away instead of being properly modeled. This is important for the goal of this thesis.
     \end{enumerate}
     \item Data. Here we explain and analyze several aspects of the dataset(s???) \citationneeded  we use. This gives important context for why and how we employ the methods described in the method chapter.
-    \item Method. Here we describe in detail how we structure our model, what programming frameworks we use and how we analyze our results.
+    \item Method. Here we describe in detail how we structure our model, what programming frameworks we use and how we analyze our results. Brief documentation  and a minimal running example of the camelsml Python-package are also presented.
     \item Results. Here we present our most interesting results and give initial comments.
     \item Discussion. This chapter presents analysis of our results.
     \item Conclusion. A short summary of our most interesting findings along with what we feel will be a logical next step for further research.
@@ -76,3 +74,7 @@ In addition the thesis also has an appendix which presents longer mathematical
 calculations which will be referenced to in the main body of the thesis. 
 
 \end{enumerate}
+\nocite{4160265}
+\nocite{mckinney-proc-scipy-2010}
+\nocite{2020NumPy-Array}
+\nocite{2020SciPy-NMeth}
