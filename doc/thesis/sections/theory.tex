@@ -109,11 +109,9 @@ decreased complexity and improving model interpretability as getting an intuitiv
 understanding of what a model needs to properly approximate a system is easier when 
 there are fewer features.
 
-A method to remove correlated static feature that is fairly simple to use is clustering on 
-\begin{Huge}
-    Spearman or Pearson, please decide!!
-\end{Huge}    rank-order correlations \cite{permutation_clustering}. The most 
-well known algorithm for finding correlation is called Pearson correlation. It has 
+A method to remove correlated features that is fairly simple to use is hierarchial 
+clustering on the correlation of the features in a dataset. 
+The most well known algorithm for finding correlation is called Pearson correlation. It has 
 the drawback of only finding linear correlation. Spearman correlation on the other 
 hand is more general and can find non-linear correlation \cite{spearman}. After 
 finding the correlations of the features one then uses a clustering method to 
@@ -121,9 +119,14 @@ visualize these correlations. The source at \cite{permutation_clustering} sugges
 using hirerarchial clustering and choosing a single feature from each branch below 
 a chosen treshold. For illustational purposes we include such a clustering figure
 created on synthetic data, it can be seen in figure \ref{wald example}.
+While \cite{permutation_clustering} suggests using the Spearman rank order correlation,
+we instead choose to use the Pearson correlation as it is more easily interpretable.
+Also, when removing features we argue that it should not matter whether two variables 
+are strongly positively or negativey correlated, so we choose to do hierarchial 
+clustering based on the absolute value of the Pearson correlation.
 \begin{figure}
 	\includegraphics{{examples}/cluster_example.pdf}
-	\caption{Example of a hierarchical plot created on some simple gaussian distributions. \large{REMEMBER TO DOUBLE CHECK WHETHER YOU WANT NP.ABS OF PEARSON CORR!!}}
+	\caption{Example of a hierarchical plot created on some simple gaussian distributions.}
     \label{wald example}
 \end{figure}
 The idea here is to set a level at the y-axis of the plot, each branch that is
