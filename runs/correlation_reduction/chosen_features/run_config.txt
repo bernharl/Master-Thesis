@@ -13,7 +13,7 @@ initial_forget_gate_bias: 5
 log_interval: 50
 clip_norm: True
 clip_value: 1
-dropout: 0.4
+dropout: 0#.4
 seed: 19970204
 cache_data: False
 no_static: False
