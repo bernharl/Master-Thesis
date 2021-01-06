@@ -65,11 +65,47 @@ represents:
 \end{itemize}
 The aim of training a machine learning model is to find the best tradeoff between model
 complexity and stability in search of the minimum of (\ref{Bias Variance Decomp}).
+\subsection{Gradient Descent}
+While the simple case of linear regression has an easily attainable analytical solution 
+as seen in (\ref{OLS solution}), more advanced models may not. \citationneeded 
+A generic computational optimization algorithm known as Gradient Descent can therefore 
+be beneficial to employ in such a case \cite{elemstatlearn} \cite{handson}. The 
+fundamental concept of Gradient Descent is to calculate the gradient $\Delta F(\mathbf{x})$ 
+of the loss function $F(\mathbf{x})$. In the case of regression this function would 
+be the MSE as described in (\ref{MSE}) while the variable $\mathbf{x}$ would be 
+the regression coefficients $\mathbf{\beta}$. After calculating $\Delta F(\mathbf{x})$ 
+one then does a gradient descent step, which is defined as
+\begin{equation}
+	\mathbf{x}_{i+1} = \mathbf{x}_{i} - \lambda \Delta F(\mathbf{x_i}).
+	\label{Gradient descent}
+\end{equation}
+Here the subscript $i$ denotes the epoch. An epoch is defined as the point when 
+the optimization algorithm has seen all the data in your training set once. 
+$\lambda$ is called the learning rate and is known as a hyperparameter. 
+A hyperparameter is a model parameter that is not trained in the training process 
+and has to be optimized in a different way. More on this in chapter \ref{Hyperparameters}
+A problem with (\ref{Gradient descent}) is that one is never guaranteed to find the 
+absolute minimum of $F(\mathbf{x})$, the algorithm often converges at local minima \cite{elemstatlearn}.
+The solution to this is to introduce stochasticity to the optimization algorithm. 
+Stochastic Gradient Descent is a modification of (\ref{Gradient descent}) which 
+iterates over minibatches of your dataset instead of the entire dataset at once. 
+This has two main benefits:
+\begin{enumerate}
+\item It adds stochasticity by shuffling the batches for each epoch.
+\item It significantly reduces the amount of RAM needed to run the calculations on a computer.
+\end{enumerate}
+Introducing minibatches yields another hyperparameter in form of the batch size. 
+This is the amount of datapoints to be used in each iterations. An iteration is 
+defined as when the optimizer has seen all datapoints in a minibatch, and there are 
+therefore several iterations in an epoch.
+Adding more complexity to Stochastic Gradient Descent (SGD) we get to the optimizer 
+known as Adaptive Moment EstimAtioN (Adam) \cite{adam}.
 \subsection{Neural Networks}
-\subsubsection{Gradient Descent}
 \subsection{Recurrent Neural Networks}
 \subsection{Long Short-Term Memory}
 \label{LSTM Theory}
+\subsection{Hyperparameters}
+\label{Hyperparameters}
 \subsection{Feature selection}
 \subsubsection{Permutation test}
 \label{Feature selection}
