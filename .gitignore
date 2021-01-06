@@ -500,3 +500,4 @@ dmypy.json
 .pyre/
 
 # End of https://www.gitignore.io/api/c,c++,cuda,linux,macos,latex,python
+testing_code/camels_gb/camels_gb/*.png

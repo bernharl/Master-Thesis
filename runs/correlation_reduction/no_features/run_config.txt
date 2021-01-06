@@ -1,0 +1,25 @@
+run_dir: /home/bernhard/git/Master-Thesis/runs/correlation_reduction/no_features
+camels_root: /home/bernhard/git/datasets_masters/camels_gb
+train_start: 01101971
+train_end: 30092015
+val_start: 01101971
+val_end: 30092015
+epochs: 30
+learning_rate: 1e-3
+seq_length: 270
+batch_size: 1536
+hidden_size:  256
+initial_forget_gate_bias: 5
+log_interval: 50
+clip_norm: True
+clip_value: 1
+dropout: 0.4
+seed: 19970204
+cache_data: False
+no_static: True
+concat_static: False
+# If evaluating:
+evaluate_on_epoch: True
+train_basin_file: /home/bernhard/git/Master-Thesis/runs/correlation_reduction/basin_splits/split_seed_19970204/basins_train.txt
+val_basin_file: /home/bernhard/git/Master-Thesis/runs/correlation_reduction/basin_splits/split_seed_19970204/basins_validation.txt
+test_basin_file: /home/bernhard/git/Master-Thesis/runs/correlation_reduction/basin_splits/split_seed_19970204/basins_test.txt
