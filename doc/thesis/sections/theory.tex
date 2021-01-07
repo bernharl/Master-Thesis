@@ -27,15 +27,15 @@ MSE = |\mathbf{y} - \mathbf{\hat{y}}|^2
 \end{equation}
 Here $\mathbf{y}$ is the observed outcome, in many cases called the ground truth.
 $\mathbf{\hat{y}}$ is the prediction made by (\ref{OLS}). The goal is to find the
-$\mathbf{\beta}$ that minimizes (\ref{MSE}). For this there is an alalytical solution 
+$\mathbf{\beta}$ that minimizes (\ref{MSE}). For this there is an analytical solution 
 as long as the matrix in (\ref{OLS}) is reversible. In other words: This can be solved
-analytically as long as there are more datapoints than there are variables (features, inputs).
+analytically as long as there are more data points than there are variables (features, inputs).
 The solution to the equation can be written as 
 \begin{equation}
 \mathbf{\beta} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^{T}\mathbf{y}
 \label{OLS solution}
 \end{equation}
-\subsection{Bias-Variance tradeoff}
+\subsection{Bias-Variance trade-off}
 When training any kind of machine learning model, one usually divides the data 
 into at least two parts: The training dataset and the testing dataset. The training 
 dataset is for training a given model, while the testing dataset is to be kept separate 
@@ -48,20 +48,20 @@ there exist many other cost functions all with different characteristics. \citat
 
 To explain 
 why this is important we need to have a quick look at what is known as the 
-bias variance tradeoff.
+bias variance trade-off.
 In the case of the OLS model the MSE can be rewritten into three parts:
 \begin{equation}
     MSE = \text{Bias}^2 + \text{Variance} + \sigma^2
     \label{Bias Variance Decomp}
 \end{equation}
 For a full derivation of this, see \cite{vijayakumar2007bias}. When selecting and 
-configuring machine learning models this tradeoff is essential. The following is 
+configuring machine learning models this trade-off is essential. The following is 
 a qualitative explanation of what each term in (\ref{Bias Variance Decomp})
 represents:
 \begin{itemize}
 \item Bias: The bias is the part of the error that comes from a model's lack of complexity.  If one were to try and represent a non-linear system on the form of (\ref{OLS}) for instance one would struggle to model the more complex interactions between input and outcome.
 \item Variance: In many ways this error is the opposite of bias. It comes from a given model having too much complexity. This could come from the model having too many parameters to train compared to how much data is available for training. 
-\item $\sigma^2$: This is known as the irreducible error. It is the inherent error in the data that is used for training. The model cannot reduce the error below this value as it is indepentent from the model. To reduce this error one would have to gather more accurate data using better instruments for instance. 
+\item $\sigma^2$: This is known as the irreducible error. It is the inherent error in the data that is used for training. The model cannot reduce the error below this value as it is independent from the model. To reduce this error one would have to gather more accurate data using better instruments for instance. 
 \end{itemize}
 The aim of training a machine learning model is to find the best tradeoff between model
 complexity and stability in search of the minimum of (\ref{Bias Variance Decomp}).
@@ -76,7 +76,7 @@ be the MSE as described in (\ref{MSE}) while the variable $\mathbf{x}$ would be
 the regression coefficients $\mathbf{\beta}$. After calculating $\Delta F(\mathbf{x})$ 
 one then does a gradient descent step, which is defined as
 \begin{equation}
-	\mathbf{x}_{i+1} = \mathbf{x}_{i} - \lambda \Delta F(\mathbf{x_i}).
+	\mathbf{x}_{i+1} = \mathbf{x}_{i} - \lambda \Delta_x F(\mathbf{x_i}).
 	\label{Gradient descent}
 \end{equation}
 Here the subscript $i$ denotes the epoch. An epoch is defined as the point when 
@@ -96,11 +96,74 @@ This has two main benefits:
 \end{enumerate}
 Introducing minibatches yields another hyperparameter in form of the batch size. 
 This is the amount of datapoints to be used in each iterations. An iteration is 
-defined as when the optimizer has seen all datapoints in a minibatch, and there are 
+defined as when the optimizer has seen all data points in a minibatch, and there are 
 therefore several iterations in an epoch.
 Adding more complexity to Stochastic Gradient Descent (SGD) we get to the optimizer 
-known as Adaptive Moment EstimAtioN (Adam) \cite{adam}.
+known as Adaptive Moment EstimAtioN (Adam) \cite{adam}. The ADAM optimizer is 
+an optimizer which uses minibatches and also what is known as a momentum based approach.
+As a slight simplification from what's written in \cite{fysstkweek40} the ADAM 
+algorithm in terms of equations looks like:
+\begin{align}
+    \mathbf{g}_i &= \Delta_x E(\bm{x}) \\
+    \bm{m}_i &= \frac{\beta_1 \bm{m}_{i-1} + (1 - \beta_1)\bm{g}_i}{1 - \beta_1^i} \\
+    \bm{s}_i &= \frac{\beta_2 \bm{s}_{i-1} + (1-\beta_2)\bm{g}^2_i}{1 - \beta_2^i} \\
+    \bm{x}_{i+1} &= \bm{x}_i - \eta_i \frac{\bm{m}_i}{\sqrt{\bm{s}_i}+ \epsilon}
+\end{align}
+Following the same naming scheme as (\ref{Gradient descent}), $\bm{x}$ is the 
+learning parameter of the model and the subscript $i$ denotes the epoch (except 
+for $\beta_{1/2}^i$, where it means power). 
+$\beta_1$ and $\beta_2$ are two constants usually set to $\beta_1 = 0.9$ and 
+$\beta_2 = 0.999$. $\epsilon$ is a regularization constant to avoid numerical 
+instability in the fraction and is usually $\epsilon=1E-8$\footnote{These values 
+for $\beta_1$, $\beta_2$ and $\epsilon$ are mentioned in \cite{adam} and seem 
+to be used in practice in most cases. They are also the default values of the 
+ADAM implementation in the Machine Learning Framework Pytorch \cite{NEURIPS2019_9015}.}.
+$\bm{m}$ and $\bm{s}$ are known as the first and second momentum of the gradient 
+$\bm{g}$ respectively.\\
+The benefits of the ADAM optimizer is that it has low memory requirement and it calculates 
+individual learning rates for for different parameters of a learning algorithm. 
+This makes the learning rate $\lambda$ a bit more ambiguous as it is weighed 
+differently for each parameter.
 \subsection{Neural Networks}
+Previously we used Ordinary Least Squares to introduce simple concepts in Machine 
+Learning. As the model we use to do our analysis in this thesis is a type of 
+Recurrent Neural Network, we now give a short introduction to ordinary neural 
+networks before working us up to describing more advanced models like Recurrent 
+Neural Networks (RNNs).
+A neural network is a non-linear machine learning model that can be used for both 
+regression and classification. In this thesis we focus on the regression case and 
+will therefore stick to describing that. The concept of the neural network was 
+first described in \cite{rosenblatt1958perceptron}. 
+\begin{figure}
+    \caption{A perceptron model as described in \cite{rosenblatt1958perceptron}}
+    \label{Neural network figure}
+\end{figure}
+Mathematically, a neural network can be written described on this form:
+\begin{equation}
+    y_i^l = f^l \left( \sum_{j=1}^{N_{l-1}}\omega_{ij}^{l-1}+b^l_i  \right)
+    \footnote{While the concept is cited to \cite{rosenblatt1958perceptron}, this 
+    equation was taken from Morten Hjorth-Jensen's great lecture notes \cite{fysstkweek40}
+    from the Universuty of Oslo course Fys-Stk4155 as this is the author's favorite 
+    mathematical description of a neural network}
+    \label{MLP equation}
+\end{equation}
+There are a lot of variables, subscripts and superscripts here, going through them 
+systematically so as to not overwhelm the reader:
+\begin{itemize}
+    \item $l$ denotes what layer in the neural network we are in. Look at Figure 
+    \ref{Neural network figure} to understand what is meant by a layer.
+    \item $i$ denotes what "neuron" in layer $l$ we are looking at. 
+    \item $y_i^l$ means the output of neuron $i$ in layer $l$. At the output layer $l=L$, it denotes the model output.
+    \item $f^l$ is the activation function in layer $l$. An activation function is a function that is used to make the neural network non-linear. Some common activation functions are the Sigmoid function and $\tanh$. For the output layer $l=L$ the activation function is often different depending on whether we are doing classification or regression. For regression $f^L$ is often just $f^L(x)=x$.
+    \item $\omega_{ij}^l$ is the weight corresponding to the output $y_j^{l-1}$ from neuron $j$ in layer $l-1$ when sent to neuron $i$ in layer $l$
+    \item $b_i^l$ is known the bias term. It is a constant that is added to all inputs in neuron $i$ in layer $l$.
+\end{itemize}
+The parameters $b$ and $\omega$ are trained using an optimizer. In the case of this 
+thesis that would be the ADAM optimizer. To get gradients to use in the optimizer 
+an algorithm known as backpropagation is used. Backpropagation is an algorithm that 
+takes the gradient at the output layer $L$, which usually is easily derivable and 
+uses the chain rule to find the gradient of the loss function with respect to all 
+the weights and biases in the network. 
 \subsection{Recurrent Neural Networks}
 \subsection{Long Short-Term Memory}
 \label{LSTM Theory}
@@ -109,7 +172,7 @@ known as Adaptive Moment EstimAtioN (Adam) \cite{adam}.
 \subsection{Feature selection}
 \subsubsection{Permutation test}
 \label{Feature selection}
-One of the critisisms of machine learning methods
+One of the criticisms of machine learning methods
 is that they are not easily interpretable. This 
 is especially true if one wants to train a model 
 on a dataset with an overwhelming amount of 
@@ -145,24 +208,24 @@ decreased complexity and improving model interpretability as getting an intuitiv
 understanding of what a model needs to properly approximate a system is easier when 
 there are fewer features.
 
-A method to remove correlated features that is fairly simple to use is hierarchial 
+A method to remove correlated features that is fairly simple to use is hierarchical 
 clustering on the correlation of the features in a dataset. 
 The most well known algorithm for finding correlation is called Pearson correlation. It has 
 the drawback of only finding linear correlation. Spearman correlation on the other 
 hand is more general and can find non-linear correlation \cite{spearman}. After 
 finding the correlations of the features one then uses a clustering method to 
 visualize these correlations. The source at \cite{permutation_clustering} suggests 
-using hirerarchial clustering and choosing a single feature from each branch below 
-a chosen treshold. For illustational purposes we include such a clustering figure
+using hierarchical clustering and choosing a single feature from each branch below 
+a chosen threshold. For illustrational purposes we include such a clustering figure
 created on synthetic data, it can be seen in figure \ref{wald example}.
 While \cite{permutation_clustering} suggests using the Spearman rank order correlation,
 we instead choose to use the Pearson correlation as it is more easily interpretable.
 Also, when removing features we argue that it should not matter whether two variables 
-are strongly positively or negativey correlated, so we choose to do hierarchial 
+are strongly positively or negatively correlated, so we choose to do hierarchical 
 clustering based on the absolute value of the Pearson correlation.
 \begin{figure}
 	\includegraphics{{examples}/cluster_example.pdf}
-	\caption{Example of a hierarchical plot created on some simple gaussian distributions.}
+	\caption{Example of a hierarchical plot created on a simple Gaussian distributions.}
     \label{wald example}
 \end{figure}
 The idea here is to set a level at the y-axis of the plot, each branch that is
