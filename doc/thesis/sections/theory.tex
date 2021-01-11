@@ -120,7 +120,10 @@ for $\beta_1$, $\beta_2$ and $\epsilon$ are mentioned in \cite{adam} and seem
 to be used in practice in most cases. They are also the default values of the 
 ADAM implementation in the Machine Learning Framework Pytorch \cite{NEURIPS2019_9015}.}.
 $\bm{m}$ and $\bm{s}$ are known as the first and second momentum of the gradient 
-$\bm{g}$ respectively.\\
+$\bm{g}$ respectively. The learning rate $\eta_i$\\ is here subscripted with the 
+epoch $i$. This is to allow for non-constant learning rates which is often beneficial \citationneeded.
+\footnote{Although perhaps less needed for the ADAM optimizer as one can tune the 
+$\beta$-constants to achieve a similar effect.}
 The benefits of the ADAM optimizer is that it has low memory requirement and it calculates 
 individual learning rates for for different parameters of a learning algorithm. 
 This makes the learning rate $\lambda$ a bit more ambiguous as it is weighed 
@@ -250,13 +253,30 @@ a new hyperparameter which we will refer to as the \textbf{sequence length}. \ci
 \subsection{Long Short-Term Memory}
 \label{LSTM Theory}
 The Long Short-Term Memory (LSTM) model is the type of RNN we employ in all our 
-experiments in this thesis work. In this section we will therefore also spend some 
+experiments in this thesis work. In this section we therefore also spend some 
 time arguing why the way an LSTM model works fits the Physics we wish to simulate 
 and is not just chosen by random. 
 
 The LSTM is a more advanced type of recurrent neural network that exists because 
-of a major drawback with the ordinary RNN. A RNN as described in the previous section 
-struggles to learn long-term dependencies because (FIND OUT WHY AND FIND CITATION FOR IT.) \citationneeded
+of a major drawback with the ordinary RNN. An RNN as described in the previous section 
+struggles to learn long-term dependencies as the Backpropagation Through Time 
+algorithm starts to downplay the importance of previous time-steps the further one 
+advances in time  \cite{bengio1994learning}. The LSTM model is designed to fix this, 
+hence the name. This is the reason we use the LSTM model and not a normal RNN in 
+this thesis even though an RNN would be less computationally expensive to train, 
+many of the dependencies in traditional rainfall-runoff modelling are long term. 
+The most obvious case is the modelling of snow. Not the melting itself, but for 
+the model to remember that snow accumulation can lead to lower discharge when it 
+happens and more discharge once the snow starts to melt.
+
+The biggest mathematical difference between a normal RNN and an LSTM is the introduction 
+of the cell state $\bm{c}_t$. Mathematically, the model is described like this:
+\begin{align}
+\cite{hochreiter1997long}
+\end{align}
+\begin{figure}
+\caption{A single LSTM cell}
+\end{figure}
 \subsection{Hyperparameters}
 \label{Hyperparameters}
 \subsection{Feature selection}
