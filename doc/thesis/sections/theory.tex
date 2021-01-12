@@ -46,7 +46,6 @@ lower on the data the model is trained on than on data the model has not seen un
 training. The function that is minimized under machine learning is called a 
 cost function and while (\ref{MSE}) is very commonly used for scalar outcomes 
 there exist many other cost functions all with different characteristics. \citationneeded
-
 To explain 
 why this is important we need to have a quick look at what is known as the 
 bias variance trade-off.
@@ -142,7 +141,7 @@ first described in \cite{rosenblatt1958perceptron}.
     \caption{A perceptron model as described in \cite{rosenblatt1958perceptron}}
     \label{Neural network figure}
 \end{figure}
-Mathematically, a neural network can be written described on this form:
+Mathematically, a neural network can be written in this form:
 \begin{equation}
     y_i^l = f^l \left( \sum_{j=1}^{N_{l-1}}\omega_{ij}^l y^{l-1}_j+b^l_i  \right)
     \footnote{While the concept is cited to \cite{rosenblatt1958perceptron}, this 
@@ -158,7 +157,7 @@ systematically so as to not overwhelm the reader:
     \ref{Neural network figure} to understand what is meant by a layer.
     \item $i$ denotes what "neuron" in layer $l$ we are looking at. 
     \item $y_i^l$ means the output of neuron $i$ in layer $l$. At the output layer $l=L$, it denotes the model output.
-    \item $f^l$ is the activation function in layer $l$. An activation function is a function that is used to make the neural network non-linear. Some common activation functions are the Sigmoid function and $\tanh$. For the output layer $l=L$ the activation function is often different depending on whether we are doing classification or regression. For regression $f^L$ is often just $f^L(x)=x$.
+    \item $f^l$ is the activation function in layer $l$. An activation function is a function that is used to make the neural network non-linear. Some common activation functions are the Sigmoid function (\ref{sigmoid}) and $\tanh$. For the output layer $l=L$ the activation function is often different depending on whether we are doing classification or regression. For regression $f^L$ is often just $f^L(x)=x$.
     \item $\omega_{ij}^l$ is the weight corresponding to the output $y_j^{l-1}$ from neuron $j$ in layer $l-1$ when sent to neuron $i$ in layer $l$
     \item $b_i^l$ is known the bias term. It is a constant that is added to all inputs in neuron $i$ in layer $l$.
     \item The input to $f^l$ (the weighted sum plus the bias) can also be denoted as $z^l_j$
@@ -169,6 +168,10 @@ an algorithm known as backpropagation is used. Backpropagation is an algorithm t
 takes the gradient at the output layer $L$, which usually is easily derivable and 
 uses the chain rule to find the gradient of the loss function with respect to all 
 the weights and biases in the network.
+We mention the sigmoid function, it is defined as
+\begin{equation}
+	\sigma(\bm{x}) = \frac{1}{1 + e^{-\bm{x}}} \label{sigmoid}
+\end{equation}
 For a normal feed forward neural network, the backpropagation algorithm can be written 
 as 
 \begin{align}
@@ -261,7 +264,7 @@ The LSTM is a more advanced type of recurrent neural network that exists because
 of a major drawback with the ordinary RNN. An RNN as described in the previous section 
 struggles to learn long-term dependencies as the Backpropagation Through Time 
 algorithm starts to downplay the importance of previous time-steps the further one 
-advances in time  \cite{bengio1994learning}. The LSTM model is designed to fix this, 
+advances in time  \cite{bengio1994learning} \cite{graves2012long}. The LSTM model is designed to fix this, 
 hence the name. This is the reason we use the LSTM model and not a normal RNN in 
 this thesis even though an RNN would be less computationally expensive to train, 
 many of the dependencies in traditional rainfall-runoff modelling are long term. 
@@ -272,11 +275,141 @@ happens and more discharge once the snow starts to melt.
 The biggest mathematical difference between a normal RNN and an LSTM is the introduction 
 of the cell state $\bm{c}_t$. Mathematically, the model is described like this:
 \begin{align}
+    f_t &= \sigma\left(W_f\cdot \left[h_{t-1},x_t\right]+b_f\right)\\
+    i_t &= \sigma\left(W_i\cdot \left[ h_{t-1}, x_t\right] + b_i\right)\\
+    C_t &= \tanh\left(W_C\cdot \left[ h_{t-1}, x_t  \right] + b_C \right)
 \cite{hochreiter1997long}
 \end{align}
+% By J. Leon, Beerware licence is acceptable...
+\newcommand{\empt}[2]{$\bm{#1}_{{#2}}$}
 \begin{figure}
-\caption{A single LSTM cell}
+\centering
+\begin{tikzpicture}[
+    % GLOBAL CFG
+    font=\sf \scriptsize,
+    >=LaTeX,
+    % Styles
+    cell/.style={% For the main box
+        rectangle, 
+        rounded corners=5mm, 
+        draw,
+        very thick,
+        },
+    operator/.style={%For operators like +  and  x
+        circle,
+        draw,
+        inner sep=-0.5pt,
+        minimum height =.2cm,
+        },
+    function/.style={%For functions
+        ellipse,
+        draw,
+        inner sep=1pt
+        },
+    ct/.style={% For external inputs and outputs
+        circle,
+        draw,
+        line width = .75pt,
+        minimum width=1cm,
+        inner sep=1pt,
+        },
+    gt/.style={% For internal inputs
+        rectangle,
+        draw,
+        minimum width=4mm,
+        minimum height=3mm,
+        inner sep=1pt
+        },
+    mylabel/.style={% something new that I have learned
+        font=\scriptsize\sffamily
+        },
+    ArrowC1/.style={% Arrows with rounded corners
+        rounded corners=.25cm,
+        thick,
+        },
+    ArrowC2/.style={% Arrows with big rounded corners
+        rounded corners=.5cm,
+        thick,
+        },
+    ]
+
+%Start drawing the thing...    
+    % Draw the cell: 
+    \node [cell, minimum height =4cm, minimum width=6cm] at (0,0){} ;
+
+    % Draw inputs named ibox#
+    \node [gt] (ibox1) at (-2,-0.75) {$\sigma$};
+    \node [gt] (ibox2) at (-1.5,-0.75) {$\sigma$};
+    \node [gt, minimum width=1cm] (ibox3) at (-0.5,-0.75) {Tanh};
+    \node [gt] (ibox4) at (0.5,-0.75) {$\sigma$};
+
+   % Draw opérators   named mux# , add# and func#
+    \node [operator] (mux1) at (-2,1.5) {$\times$};
+    \node [operator] (add1) at (-0.5,1.5) {+};
+    \node [operator] (mux2) at (-0.5,0) {$\times$};
+    \node [operator] (mux3) at (1.5,0) {$\times$};
+    \node [function] (func1) at (1.5,0.75) {Tanh};
+
+    % Draw External inputs? named as basis c,h,x
+    \node[ct, label={[mylabel]Prev Cell State}] (c) at (-4,1.5) {\empt{c}{t-1}};
+    \node[ct, label={[mylabel]Prev Hidden State}] (h) at (-4,-1.5) {\empt{h}{t-1}};
+    \node[ct, label={[mylabel]left:New Input}] (x) at (-2.5,-3) {\empt{x}{t}};
+
+    % Draw External outputs? named as basis c2,h2,x2
+    \node[ct, label={[mylabel]New Cell State}] (c2) at (4,1.5) {\empt{c}{t}};
+    \node[ct, label={[mylabel]New Hidden State}] (h2) at (4,-1.5) {\empt{h}{t}};
+    \node[ct, label={[mylabel]left:New Hidden State (output)}] (x2) at (2.5,3) {\empt{h}{t}};
+
+% Start connecting all.
+    %Intersections and displacements are used. 
+    % Drawing arrows    
+    \draw [ArrowC1] (c) -- (mux1) -- (add1) -- (c2);
+
+    % Inputs
+    \draw [ArrowC2] (h) -| (ibox4);
+    \draw [ArrowC1] (h -| ibox1)++(-0.5,0) -| (ibox1); 
+    \draw [ArrowC1] (h -| ibox2)++(-0.5,0) -| (ibox2);
+    \draw [ArrowC1] (h -| ibox3)++(-0.5,0) -| (ibox3);
+    \draw [ArrowC1] (x) -- (x |- h)-| (ibox3);
+
+    % Internal
+    \draw [->, ArrowC2] (ibox1) -- (mux1);
+    \draw [->, ArrowC2] (ibox2) |- (mux2);
+    \draw [->, ArrowC2] (ibox3) -- (mux2);
+    \draw [->, ArrowC2] (ibox4) |- (mux3);
+    \draw [->, ArrowC2] (mux2) -- (add1);
+    \draw [->, ArrowC1] (add1 -| func1)++(-0.5,0) -| (func1);
+    \draw [->, ArrowC2] (func1) -- (mux3);
+
+    %Outputs
+    \draw [-, ArrowC2] (mux3) |- (h2);
+    \draw (c2 -| x2) ++(0,-0.1) coordinate (i1);
+    \draw [-, ArrowC2] (h2 -| x2)++(-0.5,0) -| (i1);
+    \draw [-, ArrowC2] (i1)++(0,0.2) -- (x2);
+
+\end{tikzpicture}
+\caption{A single basic LSTM cell as proposed in \cite{hochreiter1997long}. The 
+Tikz code for creating this figure is released under the permissive Beerware license 
+and is therefore taken with permission from \cite{tikzlstm}
+Visually we see the point of the Cell State $C$ here is to not retain more information 
+by being affected less over time than the hidden state $h$. This is how the LSTM 
+avoids the gradient issues regarding long term dependencies that the RNN suffers 
+from.}
+\label{LSTM figure}
 \end{figure}
+It is difficult to describe an LSTM purely through mathematics, therefore we 
+include Figure \ref{LSTM figure}. In the figure lines meeting means concatenation, 
+the boxes means a neural network layer. The boxed $\sigma$ for instance indicates 
+a neural network with the sigmoid (\ref{sigmoid}) activation function.
+
+As opposed to the case of the vanilla RNN, trunctating the Backpropagation Through 
+Time algorithm actually doesn't break long-term dependencies in an LSTM as the 
+model architecture itself is designed to keep track of these. This means that the 
+LSTM has two clear advantages:
+\begin{enumerate}
+	\item An LSTM does not suffer from the same vanishing gradient problem that the RNN does.
+	\item An LSTM is less sensitive to trunctating the Backpropagation Through Time algorithm.
+\end{enumerate}
 \subsection{Hyperparameters}
 \label{Hyperparameters}
 \subsection{Feature selection}
