@@ -275,9 +275,9 @@ happens and more discharge once the snow starts to melt.
 The biggest mathematical difference between a normal RNN and an LSTM is the introduction 
 of the cell state $\bm{c}_t$. Mathematically, the model is described like this:
 \begin{align}
-    f_t &= \sigma\left(W_f\cdot \left[h_{t-1},x_t\right]+b_f\right)\\
-    i_t &= \sigma\left(W_i\cdot \left[ h_{t-1}, x_t\right] + b_i\right)\\
-    C_t &= \tanh\left(W_C\cdot \left[ h_{t-1}, x_t  \right] + b_C \right)
+    f_t &= \sigma\left(W_f\cdot \left[h_{t-1},x_t\right]+b_f\right) \label{forget gate}\\
+    i_t &= \sigma\left(W_i\cdot \left[ h_{t-1}, x_t\right] + b_i\right) \label{input gate}\\
+    C_t &= \tanh\left(W_C\cdot \left[ h_{t-1}, x_t  \right] + b_C \right) \label{output gate}
 \cite{hochreiter1997long}
 \end{align}
 % By J. Leon, Beerware licence is acceptable...
@@ -388,19 +388,20 @@ of the cell state $\bm{c}_t$. Mathematically, the model is described like this:
     \draw [-, ArrowC2] (i1)++(0,0.2) -- (x2);
 
 \end{tikzpicture}
-\caption{A single basic LSTM cell as proposed in \cite{hochreiter1997long}. The 
-Tikz code for creating this figure is released under the permissive Beerware license 
-and is therefore taken with permission from \cite{tikzlstm}
-Visually we see the point of the Cell State $C$ here is to not retain more information 
+\caption{A single basic LSTM cell as proposed in \cite{hochreiter1997long}. Visually we see the point of the Cell State $C$ here is to not retain more information 
 by being affected less over time than the hidden state $h$. This is how the LSTM 
 avoids the gradient issues regarding long term dependencies that the RNN suffers 
-from.}
+from.
+The Tikz code for creating this figure is released under the permissive Beerware license 
+and is a modified version of the figure in \cite{tikzlstm}.
+}
 \label{LSTM figure}
 \end{figure}
 It is difficult to describe an LSTM purely through mathematics, therefore we 
 include Figure \ref{LSTM figure}. In the figure lines meeting means concatenation, 
 the boxes means a neural network layer. The boxed $\sigma$ for instance indicates 
 a neural network with the sigmoid (\ref{sigmoid}) activation function.
+
 
 As opposed to the case of the vanilla RNN, trunctating the Backpropagation Through 
 Time algorithm actually doesn't break long-term dependencies in an LSTM as the 
@@ -410,6 +411,7 @@ LSTM has two clear advantages:
 	\item An LSTM does not suffer from the same vanishing gradient problem that the RNN does.
 	\item An LSTM is less sensitive to trunctating the Backpropagation Through Time algorithm.
 \end{enumerate}
+
 \subsection{Hyperparameters}
 \label{Hyperparameters}
 \subsection{Feature selection}
