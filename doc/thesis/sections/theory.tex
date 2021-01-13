@@ -27,15 +27,16 @@ MSE = |\mathbf{y} - \mathbf{\hat{y}}|^2
 \end{equation}
 Here $\mathbf{y}$ is the observed outcome, in many cases called the ground truth.
 $\mathbf{\hat{y}}$ is the prediction made by (\ref{OLS}). The goal is to find the
-$\mathbf{\beta}$ that minimizes (\ref{MSE}). For this there is an alalytical solution 
+$\mathbf{\beta}$ that minimizes (\ref{MSE}). For this there is an analytical solution 
 as long as the matrix in (\ref{OLS}) is reversible. In other words: This can be solved
-analytically as long as there are more datapoints than there are variables (features, inputs).
+analytically as long as there are more data points than there are variables (features, inputs).
 The solution to the equation can be written as 
 \begin{equation}
 \mathbf{\beta} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^{T}\mathbf{y}
 \label{OLS solution}
 \end{equation}
-\subsection{Bias-Variance tradeoff}
+\subsection{Bias-Variance trade-off}
+\label{Bias-Variance trade-off}
 When training any kind of machine learning model, one usually divides the data 
 into at least two parts: The training dataset and the testing dataset. The training 
 dataset is for training a given model, while the testing dataset is to be kept separate 
@@ -45,35 +46,376 @@ lower on the data the model is trained on than on data the model has not seen un
 training. The function that is minimized under machine learning is called a 
 cost function and while (\ref{MSE}) is very commonly used for scalar outcomes 
 there exist many other cost functions all with different characteristics. \citationneeded
-
 To explain 
 why this is important we need to have a quick look at what is known as the 
-bias variance tradeoff.
+bias variance trade-off.
 In the case of the OLS model the MSE can be rewritten into three parts:
 \begin{equation}
     MSE = \text{Bias}^2 + \text{Variance} + \sigma^2
     \label{Bias Variance Decomp}
 \end{equation}
 For a full derivation of this, see \cite{vijayakumar2007bias}. When selecting and 
-configuring machine learning models this tradeoff is essential. The following is 
+configuring machine learning models this trade-off is essential. The following is 
 a qualitative explanation of what each term in (\ref{Bias Variance Decomp})
 represents:
 \begin{itemize}
 \item Bias: The bias is the part of the error that comes from a model's lack of complexity.  If one were to try and represent a non-linear system on the form of (\ref{OLS}) for instance one would struggle to model the more complex interactions between input and outcome.
 \item Variance: In many ways this error is the opposite of bias. It comes from a given model having too much complexity. This could come from the model having too many parameters to train compared to how much data is available for training. 
-\item $\sigma^2$: This is known as the irreducible error. It is the inherent error in the data that is used for training. The model cannot reduce the error below this value as it is indepentent from the model. To reduce this error one would have to gather more accurate data using better instruments for instance. 
+\item $\sigma^2$: This is known as the irreducible error. It is the inherent error in the data that is used for training. The model cannot reduce the error below this value as it is independent from the model. To reduce this error one would have to gather more accurate data using better instruments for instance. 
 \end{itemize}
 The aim of training a machine learning model is to find the best tradeoff between model
 complexity and stability in search of the minimum of (\ref{Bias Variance Decomp}).
+\subsection{Gradient Descent}
+While the simple case of linear regression has an easily attainable analytical solution 
+as seen in (\ref{OLS solution}), more advanced models may not. \citationneeded 
+A generic computational optimization algorithm known as Gradient Descent can therefore 
+be beneficial to employ in such a case \cite{elemstatlearn} \cite{handson}. The 
+fundamental concept of Gradient Descent is to calculate the gradient $\Delta F(\mathbf{x})$ 
+of the loss function $F(\mathbf{x})$. In the case of regression this function would 
+be the MSE as described in (\ref{MSE}) while the variable $\mathbf{x}$ would be 
+the regression coefficients $\mathbf{\beta}$. After calculating $\Delta F(\mathbf{x})$ 
+one then does a gradient descent step, which is defined as
+\begin{equation}
+	\mathbf{x}_{i+1} = \mathbf{x}_{i} - \lambda \Delta_x F(\mathbf{x_i}).
+	\label{Gradient descent}
+\end{equation}
+Here the subscript $i$ denotes the epoch. An epoch is defined as the point when 
+the optimization algorithm has seen all the data in your training set once. 
+$\lambda$ is called the learning rate and is known as a hyperparameter. 
+A hyperparameter is a model parameter that is not trained in the training process 
+and has to be optimized in a different way. More on this in chapter \ref{Hyperparameters}
+A problem with (\ref{Gradient descent}) is that one is never guaranteed to find the 
+absolute minimum of $F(\mathbf{x})$, the algorithm often converges at local minima \cite{elemstatlearn}.
+The solution to this is to introduce stochasticity to the optimization algorithm. 
+Stochastic Gradient Descent is a modification of (\ref{Gradient descent}) which 
+iterates over minibatches of your dataset instead of the entire dataset at once. 
+This has two main benefits:
+\begin{enumerate}
+\item It adds stochasticity by shuffling the batches for each epoch.
+\item It significantly reduces the amount of RAM needed to run the calculations on a computer.
+\end{enumerate}
+Introducing minibatches yields another hyperparameter in form of the batch size. 
+This is the amount of datapoints to be used in each iterations. An iteration is 
+defined as when the optimizer has seen all data points in a minibatch, and there are 
+therefore several iterations in an epoch.
+Adding more complexity to Stochastic Gradient Descent (SGD) we get to the optimizer 
+known as Adaptive Moment EstimAtioN (Adam) \cite{adam}. The ADAM optimizer is 
+an optimizer which uses minibatches and also what is known as a momentum based approach.
+As a slight simplification from what's written in \cite{fysstkweek40} the ADAM 
+algorithm in terms of equations looks like:
+\begin{align}
+    \mathbf{g}_i &= \Delta_x E(\bm{x}) \\
+    \bm{m}_i &= \frac{\beta_1 \bm{m}_{i-1} + (1 - \beta_1)\bm{g}_i}{1 - \beta_1^i} \\
+    \bm{s}_i &= \frac{\beta_2 \bm{s}_{i-1} + (1-\beta_2)\bm{g}^2_i}{1 - \beta_2^i} \\
+    \bm{x}_{i+1} &= \bm{x}_i - \eta_i \frac{\bm{m}_i}{\sqrt{\bm{s}_i}+ \epsilon}
+\end{align}
+Following the same naming scheme as (\ref{Gradient descent}), $\bm{x}$ is the 
+learning parameter of the model and the subscript $i$ denotes the epoch (except 
+for $\beta_{1/2}^i$, where it means power). 
+$\beta_1$ and $\beta_2$ are two constants usually set to $\beta_1 = 0.9$ and 
+$\beta_2 = 0.999$. $\epsilon$ is a regularization constant to avoid numerical 
+instability in the fraction and is usually $\epsilon=1E-8$\footnote{These values 
+for $\beta_1$, $\beta_2$ and $\epsilon$ are mentioned in \cite{adam} and seem 
+to be used in practice in most cases. They are also the default values of the 
+ADAM implementation in the Machine Learning Framework Pytorch \cite{NEURIPS2019_9015}.}.
+$\bm{m}$ and $\bm{s}$ are known as the first and second momentum of the gradient 
+$\bm{g}$ respectively. The learning rate $\eta_i$\\ is here subscripted with the 
+epoch $i$. This is to allow for non-constant learning rates which is often beneficial \citationneeded.
+\footnote{Although perhaps less needed for the ADAM optimizer as one can tune the 
+$\beta$-constants to achieve a similar effect.}
+The benefits of the ADAM optimizer is that it has low memory requirement and it calculates 
+individual learning rates for for different parameters of a learning algorithm. 
+This makes the learning rate $\lambda$ a bit more ambiguous as it is weighed 
+differently for each parameter.
 \subsection{Neural Networks}
-\subsubsection{Gradient Descent}
+Previously we used Ordinary Least Squares to introduce simple concepts in Machine 
+Learning. As the model we use to do our analysis in this thesis is a type of 
+Recurrent Neural Network, we now give a short introduction to ordinary neural 
+networks before working us up to describing more advanced models like Recurrent 
+Neural Networks (RNNs).
+A neural network is a non-linear machine learning model that can be used for both 
+regression and classification. In this thesis we focus on the regression case and 
+will therefore stick to describing that. The concept of the neural network was 
+first described in \cite{rosenblatt1958perceptron}. 
+\begin{figure}
+    \caption{A perceptron model as described in \cite{rosenblatt1958perceptron}}
+    \label{Neural network figure}
+\end{figure}
+Mathematically, a neural network can be written in this form:
+\begin{equation}
+    y_i^l = f^l \left( \sum_{j=1}^{N_{l-1}}\omega_{ij}^l y^{l-1}_j+b^l_i  \right)
+    \footnote{While the concept is cited to \cite{rosenblatt1958perceptron}, this 
+    equation was taken from Morten Hjorth-Jensen's great lecture notes \cite{fysstkweek40}
+    from the Universuty of Oslo course Fys-Stk4155 as this is the author's favorite 
+    mathematical description of a neural network}
+    \label{MLP equation}
+\end{equation}
+There are a lot of variables, subscripts and superscripts here, going through them 
+systematically so as to not overwhelm the reader:
+\begin{itemize}
+    \item $l$ denotes what layer in the neural network we are in. Look at Figure 
+    \ref{Neural network figure} to understand what is meant by a layer.
+    \item $i$ denotes what "neuron" in layer $l$ we are looking at. 
+    \item $y_i^l$ means the output of neuron $i$ in layer $l$. At the output layer $l=L$, it denotes the model output.
+    \item $f^l$ is the activation function in layer $l$. An activation function is a function that is used to make the neural network non-linear. Some common activation functions are the Sigmoid function (\ref{sigmoid}) and $\tanh$. For the output layer $l=L$ the activation function is often different depending on whether we are doing classification or regression. For regression $f^L$ is often just $f^L(x)=x$.
+    \item $\omega_{ij}^l$ is the weight corresponding to the output $y_j^{l-1}$ from neuron $j$ in layer $l-1$ when sent to neuron $i$ in layer $l$
+    \item $b_i^l$ is known the bias term. It is a constant that is added to all inputs in neuron $i$ in layer $l$.
+    \item The input to $f^l$ (the weighted sum plus the bias) can also be denoted as $z^l_j$
+\end{itemize}
+The parameters $b$ and $\omega$ are trained using an optimizer. In the case of this 
+thesis that would be the ADAM optimizer. To get gradients to use in the optimizer 
+an algorithm known as backpropagation is used. Backpropagation is an algorithm that 
+takes the gradient at the output layer $L$, which usually is easily derivable and 
+uses the chain rule to find the gradient of the loss function with respect to all 
+the weights and biases in the network.
+We mention the sigmoid function, it is defined as
+\begin{equation}
+	\sigma(\bm{x}) = \frac{1}{1 + e^{-\bm{x}}} \label{sigmoid}
+\end{equation}
+For a normal feed forward neural network, the backpropagation algorithm can be written 
+as 
+\begin{align}
+    \delta^L_j &= \dv{f^L(z)}{z}\left(z^L_j\right) \pdv{C}{y^L_j} \label{output_backprop}\\
+    \delta^l_j &= \sum_k \delta^{l+1}_k \omega^{l+1}_{kj} \dv{f^l(z)}{z}\left(z^l_j\right) \cite{fysstkweek40} \label{backprop}
+\end{align}
+The first equation (\ref{output_backprop}) is for the special case of the output 
+layer, where $l=L$. This needs to be calculated first for us to be able to use 
+(\ref{backprop}) to calculate $\delta^l_j$ for the neurons in the rest of the layer. 
+The term $\delta^l_j$ is then used to get gradients for the weights $\omega^l_j$ 
+and biases $b^l_j$ in this manner:
+\begin{align}
+    \pdv{C}{\omega^l_j} &= \delta^l_j y^l_j \label{dw}\\
+    \pdv{C}{b^l_j} &= \delta^l_j \label{db}
+\end{align}
+Applying an optimizer step on all weights and biases using \ref{dw} and \ref{db}
+will then ideally make the model reduce the cost function of the training data.
+There is more to this than that though, hyperparameters, model complexity (often 
+referring to the amount of parameters. In the case of a neural network that would 
+be the amount of nodes and layers) dictate how well the model can fit the training 
+data. As we discuss in chapter \ref{Bias-Variance trade-off} we do not always want 
+the model to perfectly predict the training data as that can make the model perform 
+worse on data is has not seen during training. There is also the problem of the 
+optimization algorithm not necessarily hitting a global minimum then converging. 
+The parameter-loss space is a complex high dimensional space often with infinitely 
+many local minima that can lead the model to a worse fit than would be possible 
+otherwise. \citationneeded
 \subsection{Recurrent Neural Networks}
+A normal feed forward neural network is only sufficient at learning the relationship 
+between non-structured inputs and outputs. This means that it is not well suited 
+for image analysis, where each pixel's position relative to other pixels is important. 
+It also means that it is not sufficient for time series data where you ideally 
+want a model than can sequentially run through the data and use information about 
+the past to better predict the future.
+
+A Recurrent Neural Network (RNN) is a neural network that takes timed inputs 
+sequentially, changing modifying the "state" of the network while using the same 
+parameters for all future time-steps. In simple terms the algorithm goes like this:
+\begin{enumerate}
+    \item The model takes an input $\bm{x_t}$
+    \item Using trained parameters it updates a hidden state vector $\bm{h_t}$
+    \item The models gives an output based on the parameters and the hidden state $\bm{y_t}$.
+\end{enumerate}
+For an ordinary RNN the state updates and outputs are defined as: 
+\footnote{Note that this describes only a single RNN cell. When dealing with RNNs 
+we often use the term "cell" instead of "layer". There is nothing stopping us from 
+creating a model architecture with multiple RNN cells. Also, keep in mind that there 
+are many ways of sending in inputs and getting out outputs from RNN cells. Here we 
+only present what is relevant for the model setup in this thesis.}
+\begin{align}
+    \bm{h}_t &= \tanh{(\bm{\omega}_{hh}\bm{h}_{t-1} + \bm{\omega}_{xh}\bm{x}_t+\bm{b}_h)} \\
+    \bm{y}_t &= \bm{\omega}_{hy}\bm{h}_t + \bm{b}_y \citationneeded (should probably cite IN5400)
+\end{align}
+Here the variables are as follows:
+\begin{itemize}
+    \item $\bm{y}_t$: The output vector (remember that there can be several output time series) at time step $t$.
+    \item $\bm{h}_t$: The hidden state vector at time step $t$.
+    \item $\bm{x}_t$: The input vector at time step $t$.
+    \item $\bm{\omega}_{hh}$: The weight vector used for the previous hidden state to affect the new.
+    \item $\bm{\omega}_{xh}$: The weight vector that decides how much the input $\bm{x}_t$ affects the state of the RNN.
+    \item $\bm{\omega}_{hy}$: The weight vector that decides how much the hidden state $h_t$ affects the output $y_t$.
+    \item $\bm{b}_h$: A bias term that adds constant change to the hidden state.
+    \item $\bm{b}_y$: A bias term used when calculating the next time step $y_t$.
+\end{itemize}
+\begin{figure}
+    \caption{An RNN cell}
+\end{figure}
+The reason RNNs are referred to as neural networks is possibly because they, like 
+feed forward neural networks have their parameters trained using backpropagation.
+The backpropagation algorithm for an RNN is quite a bit different although the 
+underlying concept is the same. We argue it is not necessary to include the algorithm 
+in this thesis but if the reader is interested they should read this source \citationneeded.
+The important takeaway from the backpropagation algorithm used for RNNs (called 
+Backpropagation Through Time), is that it used extreme amounts of memory because 
+it needs to store values for every time step to be able to get proper gradients 
+for the model parameters. Because of this, it is common to instead use an algorithm 
+called Trunctated Backpropagation Through Time, where one stops saving values after 
+a pre-defined time sequence. This saves memory but makes the model unable to learn 
+dependencies further in time than the cutoff. It also leads to the introduction of 
+a new hyperparameter which we will refer to as the \textbf{sequence length}. \citationneeded.
+
 \subsection{Long Short-Term Memory}
 \label{LSTM Theory}
+The Long Short-Term Memory (LSTM) model is the type of RNN we employ in all our 
+experiments in this thesis work. In this section we therefore also spend some 
+time arguing why the way an LSTM model works fits the Physics we wish to simulate 
+and is not just chosen by random. 
+
+The LSTM is a more advanced type of recurrent neural network that exists because 
+of a major drawback with the ordinary RNN. An RNN as described in the previous section 
+struggles to learn long-term dependencies as the Backpropagation Through Time 
+algorithm starts to downplay the importance of previous time-steps the further one 
+advances in time  \cite{bengio1994learning} \cite{graves2012long}. The LSTM model is designed to fix this, 
+hence the name. This is the reason we use the LSTM model and not a normal RNN in 
+this thesis even though an RNN would be less computationally expensive to train, 
+many of the dependencies in traditional rainfall-runoff modelling are long term. 
+The most obvious case is the modelling of snow. Not the melting itself, but for 
+the model to remember that snow accumulation can lead to lower discharge when it 
+happens and more discharge once the snow starts to melt.
+
+The biggest mathematical difference between a normal RNN and an LSTM is the introduction 
+of the cell state $\bm{c}_t$. Mathematically, the model is described like this:
+\begin{align}
+    f_t &= \sigma\left(W_f\cdot \left[h_{t-1},x_t\right]+b_f\right)\\
+    i_t &= \sigma\left(W_i\cdot \left[ h_{t-1}, x_t\right] + b_i\right)\\
+    C_t &= \tanh\left(W_C\cdot \left[ h_{t-1}, x_t  \right] + b_C \right)
+\cite{hochreiter1997long}
+\end{align}
+% By J. Leon, Beerware licence is acceptable...
+\newcommand{\empt}[2]{$\bm{#1}_{{#2}}$}
+\begin{figure}
+\centering
+\begin{tikzpicture}[
+    % GLOBAL CFG
+    font=\sf \scriptsize,
+    >=LaTeX,
+    % Styles
+    cell/.style={% For the main box
+        rectangle, 
+        rounded corners=5mm, 
+        draw,
+        very thick,
+        },
+    operator/.style={%For operators like +  and  x
+        circle,
+        draw,
+        inner sep=-0.5pt,
+        minimum height =.2cm,
+        },
+    function/.style={%For functions
+        ellipse,
+        draw,
+        inner sep=1pt
+        },
+    ct/.style={% For external inputs and outputs
+        circle,
+        draw,
+        line width = .75pt,
+        minimum width=1cm,
+        inner sep=1pt,
+        },
+    gt/.style={% For internal inputs
+        rectangle,
+        draw,
+        minimum width=4mm,
+        minimum height=3mm,
+        inner sep=1pt
+        },
+    mylabel/.style={% something new that I have learned
+        font=\scriptsize\sffamily
+        },
+    ArrowC1/.style={% Arrows with rounded corners
+        rounded corners=.25cm,
+        thick,
+        },
+    ArrowC2/.style={% Arrows with big rounded corners
+        rounded corners=.5cm,
+        thick,
+        },
+    ]
+
+%Start drawing the thing...    
+    % Draw the cell: 
+    \node [cell, minimum height =4cm, minimum width=6cm] at (0,0){} ;
+
+    % Draw inputs named ibox#
+    \node [gt] (ibox1) at (-2,-0.75) {$\sigma$};
+    \node [gt] (ibox2) at (-1.5,-0.75) {$\sigma$};
+    \node [gt, minimum width=1cm] (ibox3) at (-0.5,-0.75) {Tanh};
+    \node [gt] (ibox4) at (0.5,-0.75) {$\sigma$};
+
+   % Draw opérators   named mux# , add# and func#
+    \node [operator] (mux1) at (-2,1.5) {$\times$};
+    \node [operator] (add1) at (-0.5,1.5) {+};
+    \node [operator] (mux2) at (-0.5,0) {$\times$};
+    \node [operator] (mux3) at (1.5,0) {$\times$};
+    \node [function] (func1) at (1.5,0.75) {Tanh};
+
+    % Draw External inputs? named as basis c,h,x
+    \node[ct, label={[mylabel]Prev Cell State}] (c) at (-4,1.5) {\empt{c}{t-1}};
+    \node[ct, label={[mylabel]Prev Hidden State}] (h) at (-4,-1.5) {\empt{h}{t-1}};
+    \node[ct, label={[mylabel]left:New Input}] (x) at (-2.5,-3) {\empt{x}{t}};
+
+    % Draw External outputs? named as basis c2,h2,x2
+    \node[ct, label={[mylabel]New Cell State}] (c2) at (4,1.5) {\empt{c}{t}};
+    \node[ct, label={[mylabel]New Hidden State}] (h2) at (4,-1.5) {\empt{h}{t}};
+    \node[ct, label={[mylabel]left:New Hidden State (output)}] (x2) at (2.5,3) {\empt{h}{t}};
+
+% Start connecting all.
+    %Intersections and displacements are used. 
+    % Drawing arrows    
+    \draw [ArrowC1] (c) -- (mux1) -- (add1) -- (c2);
+
+    % Inputs
+    \draw [ArrowC2] (h) -| (ibox4);
+    \draw [ArrowC1] (h -| ibox1)++(-0.5,0) -| (ibox1); 
+    \draw [ArrowC1] (h -| ibox2)++(-0.5,0) -| (ibox2);
+    \draw [ArrowC1] (h -| ibox3)++(-0.5,0) -| (ibox3);
+    \draw [ArrowC1] (x) -- (x |- h)-| (ibox3);
+
+    % Internal
+    \draw [->, ArrowC2] (ibox1) -- (mux1);
+    \draw [->, ArrowC2] (ibox2) |- (mux2);
+    \draw [->, ArrowC2] (ibox3) -- (mux2);
+    \draw [->, ArrowC2] (ibox4) |- (mux3);
+    \draw [->, ArrowC2] (mux2) -- (add1);
+    \draw [->, ArrowC1] (add1 -| func1)++(-0.5,0) -| (func1);
+    \draw [->, ArrowC2] (func1) -- (mux3);
+
+    %Outputs
+    \draw [-, ArrowC2] (mux3) |- (h2);
+    \draw (c2 -| x2) ++(0,-0.1) coordinate (i1);
+    \draw [-, ArrowC2] (h2 -| x2)++(-0.5,0) -| (i1);
+    \draw [-, ArrowC2] (i1)++(0,0.2) -- (x2);
+
+\end{tikzpicture}
+\caption{A single basic LSTM cell as proposed in \cite{hochreiter1997long}. The 
+Tikz code for creating this figure is released under the permissive Beerware license 
+and is therefore taken with permission from \cite{tikzlstm}
+Visually we see the point of the Cell State $C$ here is to not retain more information 
+by being affected less over time than the hidden state $h$. This is how the LSTM 
+avoids the gradient issues regarding long term dependencies that the RNN suffers 
+from.}
+\label{LSTM figure}
+\end{figure}
+It is difficult to describe an LSTM purely through mathematics, therefore we 
+include Figure \ref{LSTM figure}. In the figure lines meeting means concatenation, 
+the boxes means a neural network layer. The boxed $\sigma$ for instance indicates 
+a neural network with the sigmoid (\ref{sigmoid}) activation function.
+
+As opposed to the case of the vanilla RNN, trunctating the Backpropagation Through 
+Time algorithm actually doesn't break long-term dependencies in an LSTM as the 
+model architecture itself is designed to keep track of these. This means that the 
+LSTM has two clear advantages:
+\begin{enumerate}
+	\item An LSTM does not suffer from the same vanishing gradient problem that the RNN does.
+	\item An LSTM is less sensitive to trunctating the Backpropagation Through Time algorithm.
+\end{enumerate}
+\subsection{Hyperparameters}
+\label{Hyperparameters}
 \subsection{Feature selection}
 \subsubsection{Permutation test}
 \label{Feature selection}
-One of the critisisms of machine learning methods
+One of the criticisms of machine learning methods
 is that they are not easily interpretable. This 
 is especially true if one wants to train a model 
 on a dataset with an overwhelming amount of 
@@ -109,24 +451,24 @@ decreased complexity and improving model interpretability as getting an intuitiv
 understanding of what a model needs to properly approximate a system is easier when 
 there are fewer features.
 
-A method to remove correlated features that is fairly simple to use is hierarchial 
+A method to remove correlated features that is fairly simple to use is hierarchical 
 clustering on the correlation of the features in a dataset. 
 The most well known algorithm for finding correlation is called Pearson correlation. It has 
 the drawback of only finding linear correlation. Spearman correlation on the other 
 hand is more general and can find non-linear correlation \cite{spearman}. After 
 finding the correlations of the features one then uses a clustering method to 
 visualize these correlations. The source at \cite{permutation_clustering} suggests 
-using hirerarchial clustering and choosing a single feature from each branch below 
-a chosen treshold. For illustational purposes we include such a clustering figure
+using hierarchical clustering and choosing a single feature from each branch below 
+a chosen threshold. For illustrational purposes we include such a clustering figure
 created on synthetic data, it can be seen in figure \ref{wald example}.
 While \cite{permutation_clustering} suggests using the Spearman rank order correlation,
 we instead choose to use the Pearson correlation as it is more easily interpretable.
 Also, when removing features we argue that it should not matter whether two variables 
-are strongly positively or negativey correlated, so we choose to do hierarchial 
+are strongly positively or negatively correlated, so we choose to do hierarchical 
 clustering based on the absolute value of the Pearson correlation.
 \begin{figure}
 	\includegraphics{{examples}/cluster_example.pdf}
-	\caption{Example of a hierarchical plot created on some simple gaussian distributions.}
+	\caption{Example of a hierarchical plot created on a simple Gaussian distributions.}
     \label{wald example}
 \end{figure}
 The idea here is to set a level at the y-axis of the plot, each branch that is

@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.cluster as spc
@@ -21,4 +23,6 @@ corr_spearman = df.corr(method="spearman")
 corr_linkage = spc.hierarchy.ward(corr_spearman)
 dendro = spc.hierarchy.dendrogram(corr_linkage, labels=df.columns, ax=ax2)
 fig.tight_layout()
-fig.savefig("../figures/examples/cluster_example.pdf")
+path = Path("../figures/examples")
+path.mkdir(exist_ok=True)
+fig.savefig(path  / "cluster_example.pdf")
