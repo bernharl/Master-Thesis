@@ -349,6 +349,7 @@ To predict the output $\bm{y}_t$ at time step $t$:
 \end{enumerate}
 \subsection{Hyperparameters}
 \label{Hyperparameters}
+Is this section actually needed?
 There are mentions of a concept known as hyperparameters in this chapter. A hyperparameter 
 is a parameter that is not trained as part of the optimization algorithm. For an 
 LSTM the most relevant hyperparameters are:
@@ -358,7 +359,6 @@ LSTM the most relevant hyperparameters are:
     \item Sequence length
     \item Dropout rate
     \item Initial forget gate bias
-    \item More probably lmao
 \end{itemize}
 \subsection{Feature selection}
 \subsubsection{Permutation test}
@@ -427,3 +427,23 @@ for instance do not need $2x$, $x$ and $-x$ in the same model, those features
 represent the same information.
 
 \subsection{Drawbacks}
+There are several common criticisms of machine learning and other data driven 
+approaches to physical modelling. Two common ones are:
+\begin{enumerate}
+    \item Machine learning models are hard to analyze as they essentially are just a collection of arbitrary parameters that are optimized based on a dataset. It is therefore difficult to say whether a machine learning model actually "learns" any physics\footnote{Though this is a question of definition. What does "learning physics"actually mean?}.
+    \item Machine learning models are unable to include all the knowledge already present in a scientific field.
+\end{enumerate}
+We believe both these criticisms are valid and need to be addressed. First off: 
+While analyzing machine learning models can be very difficult, that is not necessarily 
+always the case. It depends greatly on how complex the model is how much different 
+data the model uses among other things. A linear regression model is easy to interpret, 
+but it becomes much less easy to interpret if it needs several thousand different 
+inputs \cite{elemstatlearn}. This is the reason we employ feature selection here 
+in this thesis. Our goal is not to get the highest performing model, but rather 
+to use the model as a tool for physical discovery. This also addresses point 2: 
+We  are in fact not looking to use LSTM models as replacements for physical models, 
+but are instead interested in improving existing models like SAC-SMA \citationneeded 
+by seeing if there is any possibility for improving the sometimes lacking physical 
+modelling of classical models. It is important to remember that the best performing 
+classical rainfall-runoff models also include lots of trained/optimized parameters 
+that do not necessarily represent any physical phenomena. 
