@@ -1,6 +1,29 @@
 \section{Rainfall-Runoff modelling}
-\subsection{Physical modelling}
+\subsection{Classical modelling}
+In this section we lay out some of the reasons why classical rainfall-runoff 
+models do not model the physics in a system properly and why this can lead to issues 
+for both interpretability and performance.
+
+\subsection{SAC-SMA}
+The Sacramento Soil Moisture Accounting (SAC-SMA) rainfall-runoff model is a widely 
+used hydrological model that can be considered a hybrid between a parameterized 
+and a physical model.
+\begin{align}
+    \bm{S}^1(t + \Delta t,x) &= \bm{S}(t,x) + f\left(\bm{S}(t,x),P(t+\Delta t,x),E_p (t+\Delta t, x), \bm{V}(x) \right) \\
+    \bm{S}^{(n+1)}(t+\Delta t,x) &= \bm{S}^{(n)}(t+\Delta t, x) \nonumber \\
+    &+ f\left( \bm{S}^{(n)}(t+\Delta t, x), \bm{q}^{(n+1)}(t+\Delta t,x),P_x(t+\Delta t,x),\bm{V}(x)  \right)
+\end{align}
+
 \subsection{Drawbacks}
+Several terms in the SAC-SMA model are purely parametrized, needing different parameters 
+for each basin if we want to see acceptable results. This leads to a plethora of 
+issues:
+\begin{itemize}
+    \item It is not possible for the model to generalize well over several basins. \citationneeded
+    \item The terms in the model are often hard to interpret. This is acceptable for people merely interested in a well performing model in practice, but it is a large detriment to hydrologists, physicists and people from other practices who may want to use the model for scientific discovery.
+    \item Coming from the above stated problem, it is also hard to use such a 
+        complex and highly parametrized model to find out what information it lacks to be able to improve.
+\end{itemize}
 
 \section{Machine Learning}
 We give a brief explanation of the basics in Machine Learning here for better context 
