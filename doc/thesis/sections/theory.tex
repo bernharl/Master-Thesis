@@ -368,8 +368,43 @@ To predict the output $\bm{y}_t$ at time step $t$:
 \begin{enumerate}
     \item Take a subset of the input vector $\bm{x}_{t-\text{sequence length}:t}$.
     \item Feed it through the LSTM cell, saving the hidden vector $\bm{h}_t$.
-    \item Feed $\bm{h}_t$ through an ordinary neural network layer. This is essentially to do a weighted sum of the elements in $\bm{h}_t$ so that we get an output vector of the same dimensions as the output $\bm{y}_t$. With only one output as with rainfall-runoff modeling this means summing all the values $\bm{h}_t$ into a single scalar.
+    \item Feed $\bm{h}_t$ through an ordinary neural network layer. This is essentially to do a weighted sum of the elements in $\bm{h}_t$ so that we get an output vector of the same dimensions as the output $\bm{y}_t$. With only one output as with rainfall-runoff modeling this means summing all the values $\bm{h}_t$ into a single scalar $y_t$.
 \end{enumerate}
+\subsection{Implementing static features along with timeseries}
+The description of the LSTM model we give in the above section only contains information 
+for how to implement timeseries, not static features such "area" that do not vary 
+with time. There are multiple ways to implement this. An obvious choice here is to 
+naively treat each static feature as a timeseries that does not change. This seems 
+counter-intuitive as it makes the model not see any difference between timeseries and 
+static features, but it is very easily implementable and memory-wize does not affect 
+the training algorithm too much\footnote{Memory is often the bottleneck of training 
+machine learning models. \citationneeded}. This way we train the exact same type 
+of model and do not need to modify anything.
+
+Recently a small modification to the LSTM model was proposed for this purpose. 
+It is called the Entity Aware LSTM(EA-LSTM) \cite{lstm_second_paper}. The paper 
+indicates that this modified LSTM performs worse than the naive approach, going 
+from a median NSE of 0.76 to 0.74 on the CAMELS dataset \cite{CAMELS_US}. The 
+underlying philosophy of this thesis however still makes us believe that this is 
+the model we should employ, as it is the most interpretable model \cite{lstm_second_paper} 
+and the goal of this thesis is to get a better understanding of the underlying 
+physics in rainfall-runoff modelling that these static features can help explain.
+
+Mathematically, an EA-LSTM is very similar to an LSTM. We only need to change the 
+input gate described in (\ref{input gate}): 
+\begin{equation}
+    \bm{i}_t = \sigma\left(\bm{\omega}_i  \bm{x}_s + \bm{b}_i\right) \circ \tanh\left(\bm{\omega}_{ii}\left[ \bm{h}_{t-1},\bm{x}_t  \right] + \bm{b}_{ii}\right) \label{EA-LSTM input gate}\\
+\end{equation}
+This way the part of the input gate is affected by the static features, making 
+the static features able to affect the cell state. This makes the model able to 
+change how it views long-term dependencies based on information from the static features. 
+The neuron activation $\sigma (\bm{\omega}_i \bm{x}_s + \bm{b}_i)$ is a metric that 
+is of interest as it is likely the key to understanding how the model interprets 
+the physical information of the data\footnote{Although we are of course aware that 
+the model may not at all use any physical information from the static features, but 
+instead just learns that basins with similar static features behave similarly.}. 
+
+
 \subsection{Hyperparameters}
 \label{Hyperparameters}
 Is this section actually needed?
@@ -382,6 +417,7 @@ LSTM the most relevant hyperparameters are:
     \item Sequence length
     \item Dropout rate
     \item Initial forget gate bias
+    \item Gradient norm clip threshold
 \end{itemize}
 \subsection{Feature selection}
 \subsubsection{Permutation test}
@@ -413,7 +449,10 @@ A major problem for this method is that (\ref{Permutation equation}) could give
 unrealistically low significance to features that are highly correlated to other 
 features. In this case the feature may very well be important, but the information 
 contained in it is also contained in one or more other correlated features, meaning 
-the model doesn't lose as much information as one may think.
+the model doesn't lose as much information as one may think. This would be fine 
+if we were just looking to simplify a well performing model, but what we aim for 
+is improved interpretability so that we may know which features are actually important 
+to the physical system.
 
 A way around this is to first remove unneeded correlated features so that the model 
 contains as little duplicate information as possible. Reducing the amount of 
@@ -422,6 +461,12 @@ decreased complexity and improving model interpretability as getting an intuitiv
 understanding of what a model needs to properly approximate a system is easier when 
 there are fewer features.
 
+\begin{figure}
+	\includegraphics{{examples}/cluster_example.pdf}
+    \caption{Example of a hierarchical plot created. The ticks on the x-axis 
+    represent $f(x)$ for $x \in \left[0,100\right]$}
+    \label{wald example}
+\end{figure}
 A method to remove correlated features that is fairly simple to use is hierarchical 
 clustering on the correlation of the features in a dataset. 
 The most well known algorithm for finding correlation is called Pearson correlation. It has 
@@ -437,19 +482,17 @@ we instead choose to use the Pearson correlation as it is more easily interpreta
 Also, when removing features we argue that it should not matter whether two variables 
 are strongly positively or negatively correlated, so we choose to do hierarchical 
 clustering based on the absolute value of the Pearson correlation.
-\begin{figure}
-	\includegraphics{{examples}/cluster_example.pdf}
-	\caption{Example of a hierarchical plot created on a simple Gaussian distributions.}
-    \label{wald example}
-\end{figure}
 The idea here is to set a level at the y-axis of the plot, each branch that is
 "cut off" will then only get to contribute one single feature, discarding all others.
 For instance: In figure \ref{wald example} we may want to set the level at 0.1. 
-This would lead to only 4 features being included, which would make sense as we 
+This would lead to only 4 features being included. This makes sense as we 
 for instance do not need $2x$, $x$ and $-x$ in the same model, those features 
-represent the same information.
+represent the same information. A problem with this method is that there is no 
+automatic way to determine which features to actually choose. Often this is done at 
+random, but it could for instance be an idea to use some existing domain knowledge 
+for this decision.
 
-\subsection{Drawbacks}
+\subsection{Addressing common criticisms of Machine Learning}
 There are several common criticisms of machine learning and other data driven 
 approaches to physical modelling. Two common ones are:
 \begin{enumerate}
@@ -469,4 +512,6 @@ but are instead interested in improving existing models like SAC-SMA \citationne
 by seeing if there is any possibility for improving the sometimes lacking physical 
 modelling of classical models. It is important to remember that the best performing 
 classical rainfall-runoff models also include lots of trained/optimized parameters 
-that do not necessarily represent any physical phenomena. 
+that do not necessarily represent any physical phenomena. We agree with \cite{hybrid_paper} 
+that the power of machine learning when it comes to leveraging data should be 
+used in a way that improves our understanding of Physics.
