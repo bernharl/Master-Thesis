@@ -1,9 +1,24 @@
+In this chapter we describe how we implement what we lay out in the Theory chapter.
+\section{CamelsML}
+Originally a fork of the code in \cite{lstm_second_paper} with a few modifications, 
+the machine learning code of this thesis is now implemented to be a fully fledged 
+Python package. As the original code it is forked from, it is released under the 
+Apache 2.0 license and anyone is therefore free to modify and implement the code 
+into their own experiments in the future.
+See Appendix \ref{camelsml documentation} for documentation on how to use the python 
+package.
+
 \section{Model configuration}
 The models we apply in this thesis are all variants of the LSTM model, desbribed in \ref{LSTM Theory}.
-\section{Strategies for including static features}
-LSTM models being reccurrent neural networks usually only support timeseries as 
-inputs. However, as mentioned in  chapter \ref{Data}
 \section{Data split}
+With 671 basins in the CAMELS-GB dataset, we run into an issue with perhaps not 
+having enough data. This is not a problem for the timeseries, as they have data 
+over several years, but it is indeed a problem for the static features of which there 
+are only one datapoint per basin. To improve our statistics we therefore use 
+cross validation. All results in this thesis that compare models to each other 
+are made from the same 5-fold cross validation split. The test set is separate 
+from this and is only used to say something about our best performing model after 
+we have analyzed the results.
 \subsection{In sample basins}
 \subsection{Out of sample basins}
 \section{Evaluation}

@@ -1,0 +1,60 @@
+\section{CamelsML documentation}
+\label{camelsml documentation}
+\subsection{Installation REMEMBER TO ADD TO PYPI, IF NOT, CHANGE THE INSTALLATION INSTRUCTION!!!}
+Requirements:
+\begin{itemize}
+    \item Cuda
+    \item Linux (Other operating systems have not been tested)
+    \item Python $>=$ 3.6
+\end{itemize}
+In the terminal, run:
+\begin{lstlisting}[language=bash]
+pip install camelsml
+\end{lstlisting}
+NB: The author recommends using a dependency resolver better suited than pip. 
+Pipenv (\url{https://pypi.org/project/pipenv/}) is what is being used in this thesis.
+For a Pipfile that is confirmed to work on Ubuntu $>=$ 20.04 and an updated installation of Arch Linux at the time this thesis was submitted, 
+see the root of the github repository for this thesis at \url{https://github.com/bernharl/Master-Thesis}.
+\section{Usage}
+Here we show a minimum example on how to run a model training with CamelsML. 
+\begin{lstlisting}[language=python]
+from camelsml import load_config, train
+
+cfg = load_config(cfg_file="run_config.txt", device="cpu", num_workers=24)
+train(cfg)
+\end{lstlisting}
+As seen here, the CamelsML package needs a variable called "cfg", which is a dictionary 
+containing the model configuration, how the train-validation-test split is defined, 
+and so on. 
+A simple example of a configuration file could be this, which trains an ordinary 
+LSTM for 30 epochs using a batch size of 1024 is shown below:
+\begin{lstlisting}
+run_dir: <path> # Folder to save runs in
+camels_root: <path> # Root folder of dataset
+train_start: 01101971 # Date to start training period of timeseries
+train_end: 30092015 # Date to end training period of timeseries
+val_start: 01101971 # Date to start validation period of timeseries
+val_end: 30092015 # Date to end validation period of timeseries
+epochs: 30 # Number of epochs
+learning_rate: 1e-3 # Initial learning rate
+seq_length: 270 # Sequence length
+batch_size: 1024 # Batch size
+hidden_size:  256 # Amount of nodes in neural network layers in the LSTM gates
+initial_forget_gate_bias: 5 
+log_interval: 50 # How often to log
+clip_norm: True # Whether to clip gradients
+clip_value: 1 # Max of gradient norm
+dropout: 0 # Dropout rate
+seed: 19970204 # Seed, for reproducability 
+cache_data: False # Whether to cache all training data in RAM
+no_static: True # No static features
+evaluate_on_epoch: True # Run evaluation after each epoch
+train_basin_file: <path> # Plain text list of basins to use for training 
+val_basin_file:  <path> # Plain text list of basins to use for validation
+test_basin_file: <path> # Plain text list of basins to use for testing
+\end{lstlisting}
+For more examples, all the models trained in this thesis along with scripts for 
+setting up train-test splits and cross validation are contained in the "runs" directory at the 
+Github page for this thesis (\url{https://github.com/bernharl/Master-Thesis/tree/master/runs}).
+If you are reading this some time after the thesis is submitted, there may be updated 
+documentation for CamelsML on the Github page (\url{https://github.com/bernharl/ealstm_regional_modeling_camels_gb})

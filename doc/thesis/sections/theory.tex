@@ -1,6 +1,29 @@
 \section{Rainfall-Runoff modelling}
-\subsection{Physical modelling}
+\subsection{Classical modelling}
+In this section we lay out some of the reasons why classical rainfall-runoff 
+models do not model the physics in a system properly and why this can lead to issues 
+for both interpretability and performance.
+
+\subsection{SAC-SMA}
+The Sacramento Soil Moisture Accounting (SAC-SMA) rainfall-runoff model is a widely 
+used hydrological model that can be considered a hybrid between a parameterized 
+and a physical model.
+\begin{align}
+    \bm{S}^1(t + \Delta t,x) &= \bm{S}(t,x) + f\left(\bm{S}(t,x),P(t+\Delta t,x),E_p (t+\Delta t, x), \bm{V}(x) \right) \\
+    \bm{S}^{(n+1)}(t+\Delta t,x) &= \bm{S}^{(n)}(t+\Delta t, x) \nonumber \\
+    &+ f\left( \bm{S}^{(n)}(t+\Delta t, x), \bm{q}^{(n+1)}(t+\Delta t,x),P_x(t+\Delta t,x),\bm{V}(x)  \right)
+\end{align}
+
 \subsection{Drawbacks}
+Several terms in the SAC-SMA model are purely parametrized, needing different parameters 
+for each basin if we want to see acceptable results. This leads to a plethora of 
+issues:
+\begin{itemize}
+    \item It is not possible for the model to generalize well over several basins. \citationneeded
+    \item The terms in the model are often hard to interpret. This is acceptable for people merely interested in a well performing model in practice, but it is a large detriment to hydrologists, physicists and people from other practices who may want to use the model for scientific discovery.
+    \item Coming from the above stated problem, it is also hard to use such a 
+        complex and highly parametrized model to find out what information it lacks to be able to improve.
+\end{itemize}
 
 \section{Machine Learning}
 We give a brief explanation of the basics in Machine Learning here for better context 
@@ -264,7 +287,14 @@ The LSTM is a more advanced type of recurrent neural network that exists because
 of a major drawback with the ordinary RNN. An RNN as described in the previous section 
 struggles to learn long-term dependencies as the Backpropagation Through Time 
 algorithm starts to downplay the importance of previous time-steps the further one 
-advances in time  \cite{bengio1994learning} \cite{graves2012long}. The LSTM model is designed to fix this, 
+advances in time. The fenomenon that causes this is known as the vanishing gradient 
+problem \cite{bengio1994learning} \cite{graves2012long} \footnote{Mentions of 
+vanishing and exploding gradients are common in Machine Learning and are not 
+exclusive to Recurrent Neural Networks. Historically the popularity of activation 
+functions in normal neural networks has also been dictated by these issues. The 
+Sigmoid function (\ref{sigmoid}) can lead to vanishing gradients as the gradient 
+approaches $0$ when $x\rightarrow \infty$.}.
+The LSTM model is designed to fix this, 
 hence the name. This is the reason we use the LSTM model and not a normal RNN in 
 this thesis even though an RNN would be less computationally expensive to train, 
 many of the dependencies in traditional rainfall-runoff modelling are long term. 
@@ -272,146 +302,123 @@ The most obvious case is the modelling of snow. Not the melting itself, but for
 the model to remember that snow accumulation can lead to lower discharge when it 
 happens and more discharge once the snow starts to melt.
 
-The biggest mathematical difference between a normal RNN and an LSTM is the introduction 
-of the cell state $\bm{c}_t$. Mathematically, the model is described like this:
-\begin{align}
-    f_t &= \sigma\left(W_f\cdot \left[h_{t-1},x_t\right]+b_f\right)\\
-    i_t &= \sigma\left(W_i\cdot \left[ h_{t-1}, x_t\right] + b_i\right)\\
-    C_t &= \tanh\left(W_C\cdot \left[ h_{t-1}, x_t  \right] + b_C \right)
-\cite{hochreiter1997long}
-\end{align}
-% By J. Leon, Beerware licence is acceptable...
-\newcommand{\empt}[2]{$\bm{#1}_{{#2}}$}
-\begin{figure}
-\centering
-\begin{tikzpicture}[
-    % GLOBAL CFG
-    font=\sf \scriptsize,
-    >=LaTeX,
-    % Styles
-    cell/.style={% For the main box
-        rectangle, 
-        rounded corners=5mm, 
-        draw,
-        very thick,
-        },
-    operator/.style={%For operators like +  and  x
-        circle,
-        draw,
-        inner sep=-0.5pt,
-        minimum height =.2cm,
-        },
-    function/.style={%For functions
-        ellipse,
-        draw,
-        inner sep=1pt
-        },
-    ct/.style={% For external inputs and outputs
-        circle,
-        draw,
-        line width = .75pt,
-        minimum width=1cm,
-        inner sep=1pt,
-        },
-    gt/.style={% For internal inputs
-        rectangle,
-        draw,
-        minimum width=4mm,
-        minimum height=3mm,
-        inner sep=1pt
-        },
-    mylabel/.style={% something new that I have learned
-        font=\scriptsize\sffamily
-        },
-    ArrowC1/.style={% Arrows with rounded corners
-        rounded corners=.25cm,
-        thick,
-        },
-    ArrowC2/.style={% Arrows with big rounded corners
-        rounded corners=.5cm,
-        thick,
-        },
-    ]
-
-%Start drawing the thing...    
-    % Draw the cell: 
-    \node [cell, minimum height =4cm, minimum width=6cm] at (0,0){} ;
-
-    % Draw inputs named ibox#
-    \node [gt] (ibox1) at (-2,-0.75) {$\sigma$};
-    \node [gt] (ibox2) at (-1.5,-0.75) {$\sigma$};
-    \node [gt, minimum width=1cm] (ibox3) at (-0.5,-0.75) {Tanh};
-    \node [gt] (ibox4) at (0.5,-0.75) {$\sigma$};
-
-   % Draw opérators   named mux# , add# and func#
-    \node [operator] (mux1) at (-2,1.5) {$\times$};
-    \node [operator] (add1) at (-0.5,1.5) {+};
-    \node [operator] (mux2) at (-0.5,0) {$\times$};
-    \node [operator] (mux3) at (1.5,0) {$\times$};
-    \node [function] (func1) at (1.5,0.75) {Tanh};
-
-    % Draw External inputs? named as basis c,h,x
-    \node[ct, label={[mylabel]Prev Cell State}] (c) at (-4,1.5) {\empt{c}{t-1}};
-    \node[ct, label={[mylabel]Prev Hidden State}] (h) at (-4,-1.5) {\empt{h}{t-1}};
-    \node[ct, label={[mylabel]left:New Input}] (x) at (-2.5,-3) {\empt{x}{t}};
-
-    % Draw External outputs? named as basis c2,h2,x2
-    \node[ct, label={[mylabel]New Cell State}] (c2) at (4,1.5) {\empt{c}{t}};
-    \node[ct, label={[mylabel]New Hidden State}] (h2) at (4,-1.5) {\empt{h}{t}};
-    \node[ct, label={[mylabel]left:New Hidden State (output)}] (x2) at (2.5,3) {\empt{h}{t}};
-
-% Start connecting all.
-    %Intersections and displacements are used. 
-    % Drawing arrows    
-    \draw [ArrowC1] (c) -- (mux1) -- (add1) -- (c2);
-
-    % Inputs
-    \draw [ArrowC2] (h) -| (ibox4);
-    \draw [ArrowC1] (h -| ibox1)++(-0.5,0) -| (ibox1); 
-    \draw [ArrowC1] (h -| ibox2)++(-0.5,0) -| (ibox2);
-    \draw [ArrowC1] (h -| ibox3)++(-0.5,0) -| (ibox3);
-    \draw [ArrowC1] (x) -- (x |- h)-| (ibox3);
-
-    % Internal
-    \draw [->, ArrowC2] (ibox1) -- (mux1);
-    \draw [->, ArrowC2] (ibox2) |- (mux2);
-    \draw [->, ArrowC2] (ibox3) -- (mux2);
-    \draw [->, ArrowC2] (ibox4) |- (mux3);
-    \draw [->, ArrowC2] (mux2) -- (add1);
-    \draw [->, ArrowC1] (add1 -| func1)++(-0.5,0) -| (func1);
-    \draw [->, ArrowC2] (func1) -- (mux3);
-
-    %Outputs
-    \draw [-, ArrowC2] (mux3) |- (h2);
-    \draw (c2 -| x2) ++(0,-0.1) coordinate (i1);
-    \draw [-, ArrowC2] (h2 -| x2)++(-0.5,0) -| (i1);
-    \draw [-, ArrowC2] (i1)++(0,0.2) -- (x2);
-
-\end{tikzpicture}
-\caption{A single basic LSTM cell as proposed in \cite{hochreiter1997long}. The 
-Tikz code for creating this figure is released under the permissive Beerware license 
-and is therefore taken with permission from \cite{tikzlstm}
-Visually we see the point of the Cell State $C$ here is to not retain more information 
-by being affected less over time than the hidden state $h$. This is how the LSTM 
-avoids the gradient issues regarding long term dependencies that the RNN suffers 
-from.}
-\label{LSTM figure}
-\end{figure}
-It is difficult to describe an LSTM purely through mathematics, therefore we 
-include Figure \ref{LSTM figure}. In the figure lines meeting means concatenation, 
-the boxes means a neural network layer. The boxed $\sigma$ for instance indicates 
-a neural network with the sigmoid (\ref{sigmoid}) activation function.
-
 As opposed to the case of the vanilla RNN, trunctating the Backpropagation Through 
 Time algorithm actually doesn't break long-term dependencies in an LSTM as the 
-model architecture itself is designed to keep track of these. This means that the 
-LSTM has two clear advantages:
+model architecture itself is designed to keep track of these \cite{graves2012long}.
+This means that the LSTM has two clear advantages:
 \begin{enumerate}
 	\item An LSTM does not suffer from the same vanishing gradient problem that the RNN does.
 	\item An LSTM is less sensitive to trunctating the Backpropagation Through Time algorithm.
 \end{enumerate}
+
+\begin{figure}
+\centering
+    \input{figures/tikz/lstm.tex}
+\caption{A single basic LSTM cell as proposed in \cite{hochreiter1997long}. Visually we see the point of the Cell State $C$ here is to not retain more information 
+by being affected less over time than the hidden state $h$. This is how the LSTM 
+avoids the gradient issues regarding long term dependencies that the RNN suffers 
+from.
+The Tikz code for creating this figure is released under the permissive Beerware license 
+and is a modified version of the figure in \cite{tikzlstm}.
+}
+\label{LSTM figure}
+\end{figure}
+To understand how an ordinary LSTM works we need to have a look at Figure \ref{LSTM figure}.
+In the figure lines meeting means concatenation, the boxes represent neural network layers. The boxed $\sigma$ for instance indicates a neural network layer with the Sigmoid function 
+as the activation function. Circles indicate a pointwise operation.
+The biggest mathematical difference between a normal RNN and an LSTM is the introduction 
+of the cell state $\bm{c}_t$. The cell state is only affected twice per time step 
+by relatively simple operations (pointwise multiplication and addition). This 
+ensures that the gradients related to the cell state get simplified and therefore 
+suffer less from the vanishing gradient effect that hinders ordinary RNNs from 
+learning long term dependencies. The three connections between the hidden state 
+$\bm{h}$ and cell state $\bm{c}$ are often called "gates".
+\begin{enumerate}
+    \item The first (from left to right) is often called the "forget gate". This is because $\sigma(x) \in \left<0,1\right>$, making the forget gate either not affect the hidden state at all or lower the values in the $\bm{c}_{t-1}$-vector.
+    \item The second gate is called the "input gate". This is where new information is added to the cell state through multiplying the output from two neural network layers, one with Sigmoid activation and one with $\tanh$ activation and then adding that product to the cell state.
+    \item The third gate is called the "output gate" and it dictates the flow of information from the cell state to the hidden state. It is defined as the pointwise product of $\tanh{\bm{c}_t}$ and the output of the concatenated previous hidden state and current input $\left[\bm{h}_{t-1},\bm{x}_t\right]$. The output of this gate is both used as the updated hidden state $\bm{h}_t$ and as the output\footnote{At least in the model configuration we use, there are many variants of the LSTM model \cite{graves2012long}.}.
+\end{enumerate}
+Now that we have a qualitative explanation of the LSTM model, we lay it down in 
+mathematical terms as well:
+\begin{align}
+    \bm{f}_t &= \sigma\left(\bm{\omega}_f\cdot \left[\bm{h}_{t-1},\bm{x}_t\right]+\bm{b}_f\right) \label{forget gate}\\
+    \bm{i}_t &= \sigma\left(\bm{\omega}_i \left[ \bm{h}_{t-1}, \bm{x}_t\right] + \bm{b}_i\right) \circ \tanh\left(\bm{\omega}_{ii}\left[ \bm{h}_{t-1},\bm{x}_t  \right] + \bm{b}_{ii}\right) \label{input gate}\\
+    \bm{c}_t &= \bm{c}_{t-1} \circ \bm{f}_t + \bm{i}_t \\
+    \bm{h}_t &= \sigma \left( \bm{\omega}_o \left[ \bm{h}_{t-1}, \bm{x}_t \right] 
+    + \bm{b}_o \right) \circ \tanh(\bm{c}_t) \label{output gate}
+    \cite{hochreiter1997long} \cite{gers1999learning}
+\end{align}
+The terms are as follows:
+\begin{itemize}
+    \item $\sigma$: The Sigmoid function (\ref{sigmoid}).
+    \item $\bm{f}_t$: Forget gate at time step $t$.
+    \item $\bm{\omega}_i$ and $\bm{f}_i$: Neural network weights and bias in the forget gate.
+    \item $\circ$: Hadamard product.
+    \item $\bm{i}_t$: Input gate at time step $t$.
+    \item $\bm{\omega}_i$ and $\bm_i$: Neural network weights and bias in the Sigmoid activated neural network in the input gate.
+    \item $\bm{\omega}_{ii}$ and $\bm_{ii}$: Neural network weights and bias in the tanh activated neural network in the input gate.
+    \item $\bm{c}_t$: Cell state at time step $t$.
+    \item $\bm{h}_t$: Hidden state at time step $t$.
+    \item $\bm{\omega}_o$ and $\bm{b}_o$: Neural network weights and bias in the output gate.
+    \item $\bm{x}_t$: Input vector at time step $t$.
+\end{itemize}
+There are several ways to use an LSTM for prediction. The method relevant for this 
+thesis is the one we present here.
+To predict the output $\bm{y}_t$ at time step $t$:
+\begin{enumerate}
+    \item Take a subset of the input vector $\bm{x}_{t-\text{sequence length}:t}$.
+    \item Feed it through the LSTM cell, saving the hidden vector $\bm{h}_t$.
+    \item Feed $\bm{h}_t$ through an ordinary neural network layer. This is essentially to do a weighted sum of the elements in $\bm{h}_t$ so that we get an output vector of the same dimensions as the output $\bm{y}_t$. With only one output as with rainfall-runoff modeling this means summing all the values $\bm{h}_t$ into a single scalar $y_t$.
+\end{enumerate}
+\subsection{Implementing static features along with timeseries}
+The description of the LSTM model we give in the above section only contains information 
+for how to implement timeseries, not static features such "area" that do not vary 
+with time. There are multiple ways to implement this. An obvious choice here is to 
+naively treat each static feature as a timeseries that does not change. This seems 
+counter-intuitive as it makes the model not see any difference between timeseries and 
+static features, but it is very easily implementable and memory-wize does not affect 
+the training algorithm too much\footnote{Memory is often the bottleneck of training 
+machine learning models. \citationneeded}. This way we train the exact same type 
+of model and do not need to modify anything.
+
+Recently a small modification to the LSTM model was proposed for this purpose. 
+It is called the Entity Aware LSTM(EA-LSTM) \cite{lstm_second_paper}. The paper 
+indicates that this modified LSTM performs worse than the naive approach, going 
+from a median NSE of 0.76 to 0.74 on the CAMELS dataset \cite{CAMELS_US}. The 
+underlying philosophy of this thesis however still makes us believe that this is 
+the model we should employ, as it is the most interpretable model \cite{lstm_second_paper} 
+and the goal of this thesis is to get a better understanding of the underlying 
+physics in rainfall-runoff modelling that these static features can help explain.
+
+Mathematically, an EA-LSTM is very similar to an LSTM. We only need to change the 
+input gate described in (\ref{input gate}): 
+\begin{equation}
+    \bm{i}_t = \sigma\left(\bm{\omega}_i  \bm{x}_s + \bm{b}_i\right) \circ \tanh\left(\bm{\omega}_{ii}\left[ \bm{h}_{t-1},\bm{x}_t  \right] + \bm{b}_{ii}\right) \label{EA-LSTM input gate}\\
+\end{equation}
+This way the part of the input gate is affected by the static features, making 
+the static features able to affect the cell state. This makes the model able to 
+change how it views long-term dependencies based on information from the static features. 
+The neuron activation $\sigma (\bm{\omega}_i \bm{x}_s + \bm{b}_i)$ is a metric that 
+is of interest as it is likely the key to understanding how the model interprets 
+the physical information of the data\footnote{Although we are of course aware that 
+the model may not at all use any physical information from the static features, but 
+instead just learns that basins with similar static features behave similarly.}. 
+
+
 \subsection{Hyperparameters}
 \label{Hyperparameters}
+Is this section actually needed?
+There are mentions of a concept known as hyperparameters in this chapter. A hyperparameter 
+is a parameter that is not trained as part of the optimization algorithm. For an 
+LSTM the most relevant hyperparameters are:
+\begin{itemize}
+    \item Learning rate
+    \item Batch size
+    \item Sequence length
+    \item Dropout rate
+    \item Initial forget gate bias
+    \item Gradient norm clip threshold
+\end{itemize}
 \subsection{Feature selection}
 \subsubsection{Permutation test}
 \label{Feature selection}
@@ -442,7 +449,10 @@ A major problem for this method is that (\ref{Permutation equation}) could give
 unrealistically low significance to features that are highly correlated to other 
 features. In this case the feature may very well be important, but the information 
 contained in it is also contained in one or more other correlated features, meaning 
-the model doesn't lose as much information as one may think.
+the model doesn't lose as much information as one may think. This would be fine 
+if we were just looking to simplify a well performing model, but what we aim for 
+is improved interpretability so that we may know which features are actually important 
+to the physical system.
 
 A way around this is to first remove unneeded correlated features so that the model 
 contains as little duplicate information as possible. Reducing the amount of 
@@ -451,6 +461,12 @@ decreased complexity and improving model interpretability as getting an intuitiv
 understanding of what a model needs to properly approximate a system is easier when 
 there are fewer features.
 
+\begin{figure}
+	\includegraphics{{examples}/cluster_example.pdf}
+    \caption{Example of a hierarchical plot created. The ticks on the x-axis 
+    represent $f(x)$ for $x \in \left[0,100\right]$}
+    \label{wald example}
+\end{figure}
 A method to remove correlated features that is fairly simple to use is hierarchical 
 clustering on the correlation of the features in a dataset. 
 The most well known algorithm for finding correlation is called Pearson correlation. It has 
@@ -466,16 +482,36 @@ we instead choose to use the Pearson correlation as it is more easily interpreta
 Also, when removing features we argue that it should not matter whether two variables 
 are strongly positively or negatively correlated, so we choose to do hierarchical 
 clustering based on the absolute value of the Pearson correlation.
-\begin{figure}
-	\includegraphics{{examples}/cluster_example.pdf}
-	\caption{Example of a hierarchical plot created on a simple Gaussian distributions.}
-    \label{wald example}
-\end{figure}
 The idea here is to set a level at the y-axis of the plot, each branch that is
 "cut off" will then only get to contribute one single feature, discarding all others.
 For instance: In figure \ref{wald example} we may want to set the level at 0.1. 
-This would lead to only 4 features being included, which would make sense as we 
+This would lead to only 4 features being included. This makes sense as we 
 for instance do not need $2x$, $x$ and $-x$ in the same model, those features 
-represent the same information.
+represent the same information. A problem with this method is that there is no 
+automatic way to determine which features to actually choose. Often this is done at 
+random, but it could for instance be an idea to use some existing domain knowledge 
+for this decision.
 
-\subsection{Drawbacks}
+\subsection{Addressing common criticisms of Machine Learning}
+There are several common criticisms of machine learning and other data driven 
+approaches to physical modelling. Two common ones are:
+\begin{enumerate}
+    \item Machine learning models are hard to analyze as they essentially are just a collection of arbitrary parameters that are optimized based on a dataset. It is therefore difficult to say whether a machine learning model actually "learns" any physics\footnote{Though this is a question of definition. What does "learning physics"actually mean?}.
+    \item Machine learning models are unable to include all the knowledge already present in a scientific field.
+\end{enumerate}
+We believe both these criticisms are valid and need to be addressed. First off: 
+While analyzing machine learning models can be very difficult, that is not necessarily 
+always the case. It depends greatly on how complex the model is how much different 
+data the model uses among other things. A linear regression model is easy to interpret, 
+but it becomes much less easy to interpret if it needs several thousand different 
+inputs \cite{elemstatlearn}. This is the reason we employ feature selection here 
+in this thesis. Our goal is not to get the highest performing model, but rather 
+to use the model as a tool for physical discovery. This also addresses point 2: 
+We  are in fact not looking to use LSTM models as replacements for physical models, 
+but are instead interested in improving existing models like SAC-SMA \citationneeded 
+by seeing if there is any possibility for improving the sometimes lacking physical 
+modelling of classical models. It is important to remember that the best performing 
+classical rainfall-runoff models also include lots of trained/optimized parameters 
+that do not necessarily represent any physical phenomena. We agree with \cite{hybrid_paper} 
+that the power of machine learning when it comes to leveraging data should be 
+used in a way that improves our understanding of Physics.
