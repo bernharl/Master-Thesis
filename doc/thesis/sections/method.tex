@@ -9,7 +9,11 @@ See Appendix \ref{camelsml documentation} for documentation on how to use the py
 package.
 
 \section{Model configuration}
-The models we apply in this thesis are all variants of the LSTM model, desbribed in \ref{LSTM Theory}.
+\begin{figure}
+\caption{Our full model configuration using an EA-LSTM \cite{lstm_second_paper}}.
+\end{figure}
+The models we apply in this thesis are all variants of the LSTM model, described, 
+in \ref{LSTM Theory}.
 \section{Data split}
 With 671 basins in the CAMELS-GB dataset, we run into an issue with perhaps not 
 having enough data. This is not a problem for the timeseries, as they have data 
@@ -19,6 +23,7 @@ cross validation. All results in this thesis that compare models to each other
 are made from the same 5-fold cross validation split. The test set is separate 
 from this and is only used to say something about our best performing model after 
 we have analyzed the results.
-\subsection{In sample basins}
-\subsection{Out of sample basins}
 \section{Evaluation}
+Evaluating our model is done using the Nash–Sutcliffe model efficiency coefficient (NSE). \cite{NSE}
+This metric is very similar to the $R^2$ score, but it is specialized for usage 
+on hydrological timeseries.

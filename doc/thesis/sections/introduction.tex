@@ -13,8 +13,8 @@ calibrated for each basin individually. They lack generalisation because of a la
 physical information in the models. \citationneeded In 2019 Kratzert et. al. showed
 that we can use Long Short-Term Memory (LSTM) models to model several basins with the same model
 given enough static information about the basins \cite{lstm_second_paper}. These 
-static features are things like forest coverage, soil type, etc. While these LSTM 
-models did not outperform traditional models when calibrated on a single basin at 
+static features are easily obtainable through for example observational satelite 
+data \cite{CAMELS_US}. While these LSTM models did not outperform traditional models when calibrated on a single basin at 
 a time, they did outperform traditional models when used for generalisation.
 
 In addition to the benefits of LSTM models performing well on several basins, 
@@ -24,37 +24,31 @@ This would grant companies the ability to model older basins without proper sens
 and would allow companies to model the basins of their competitors to better price 
 their produced electricity as a response to this. There has been made some initial 
 progress on trying LSTM models for this use case showing promising results \cite{lstm_third_paper}.
-While Kratzert et. al. showed that this works well on a single dataset, namely the 
-CAMELS US dataset \cite{CAMELS_US}, it is important to see what results one may get 
-also on different datasets. In this thesis we will mainly forcus doing prediction on 
-the CAMELS GB dataset \cite{CAMELS_GB} in addition to data derived from Norwegian basins provided by 
-Statkraft.
-
-\section{A brief history of traditional rainfall-runoff modelling}
-
-\section{History of the Long Short-Term Memory model}
-\subsection{Early history}
-The concept of neural networks has existed for decades, the earliest example being 
-from 1958 \cite{rosenblatt1958perceptron}. The standard fully connected feed forward 
-neural network is unable to learn dependencies over time, which is why the Recurrent 
-Neural Network (RNN) was invented. \citationneeded
-Due to several drawbacks of the default RNN architecture several new RNN-types 
-were created. The two most well known are the GRU and LSTM models. \citationneeded
-\subsection{Recent developements and the resurgence of machine learning}
-\subsection{Usage in rainfall-runoff modelling}
 
 \section{Goals}
-Riding on the promising results from \cite{lstm_second_paper} and \cite{lstm_third_paper}
-we want to see if LSTM models are generally applicable for rainfall-runoff modelling 
-and not just in the special case of the CAMELS US \cite{CAMELS_US} dataset. This 
-is important as one of the main drawbacks to the machine learning approach is that 
-it is difficult if not impossible to mathematically prove your results, meaning 
-we have to approach the issue with extensive imperic research preferably on as 
-many datasts as possible. 
+Our main goal of this thesis is to improve the understanding of the underlying 
+physics in rainfall-runoff modelling. While we already know that \cite{lstm_third_paper} 
+shows promising results from using a purely data-driven model, but there are several 
+disadvantages of using so called "black box" models. What we therefore are interested 
+in is to show that such a black box model can be used for analysis of a dataset 
+to give an indication on the best way forward to include the easily obtained 
+static data included in the CAMELS \cite{CAMELS_US} and CAMELS-GB \cite{CAMELS_GB} 
+datasets. 
+While previous work has been focusing on the 
+CAMELS dataset \cite{CAMELS_US}, it is important to see what results one may get 
+also on different datasets. In this thesis we will mainly focus doing prediction on 
+the CAMELS GB dataset \cite{CAMELS_GB}. This way even if our attempts at finding 
+relevant physical information in the static features we will at least have shown 
+that the results of \cite{lstm_third_paper} also seem to apply on a separate dataset 
+gathered from a different place in the world. 
 \section{Our contribution}
-We show that there is potential for more accurate general physical models based on
-available data that is not taken into account by traditional models.
-
+We show that our model performs better using the extra information in the static 
+catchment features in the CAMELS-GB dataset than if it were trained only on timeseries.
+We are able to do an analysis on the importance of these features and give a brief 
+indication where to begin using these features for better calibration of physics-
+based traditional models. For further analysis we also provide the main bulk of 
+the code used in this thesis as a python package released under the Apache 2.0 
+license. This code is originally based on the code used in \cite{lstm_second_paper}.
 \section{Thesis structure}
 This thesis is divided into 7 chapters, most chapters also being sub-divided into
 sections. 
@@ -62,18 +56,18 @@ sections.
 \item  The introduction. Here we explain the importance of this work and briefly summarize what has been done by others before us.
 \item Theory. This chapter is divided into two parts:
     \begin{enumerate}
-    \item Rainfall-runoff modelling. This section describes the relevant theory for understanding the physics captured in today's popular rainfall-runoff models. We present several 
-    \item Machine learning. Here we try to give a thorough overview of the concepts needed to understand the models and methods we apply in this thesis. We give a brief mathematical and physical explanation of the model, and try to present physical effects that are parametrized away instead of being properly modeled. This is important for the goal of this thesis.
+    \item Rainfall-runoff modelling. This section describes the relevant theory for understanding the physics captured in today's popular rainfall-runoff models. We present a popular traditional model known as SAC-SMA an show parts of it that may be improved using the insight gathered in this thesis work.
+    \item Machine learning. Here we try to give a thorough overview of the concepts needed to understand the machine learning models we employ in this work. We also give physics-based arguments for why the Long Short-Term Memory (LSTM) model is a good fit for this kind of physical system.
     \end{enumerate}
-    \item Data. Here we explain and analyze several aspects of the dataset(s???) \citationneeded  we use. This gives important context for why and how we employ the methods described in the method chapter.
-    \item Method. Here we describe in detail how we structure our model, what programming frameworks we use and how we analyze our results. Brief documentation  and a minimal running example of the camelsml Python-package are also presented.
+    \item Data. Here we give a brief explanation of how the CAMELS and CAMELS-GB 
+    datasets are structured so that the Method and Results chapters is more easily followed.
+    \item Method. Here we describe in detail how we structure our model, what programming frameworks we use and how we analyze our results. An explanation of the code used to derive our results is also included.
     \item Results. Here we present our most interesting results and give initial comments.
-    \item Discussion. This chapter presents analysis of our results.
+    \item Discussion. This chapter presents analysis of our results. We try to find potential ways to connect our results to the goals of this thesis.
     \item Conclusion. A short summary of our most interesting findings along with what we feel will be a logical next step for further research.
-In addition the thesis also has an appendix which presents longer mathematical 
-calculations which will be referenced to in the main body of the thesis. 
-
 \end{enumerate}
+In addition the thesis includes a couple more details in the appendix, such as 
+minimal running examples of the CamelsML python package along with documentation.
 \nocite{4160265}
 \nocite{mckinney-proc-scipy-2010}
 \nocite{2020NumPy-Array}

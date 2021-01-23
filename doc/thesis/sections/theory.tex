@@ -24,6 +24,16 @@ issues:
     \item Coming from the above stated problem, it is also hard to use such a 
         complex and highly parametrized model to find out what information it lacks to be able to improve.
 \end{itemize}
+While there do exist more physically driven models than SAC-SMA \citationneeded, 
+we use the SAC-SMA model as our example of a traditional model in this thesis. 
+There is a likelihood that some of these even more physical models can also benefit 
+from the analysis in this thesis, however, as they are also highly parameter 
+driven. Finding a relationship between easily obtainable data such as the static 
+features in \cite{CAMELS_US} and \cite{CAMELS_GB} and physical constants in 
+hydrological models is something we and \citationneeded predict will be a very 
+interesting research topic for quite some time, hopefully giving insight into the 
+physic of hydrology as well as improving the prediction power of hydrological models.
+
 
 \section{Machine Learning}
 We give a brief explanation of the basics in Machine Learning here for better context 
@@ -260,7 +270,10 @@ Here the variables are as follows:
     \item $\bm{b}_y$: A bias term used when calculating the next time step $y_t$.
 \end{itemize}
 \begin{figure}
-    \caption{An RNN cell}
+    \input{figures/tikz/rnn.tex}
+    \caption{Illustration of an RNN cell. The squared Tanh indicated a neural 
+    network layer with tanh as the activation function. Lines meeting indicate 
+    concatenation while lines splitting means copying.}
 \end{figure}
 The reason RNNs are referred to as neural networks is possibly because they, like 
 feed forward neural networks have their parameters trained using backpropagation.
@@ -370,12 +383,12 @@ To predict the output $\bm{y}_t$ at time step $t$:
     \item Feed it through the LSTM cell, saving the hidden vector $\bm{h}_t$.
     \item Feed $\bm{h}_t$ through an ordinary neural network layer. This is essentially to do a weighted sum of the elements in $\bm{h}_t$ so that we get an output vector of the same dimensions as the output $\bm{y}_t$. With only one output as with rainfall-runoff modeling this means summing all the values $\bm{h}_t$ into a single scalar $y_t$.
 \end{enumerate}
-\subsection{Implementing static features along with timeseries}
+\subsection{Implementing static features along with time series}
 The description of the LSTM model we give in the above section only contains information 
-for how to implement timeseries, not static features such "area" that do not vary 
+for how to implement time series, not static features such "area" that do not vary 
 with time. There are multiple ways to implement this. An obvious choice here is to 
-naively treat each static feature as a timeseries that does not change. This seems 
-counter-intuitive as it makes the model not see any difference between timeseries and 
+naively treat each static feature as a time series that does not change. This seems 
+counter-intuitive as it makes the model not see any difference between time series and 
 static features, but it is very easily implementable and memory-wize does not affect 
 the training algorithm too much\footnote{Memory is often the bottleneck of training 
 machine learning models. \citationneeded}. This way we train the exact same type 
@@ -433,7 +446,7 @@ permutation test:
 Given a feature $j$, the permutation importance 
 $i_j$ is equal to 
 \begin{equation}
-i_j = s - \frac{1}{K} \sum_{k=1}^K s_{k,j}\quad \cite{permutation}.
+i_j = s - \frac{1}{K} \sum_{k=1}^K s_{k,j}\quad \cite{permutation} \cite{breiman2001random}.
 \label{Permutation equation}
 \end{equation}
 Here $K$ denotes how many permutations we average over for each feature, $s$ is
