@@ -5,9 +5,11 @@ models do not model the physics in a system properly and why this can lead to is
 for both interpretability and performance.
 
 \subsection{SAC-SMA}
-The Sacramento Soil Moisture Accounting (SAC-SMA) rainfall-runoff model is a widely 
+The Sacramento Soil Moisture Accounting (SAC-SMA) \cite{SAC-SMA} rainfall-runoff model is a widely 
 used hydrological model that can be considered a hybrid between a parameterized 
 and a physical model.
+Originally introduced in 1973 the model has since been modified and improved by 
+several other papers \cite{SAC-SMA-physics}.
 \begin{align}
     \bm{S}^1(t + \Delta t,x) &= \bm{S}(t,x) + f\left(\bm{S}(t,x),P(t+\Delta t,x),E_p (t+\Delta t, x), \bm{V}(x) \right) \\
     \bm{S}^{(n+1)}(t+\Delta t,x) &= \bm{S}^{(n)}(t+\Delta t, x) \nonumber \\
@@ -32,8 +34,10 @@ driven. Finding a relationship between easily obtainable data such as the static
 features in \cite{CAMELS_US} and \cite{CAMELS_GB} and physical constants in 
 hydrological models is something we and \citationneeded predict will be a very 
 interesting research topic for quite some time, hopefully giving insight into the 
-physic of hydrology as well as improving the prediction power of hydrological models.
+physics of hydrology as well as improving the prediction power of hydrological models.
 
+One of the many aspects of the model that are not well understood is the melting 
+of snow and how that melted water spreads via the ground. 
 
 \section{Machine Learning}
 We give a brief explanation of the basics in Machine Learning here for better context 
@@ -233,6 +237,13 @@ The parameter-loss space is a complex high dimensional space often with infinite
 many local minima that can lead the model to a worse fit than would be possible 
 otherwise. \citationneeded
 \subsection{Recurrent Neural Networks}
+\begin{figure}
+    \input{figures/tikz/rnn.tex}
+    \caption{Illustration of an RNN cell. The squared Tanh indicated a neural 
+    network layer with tanh as the activation function. Lines meeting indicate 
+    concatenation while lines splitting means copying.}
+	\label{RNN figure}
+\end{figure}
 A normal feed forward neural network is only sufficient at learning the relationship 
 between non-structured inputs and outputs. This means that it is not well suited 
 for image analysis, where each pixel's position relative to other pixels is important. 
@@ -256,7 +267,7 @@ are many ways of sending in inputs and getting out outputs from RNN cells. Here 
 only present what is relevant for the model setup in this thesis.}
 \begin{align}
     \bm{h}_t &= \tanh{(\bm{\omega}_{hh}\bm{h}_{t-1} + \bm{\omega}_{xh}\bm{x}_t+\bm{b}_h)} \\
-    \bm{y}_t &= \bm{\omega}_{hy}\bm{h}_t + \bm{b}_y \citationneeded (should probably cite IN5400)
+    \bm{y}_t &= \bm{\omega}_{hy}\bm{h}_t + \bm{b}_y \citationneeded (should probably cite IN5400) \label{RNN output}
 \end{align}
 Here the variables are as follows:
 \begin{itemize}
@@ -269,19 +280,17 @@ Here the variables are as follows:
     \item $\bm{b}_h$: A bias term that adds constant change to the hidden state.
     \item $\bm{b}_y$: A bias term used when calculating the next time step $y_t$.
 \end{itemize}
-\begin{figure}
-    \input{figures/tikz/rnn.tex}
-    \caption{Illustration of an RNN cell. The squared Tanh indicated a neural 
-    network layer with tanh as the activation function. Lines meeting indicate 
-    concatenation while lines splitting means copying.}
-\end{figure}
-The reason RNNs are referred to as neural networks is possibly because they, like 
-feed forward neural networks have their parameters trained using backpropagation.
+
+In Figure \ref{RNN figure} we see that the output is represented as equal to the 
+hidden state. While not illustrated in the figure, usually the way to get the output 
+on the form we are interested involved feeding the hidden state through a neural 
+network layer. This is what is done in (\ref{RNN output}).
+
 The backpropagation algorithm for an RNN is quite a bit different although the 
 underlying concept is the same. We argue it is not necessary to include the algorithm 
-in this thesis but if the reader is interested they should read this source \citationneeded.
+in this thesis but if the reader is interested they should read this source \cite{BPTT}.
 The important takeaway from the backpropagation algorithm used for RNNs (called 
-Backpropagation Through Time), is that it used extreme amounts of memory because 
+Backpropagation Through Time), is that it uses high amounts of memory because 
 it needs to store values for every time step to be able to get proper gradients 
 for the model parameters. Because of this, it is common to instead use an algorithm 
 called Trunctated Backpropagation Through Time, where one stops saving values after 

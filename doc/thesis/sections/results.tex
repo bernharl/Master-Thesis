@@ -3,6 +3,8 @@ are found based on earlier results, so we find it natural to include some amount
 of discussion of the results as they are presented to be able to argue for why we 
 approach the problem the way we do further down.
 \section{Feature reduction}
+Note that when doing model selection we do not look at test set performance, only 
+performance on the cross validated train set.
 \begin{table}
     \begin{adjustbox}{width=\textwidth}
     \input{tables/linreg_no_static.tex}
@@ -31,4 +33,12 @@ strategy for feature selection.
     \includegraphics{reduced_matrix.pdf}
     \caption{Correlation matrix after backward selection}
     \label{corr_matrix_reduced}
+\end{figure}
+
+\subsection{Performance of full model}
+\begin{figure}
+\includegraphics[scale=1]{{permutation/all_features_cv/histogram_all}.pdf}
+\caption{The two most important (above) and least important (below) features according 
+to the permutation test}
+\label{Hist all}
 \end{figure}
