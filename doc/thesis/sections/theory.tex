@@ -27,7 +27,8 @@ issues:
         complex and highly parametrized model to find out what information it lacks to be able to improve.
 \end{itemize}
 While there do exist more physically driven models than SAC-SMA \citationneeded, 
-we use the SAC-SMA model as our example of a traditional model in this thesis. 
+we use the SAC-SMA model as our example of a traditional model in this thesis because
+the CAMELS dataset includes benchmarks of it \cite{CAMELS_US}. 
 There is a likelihood that some of these even more physical models can also benefit 
 from the analysis in this thesis, however, as they are also highly parameter 
 driven. Finding a relationship between easily obtainable data such as the static 
@@ -37,7 +38,7 @@ interesting research topic for quite some time, hopefully giving insight into th
 physics of hydrology as well as improving the prediction power of hydrological models.
 
 One of the many aspects of the model that are not well understood is the melting 
-of snow and how that melted water spreads via the ground. 
+of snow and how that melted water spreads via the ground \citationneeded. 
 
 \section{Machine Learning}
 We give a brief explanation of the basics in Machine Learning here for better context 
@@ -175,7 +176,8 @@ regression and classification. In this thesis we focus on the regression case an
 will therefore stick to describing that. The concept of the neural network was 
 first described in \cite{rosenblatt1958perceptron}. 
 \begin{figure}
-    \caption{A perceptron model as described in \cite{rosenblatt1958perceptron}}
+    \input{figures/tikz/neural_network.tex}
+    \caption{A multilayer perceptron model as described in \cite{rosenblatt1958perceptron}. Figure taken and modified from \cite{neuralnetfig}.}
     \label{Neural network figure}
 \end{figure}
 Mathematically, a neural network can be written in this form:
@@ -199,6 +201,7 @@ systematically so as to not overwhelm the reader:
     \item $b_i^l$ is known the bias term. It is a constant that is added to all inputs in neuron $i$ in layer $l$.
     \item The input to $f^l$ (the weighted sum plus the bias) can also be denoted as $z^l_j$
 \end{itemize}
+Figure \ref{Neural network figure} gives a visual representation of (\ref{MLP equation}).
 The parameters $b$ and $\omega$ are trained using an optimizer. In the case of this 
 thesis that would be the ADAM optimizer. To get gradients to use in the optimizer 
 an algorithm known as backpropagation is used. Backpropagation is an algorithm that 
