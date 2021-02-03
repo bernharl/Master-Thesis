@@ -3,10 +3,10 @@ train_start: 01101971
 train_end: 30092015
 val_start: 01101971
 val_end: 30092015
-epochs: 30
+epochs: 20
 learning_rate: 1e-3
-seq_length: 270
-batch_size: 1536
+seq_length: 365
+batch_size: 1280
 hidden_size:  256
 initial_forget_gate_bias: 5
 log_interval: 50
