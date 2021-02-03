@@ -1,8 +1,8 @@
-camels_root: /home/bernhard/git/datasets_masters/camels_us
-train_start: 01011980
-train_end: 31122008
-val_start: 01011980
-val_end: 31122008
+camels_root: /home/bernhard/git/datasets_masters/camels_gb
+train_start: 01101971
+train_end: 30092015
+val_start: 01101971
+val_end: 30092015
 epochs: 30
 learning_rate: 1e-3
 seq_length: 270
@@ -21,5 +21,5 @@ concat_static: False
 evaluate_on_epoch: True
 early_stopping: False
 early_stopping_steps: 5
-attribute_selection_file: /home/bernhard/git/Master-Thesis/runs/camels_us/chosen_features_cv_us/use_features.txt
-dataset: camels_us
+attribute_selection_file: /home/bernhard/git/Master-Thesis/runs/camels_us/chosen_features_cv_gb/use_features.txt
+dataset: camels_gb

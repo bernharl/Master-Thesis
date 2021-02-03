@@ -1,4 +1,4 @@
-area_gapes2
+area_gages2
 elev_mean
 water_frac
 sand_frac
