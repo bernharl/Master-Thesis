@@ -5,7 +5,9 @@ import matplotlib.pyplot as plt
 import scipy.cluster as spc
 import pandas as pd
 
-fig, ax1 = plt.subplots(1,1, figsize=[4.7747, 4.7747/1.618])
+plt.style.use("..//../../figstyle.mplstyle")
+
+fig, ax1 = plt.subplots(1,1)
 x = np.arange(0, 100)
 X = np.array([x, -x, 2*x, x**2, -x**2, 2*x**2, x**3, -x**3, 2*x**3, x**4])
 df = pd.DataFrame(X.T, columns=[r"$x$", r"$-x$", r"$2x$", r"$x^2$", r"$-x^2$", r"$2x^2$", r"$x^3$", r"$-x^3$", r"$2x^3$", r"$x^4$"])

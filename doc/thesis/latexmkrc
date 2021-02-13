@@ -1,3 +1,3 @@
 $ENV{'TEXINPUTS'}='./include//:' . $ENV{'TEXINPUTS'}; 
 $ENV{'TEXINPUTS'}='./sections//:' . $ENV{'TEXINPUTS'}; 
-system("pwd; cd illustration_scripts; pwd;pipenv run python bias_variance_runoff.py; pipenv run python clustering_example.py");
+system("cd illustration_scripts; pipenv run python bias_variance_runoff.py");

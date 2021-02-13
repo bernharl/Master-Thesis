@@ -1,13 +1,24 @@
 \section{Rainfall-Runoff modelling}
-\subsection{Classical modelling}
-In this section we lay out some of the reasons why classical rainfall-runoff 
-models do not model the physics in a system properly and why this can lead to issues 
-for both interpretability and performance.
-
-\subsection{SAC-SMA}
+In this section we give some brief explanations of examples of two different types 
+of classical rainfall-runoff models. These two types are
+\begin{enumerate}
+    \item Conceptual models: These models can often be referred to as so called "grey box" models \citationneeded as many important physical effects are replaced by parametrized models.
+    \item Process-based models: These models are more physics-based than the conceptual models. 
+\end{enumerate}
+Because they attempt to predict runoff using physically modelled processes process based models
+have been referred to as the models of choice when predicting runoff in ungauged 
+ (meaning basins where there is no forcing data available for callibration) basins. 
+ \cite{lstm_third_paper} argues that this is not necessarily the case and data driven 
+ machine learning models can also give state of the art predictions.
+ While this may be the case, we still argue that the ideal scenario would be having 
+ a well performing process-based model. This is because all models are likely to 
+ have a selection of outlier basins where they perform exceptionally poorly. A model 
+ incorporating physics is in this case likely to be easier interpretable, leading 
+ to the possibility of being able to know whether one can trust a specific prediction or not. 
+ For ungauged basins this is a clear benefit.
+\subsection{Sacramento Soil Moisture Accounting}
 The Sacramento Soil Moisture Accounting (SAC-SMA) \cite{SAC-SMA} rainfall-runoff model is a widely 
-used hydrological model that can be considered a hybrid between a parameterized 
-and a physical model.
+used hydrological and serves the purpose of being a conceptual model in this thesis.
 Originally introduced in 1973 the model has since been modified and improved by 
 several other papers \cite{SAC-SMA-physics}.
 \begin{align}
@@ -15,6 +26,12 @@ several other papers \cite{SAC-SMA-physics}.
     \bm{S}^{(n+1)}(t+\Delta t,x) &= \bm{S}^{(n)}(t+\Delta t, x) \nonumber \\
     &+ f\left( \bm{S}^{(n)}(t+\Delta t, x), \bm{q}^{(n+1)}(t+\Delta t,x),P_x(t+\Delta t,x),\bm{V}(x)  \right)
 \end{align}
+
+\subsection{National Water Model}
+The National Water Model (NWA) is a process based hydrological model. For completeness 
+we briefly describe what we deem the most important underlying physics in the model 
+in this section.
+
 
 \subsection{Drawbacks}
 Several terms in the SAC-SMA model are purely parametrized, needing different parameters 
@@ -103,6 +120,24 @@ represents:
 \end{itemize}
 The aim of training a machine learning model is to find the best tradeoff between model
 complexity and stability in search of the minimum of (\ref{Bias Variance Decomp}).
+This concept also generalizes to other types of modelling than machine learning. 
+\begin{figure}
+	\centering
+	\includegraphics{{examples}/bias_variance_runoff.pdf}
+	\caption{Illustration of the bias-variance tradeoff. The analogy to physics-
+	constrained runoff models is included in the figure to give context for as to 
+	why this is important for the problem in this thesis work. The concept and 
+	function form is inspired by Figure ?? in \cite{elemstatlearn}.}
+	\label{Bias Variance rainfall}
+\end{figure}
+In \cite{VICbench} the concept of model flexibility is mentioned. This is 
+analogous to a model with high variance, making it able to predict well in more scenarios, 
+but possibly losing performance (overfitting) and interpretability if taken too far. 
+In traditional 
+rainfall-runoff modelling we could call a purely process-driven model biased, while 
+a more data driven conceptual model would have higher variance. The concept of 
+the bias-variance tradeoff concept is illustrated  in Figure 
+\ref{Bias Variance rainfall}.
 \subsection{Gradient Descent}
 While the simple case of linear regression has an easily attainable analytical solution 
 as seen in (\ref{OLS solution}), more advanced models may not. \citationneeded 
