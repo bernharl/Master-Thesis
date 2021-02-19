@@ -4,7 +4,6 @@
 \usepackage{babel,duomasterforside}
 \usepackage{color}
 \usepackage{amsmath}
-\usepackage{hyperref}
 \usepackage{booktabs}
 \usepackage{adjustbox}
 \usepackage{graphicx}
@@ -14,8 +13,11 @@
 \usepackage{pgfplots}
 \usepackage{tikz}
 \usetikzlibrary{positioning, fit, arrows.meta, shapes}
-\usepackage{listings}
-\lstset{linewidth=\textwidth, breaklines=true}
+\usepackage{xcolor}
+\usepackage{lipsum}
+\usepackage[chapter]{minted}
+\newminted{python}{frame=single, breaklines=true, linenos, python3=true}
+\newminted{cfg}{frame=single, breaklines=true, linenos}
 \graphicspath{{../}{figures/}}
 \title{Algorithms and applications for machine learning based physical modelling}
 \subtitle{In cooperation with Simula and Statkraft}
@@ -38,6 +40,11 @@
 	\fi
 }
 
+\usepackage{hyperref}
+\hypersetup{
+  hyperindex   = true,
+  linktocpage   = true
+}
 \begin{document}
 \duoforside[
     dept={Department of Physics},
@@ -56,6 +63,8 @@
 
 \setcounter{page}{1}
 \tableofcontents
+\listoflistings
+\listoffigures
 \chapter{Introduction}
 \subfile{introduction}
 
