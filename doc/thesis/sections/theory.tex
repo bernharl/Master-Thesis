@@ -27,6 +27,63 @@ several other papers \cite{SAC-SMA-physics}.
     &+ f\left( \bm{S}^{(n)}(t+\Delta t, x), \bm{q}^{(n+1)}(t+\Delta t,x),P_x(t+\Delta t,x),\bm{V}(x)  \right)
 \end{align}
 
+\subsection{The Variable Infiltration Capacity model}
+The Variable Infiltration Capacity (VIC) model \cite{VIC} is a process driven model 
+with emphasis on simulating the physical process of water running through soil.
+The model was created to be used in a GCM (General Circulation Model), but it can 
+also be used for rainfall-runoff modelling. The rainfall-runoff modelling aspect 
+of the model is presented here for completeness. It works by splitting the catchment 
+area into $N$ grid points and the ground (vertically) into two soil layers. 
+
+The runoff modelling is split into three parts:
+\begin{enumerate}
+	\item Surface runoff from bare soil
+	\item Subsurface runoff from bare soil
+	\item Covered surfaces (Vegetation, snow, etc.)
+\end{enumerate}
+Surface runoff is a simpler task to model than subsurface runoff. In VIC the physical 
+modelling is based on energy equations. We begin by describing the maximum soil 
+moisture content of layer 1.
+\begin{equation}
+W^c_1 = \frac{i_m}{1+b_i} \label{VIC max moisture surface}
+\end{equation}
+
+Using (\ref{VIC max moisture surface}) we can get an expression for the surface 
+runoff\footnote{For a complete derivation of this we refer to \cite{VIC}.} written 
+as 
+\begin{equation}
+Q_d\left[ N+1 \right] \cdot \Delta t = 
+\begin{cases}
+	P \cdot \Delta t - W_1^c + W_i^- \left[ N+1 \right], &  i_0 + P \Delta t \geq i_m\\
+	P \cdot \Delta t - W_1^c + W_1^- \left[ N+1 \right] \\ + W_1^c \left[  1 - 
+    \frac{1 + P \cdot \Delta t}{i_m} \right]^{l+b_i}, & i + P \cdot \Delta t \leq i_m
+\end{cases}
+\end{equation}
+Information about the soil moisture of the previous time step is stores in the 
+relationship between previous upper layer soil moisture $W_1^-$ and the new 
+upper layer soil moisture 
+\begin{equation}
+	W_1^+ \left[N+1 \right] = W_1^- \left[ N+1  \right] + \left( P - Q_d\left[ 
+N+1 \right] - Q_{12}\left[ N+1 \right] - E_1 \right) \cdot \Delta t
+\end{equation}
+Based on this new soil layer 1 moisture we then get an expression for the flow 
+from soil layer 1 to soil layer 2:
+\begin{equation}
+	Q_{12}\left[ N + 1 \right] = K_s \left( \frac{W_1 \left[ N + 1  \right] - 
+\theta_r}{W_1^c - \theta_r}  \right)^{\frac{2}{B_p}+3} \label{q layer 1 to 2 VIC}
+\end{equation}
+Using this relationship VIC now models subsurface flow (flow in soil layer 2) as 
+\begin{equation}
+	Q_b[N+1] = 
+	\begin{cases}
+\frac{D_s D_m}{W_s W_2^c}W_2^-[N+1], &  W_2^-\left[ N+1 \right] \in [0, W_s W_2^c] \\
+\frac{D_sD_m}{W_sW_2^c}W_2^-\left[ N+1  \right]\\ + \left( D_M - \frac{D_sD_m}{W_s}  \right) 
+\left( \frac{W_2^-\left[ N+1  \right] - W_sW_2^c}{W_2^c - W_sW_2^c}  \right), 
+& W_2^-\left[ N+1  \right] \geq W_sW_2^c
+	\end{cases}
+\end{equation}
+Explain all terms. Try to understand what the next terms mean. Then argue why 
+this model isn't ideal (it is constrained, not that physical, blah blah).
 \subsection{National Water Model}
 The National Water Model (NWA) is a process based hydrological model. For completeness 
 we briefly describe what we deem the most important underlying physics in the model 
