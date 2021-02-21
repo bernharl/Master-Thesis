@@ -29,6 +29,12 @@ from this and is only used to say something about our best performing model afte
 we have analyzed the results.
 
 \section{Training Algorithm}
+\begin{figure}
+\centering
+\input{figures/tikz/mini_batch_training.tex}
+\caption{A minibatch. When training this is how the data is structured. $\bm{x}_{\text{basin}t}$ represents the input parameters of a basin at time t.}
+\label{minibatch}
+\end{figure}
 Our training algorithm can be described as this:
 \begin{enumerate}
     \item Split the basins in the training set into 5 parts. Repeat this 5 times, each time using 4/5 parts for training and 1/5 for validation.\begin{enumerate}
