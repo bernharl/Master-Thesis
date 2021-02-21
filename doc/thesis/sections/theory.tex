@@ -33,7 +33,9 @@ with emphasis on simulating the physical process of water running through soil.
 The model was created to be used in a GCM (General Circulation Model), but it can 
 also be used for rainfall-runoff modelling. The rainfall-runoff modelling aspect 
 of the model is presented here for completeness. It works by splitting the catchment 
-area into $N$ grid points and the ground (vertically) into two soil layers. 
+area into $N$ grid points and the ground (vertically) into two soil layers. One 
+upper soil layer and one lower soil layer. This is an attempt at physically 
+representing underground streamflow.
 
 The runoff modelling is split into three parts:
 \begin{enumerate}
@@ -56,7 +58,7 @@ Q_d\left[ N+1 \right] \cdot \Delta t =
 \begin{cases}
 	P \cdot \Delta t - W_1^c + W_i^- \left[ N+1 \right], &  i_0 + P \Delta t \geq i_m\\
 	P \cdot \Delta t - W_1^c + W_1^- \left[ N+1 \right] \\ + W_1^c \left[  1 - 
-    \frac{1 + P \cdot \Delta t}{i_m} \right]^{l+b_i}, & i + P \cdot \Delta t \leq i_m
+    \frac{i_0 + P \cdot \Delta t}{i_m} \right]^{l+b_i}, & i + P \cdot \Delta t \leq i_m
 \end{cases}
 \end{equation}
 Information about the soil moisture of the previous time step is stores in the 
@@ -74,14 +76,39 @@ from soil layer 1 to soil layer 2:
 \end{equation}
 Using this relationship VIC now models subsurface flow (flow in soil layer 2) as 
 \begin{equation}
-	Q_b[N+1] = 
+	Q_b'[N+1] = 
 	\begin{cases}
 \frac{D_s D_m}{W_s W_2^c}W_2^-[N+1], &  W_2^-\left[ N+1 \right] \in [0, W_s W_2^c] \\
 \frac{D_sD_m}{W_sW_2^c}W_2^-\left[ N+1  \right]\\ + \left( D_M - \frac{D_sD_m}{W_s}  \right) 
-\left( \frac{W_2^-\left[ N+1  \right] - W_sW_2^c}{W_2^c - W_sW_2^c}  \right), 
+\\ \cdot \left( \frac{W_2^-\left[ N+1  \right] - W_sW_2^c}{W_2^c - W_sW_2^c}  \right), 
 & W_2^-\left[ N+1  \right] \geq W_sW_2^c
 	\end{cases}
 \end{equation}
+
+Updating the lower layer soil moisture is then described as 
+\begin{align}
+    W_2^+\left[ N + 1 \right] &= \text{min}\left( W_2^- \left[N+1\right] \right. \nonumber
+    \\& \left. +\left(Q_{12} \left[N+1\right]  - Q_b'\left[ N+1 \right] - E_2 \right)
+    \cdot \Delta t, W_2^c\right).
+\end{align}
+
+At the edge case of $W_2^+ = W_2^c$, the second soil layer cannot absorb more 
+water and all the excess streamflow is added to the runoff. An extra runoff term 
+\begin{equation}
+    Q_b''\left[ N + 1 \right] =  W_2^- \left[N+1\right]+\left(Q_{12}
+    \left[N+1\right]  - Q_b'\left[ N+1 \right] - E_2 \right) \cdot \Delta t - W_2^c
+\end{equation}
+is therefore added.
+
+The total streamflow is expressed as 
+\begin{equation}
+    Q_b = 
+    \begin{cases}
+        Q_b', & W_2^+ < W_2^c \\
+        Q_b' + Q_b'', & W_2^+ = W_2^c
+    \end{cases}
+\end{equation}
+
 Explain all terms. Try to understand what the next terms mean. Then argue why 
 this model isn't ideal (it is constrained, not that physical, blah blah).
 \subsection{National Water Model}
