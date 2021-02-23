@@ -32,7 +32,7 @@ we have analyzed the results.
 \begin{figure}
 \centering
 \input{figures/tikz/mini_batch_training.tex}
-\caption{A minibatch. When training this is how the data is structured. $\bm{x}_{\text{basin}t}$ represents the input parameters of a basin at time t.}
+\caption{A minibatch. $\bm{x}_{i,t}$ represents the input parameters $\bm{x}$ at time step $t$ for time series $t \in [0, b]$ where $b$ is the batch size.}
 \label{minibatch}
 \end{figure}
 Our training algorithm can be described as this:
