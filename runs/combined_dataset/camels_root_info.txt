@@ -1,0 +1,3 @@
+camels_us_root: /home/bernhard/git/datasets_masters/camels_us
+camels_gb_root: /home/bernhard/git/datasets_masters/camels_gb
+dataset: camels_us, camels_gb
