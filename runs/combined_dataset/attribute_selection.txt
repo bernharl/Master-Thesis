@@ -18,4 +18,4 @@ sand_perc
 silt_perc
 clay_perc
 organic_perc
-gfv_max
+gvf_max
