@@ -136,15 +136,18 @@ equation. In numeric form it is easy to rewrite the equation as
 	f'(z)}{\beta}  \right] \nonumber \\ &+ \rho_i L_f \frac{(\theta_i)_i^t - 
     (\theta_i)_i^{t-1}}{\Delta t}. \label{vic frozen soil pde}
 \end{align}
-The terms in (\ref{VIC heat equation})/(\ref{vic frozen soil pde}) are as follows:
+The terms in (\ref{VIC heat equation}) and (\ref{vic frozen soil pde}) are as follows:
 \begin{itemize}
-    \item $C_S$: 
-    \item $T$: 
-    \item $z$: 
-    \item $\kappa$: 
-    \item $\rho_i$: 
-    \item $L_f$: 
-    \item $\theta_i$: 
+    \item $C_S$: Soil volumetric heat capacity [J/(m$^3$K)]
+    \item $T$: Temperature [K]
+    \item $z$: Depth [m]
+    \item $\kappa$: Soil thermal conductivity [W/(mK)]
+    \item $\rho_i$: Ice density [kg/m$^3$]
+    \item $L_f$: Latent heat of fusion (?) [kg/m$^3$]
+    \item $\theta_i$: Ice fraction in soil [-]. When $\theta_i=1$ there is no frozen soil and the term $\rho_i L_f\left( \pdv{\theta_i}{t}\right) $ in (\ref{VIC heat equation}) is defined as zero (the gradient of 0 is 0).
+    \item $\alpha$: $(\Delta z_1 + \Delta z_2)$
+    \item $\gamma$: $(\Delta z_1 - \Delta z_2)$
+    \item $(T_{i+1}^t - T_{i-1}^t) / \alpha$
 \end{itemize}
 
 Explain all terms. Try to understand what the next terms mean. Then argue why 
