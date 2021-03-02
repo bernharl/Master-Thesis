@@ -130,13 +130,22 @@ From (\ref{VIC heat equation}) \cite{VICFrozenSoil} then uses an explicit numeri
 finite difference scheme to solve this one dimensional partial differential 
 equation. In numeric form it is easy to rewrite the equation as
 \begin{align}
-	C_s\frac{T_i^t - T_i^{t-1}}{dt} &= \left( \frac{\kappa_{i+1}^t - 
+	C_s\frac{T_i^t - T_i^{t-1}}{\Delta t} &= \left( \frac{\kappa_{i+1}^t - 
 	\kappa_{t-1}^t}{\alpha}\right) \left( \frac{T_{t+1}^t - T_{t-1}^2}{\alpha} 
 	\right)\nonumber \\ &+ \kappa_i^t \left[ \frac{2T_i+1^t + 2T_{t-1}^t - 4T_i^t - 2\gamma 
 	f'(z)}{\beta}  \right] \nonumber \\ &+ \rho_i L_f \frac{(\theta_i)_i^t - 
-	(\theta_i)_i^{t-1}}{dt}
+    (\theta_i)_i^{t-1}}{\Delta t}. \label{vic frozen soil pde}
 \end{align}
-
+The terms in (\ref{VIC heat equation})/(\ref{vic frozen soil pde}) are as follows:
+\begin{itemize}
+    \item $C_S$: 
+    \item $T$: 
+    \item $z$: 
+    \item $\kappa$: 
+    \item $\rho_i$: 
+    \item $L_f$: 
+    \item $\theta_i$: 
+\end{itemize}
 
 Explain all terms. Try to understand what the next terms mean. Then argue why 
 this model isn't ideal (it is constrained, not that physical, blah blah).
