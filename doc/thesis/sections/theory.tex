@@ -35,7 +35,10 @@ also be used for rainfall-runoff modelling. The rainfall-runoff modelling aspect
 of the model is presented in short here for context. It works by splitting the catchment 
 area into $N$ land coverage categories and the ground (vertically) into several soil layers. 
 One upper soil layer and one lower soil layer. This is an attempt at physically 
-representing underground streamflow\footnote{While \cite{VIC} originally used a two layer setup, later versions of the VIC model have introduced more layers. When introducing the (still used) frozen soil modelling aspect to VIC \cite{VICFrozenSoil}.}.
+representing underground streamflow\footnote{While \cite{VIC} originally used a 
+two layer setup, later versions of the VIC model have introduced more layers. 
+\cite{VIC2L} for instance showed that adding a top smaller layer improved performance 
+significantly.}
 
 The runoff modelling is split into three parts:
 \begin{enumerate}
@@ -111,14 +114,16 @@ The total streamflow is expressed as
 \end{equation}
 
 For other ground covers than bare soil $Q\left[ 1...N \right]$ the model is slightly 
-modified. We do not represent the details of this in this thesis and instead shift 
+modified. We do not present the details of this in this thesis and instead shift 
 our focus to the next challenge of the VIC: Frozen soil and snow modelling.
 
 While \cite{VIC} included a simple way to model snow which treated snow coverage as 
 a special land coverage feature where it was assumed that all the land was covered 
 by a uniformly divided snow layer, many updates later down the line by users of VIC 
-have added to and improved these representations. The newest version of VIC \cite{VIC5} 
-uses a modification from 1999 \cite{VICFrozenSoil} to model frozen soil.
+have added to and improved these representations. The original VIC did not account 
+properly for frozen soil either, the effect of which is important in cold climates.
+The newest version of VIC \cite{VIC5} uses a modification from \cite{VICFrozenSoil}
+to model frozen soil. 
 
 The model is based on the heat equation written for frozen soil, which is defined 
 as 
@@ -126,9 +131,10 @@ as
 C_s\pdv{T}{t}=\pdv{}{z}\left( \kappa \pdv{T}{z} \right) + \rho_i L_f \left( \pdv{\theta_i}{t}\right).
 \label{VIC heat equation}
 \end{equation}
-From (\ref{VIC heat equation}) \cite{VICFrozenSoil} then uses an explicit numerical 
+From (\ref{VIC heat equation}) \cite{VICFrozenSoil} then uses an explicit first order 
 finite difference scheme to solve this one dimensional partial differential 
-equation. In numeric form it is easy to rewrite the equation as
+equation, discretizing  $\partial t\approx \Delta t$ and $\partial z \ approx \Delta z_i$.
+For the top two layers it is then easy to rewrite the equation on numerical form as
 \begin{align}
 	C_s\frac{T_i^t - T_i^{t-1}}{\Delta t} &= \left( \frac{\kappa_{i+1}^t - 
 	\kappa_{t-1}^t}{\alpha}\right) \left( \frac{T_{t+1}^t - T_{t-1}^2}{\alpha} 
@@ -143,11 +149,28 @@ The terms in (\ref{VIC heat equation}) and (\ref{vic frozen soil pde}) are as fo
     \item $z$: Depth [m]
     \item $\kappa$: Soil thermal conductivity [W/(mK)]
     \item $\rho_i$: Ice density [kg/m$^3$]
-    \item $L_f$: Latent heat of fusion (?) [kg/m$^3$]
+    \item $L_f$: Enthalpy of fusion [J/kg]
     \item $\theta_i$: Ice fraction in soil [-]. When $\theta_i=1$ there is no frozen soil and the term $\rho_i L_f\left( \pdv{\theta_i}{t}\right) $ in (\ref{VIC heat equation}) is defined as zero (the gradient of 0 is 0).
-    \item $\alpha$: $(\Delta z_1 + \Delta z_2)$
-    \item $\gamma$: $(\Delta z_1 - \Delta z_2)$
-    \item $(T_{i+1}^t - T_{i-1}^t) / \alpha$
+    \item $\alpha = (\Delta z_1 + \Delta z_2)$
+    \item $\beta = (\Delta z_1^2 + \Delta z_2^2)$
+    \item $\gamma = (\Delta z_1 - \Delta z_2)$
+    \item $f'(z)=(T_{i+1}^t - T_{i-1}^t) / \alpha$
+\end{itemize}
+
+
+Perhaps add equations for $\kappa$ and $C_s$?
+
+
+The water content of layer $i$ when ice is present is then described as 
+\begin{equation}
+    W_i = W_i^c \left[ \left( \frac{1}{g \psi_e} \right) \left( \frac{L_fT}{T+273.16
+    \text{ K}}  \right) \right]^{-B_p}.
+\end{equation}
+
+\begin{itemize}
+    \item $\psi_e$: Air entry potential [m]
+    \item $B_p$: Pore-size distribution [-]
+    \item $g$: Surface average gravitational acceleration [m$/$s$^2$]
 \end{itemize}
 
 Explain all terms. Try to understand what the next terms mean. Then argue why 
