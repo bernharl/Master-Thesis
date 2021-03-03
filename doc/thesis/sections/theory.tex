@@ -30,15 +30,29 @@ several other papers \cite{SAC-SMA-physics}.
 \subsection{The Variable Infiltration Capacity model}
 The Variable Infiltration Capacity (VIC) model \cite{VIC} is a process driven model 
 with emphasis on simulating the physical process of water running through soil.
-The model was created to be used in a GCM (General Circulation Model), but it can 
-also be used for rainfall-runoff modelling. The rainfall-runoff modelling aspect 
+
+The name stems from the equation for infiltration capacity
+\begin{equation}
+    i = i_m \left[ 1 - (1-A)^{1/b_i}  \right]
+\end{equation}
+where $i$ is the infiltration capacity, $i_m$ is the maximum infiltration capacity
+defined as 
+\begin{equation}
+    i_m = (1+b_i)\theta_s|z|. \cite{VIC2L}
+\end{equation}
+
+
+The model was created to be used in a GCM (General Circulation Model), but is often 
+instead used for rainfall-runoff modelling using real-world data instead of the inputs 
+from a circulation model \citationneeded. The rainfall-runoff modelling aspect 
 of the model is presented in short here for context. It works by splitting the catchment 
 area into $N$ land coverage categories and the ground (vertically) into several soil layers. 
 One upper soil layer and one lower soil layer. This is an attempt at physically 
 representing underground streamflow\footnote{While \cite{VIC} originally used a 
 two layer setup, later versions of the VIC model have introduced more layers. 
 \cite{VIC2L} for instance showed that adding a top smaller layer improved performance 
-significantly.}
+significantly. This three layer structure is also what has been used by \cite{VICbench} 
+which is the reason we include VIC as an example process-driven model in this thesis.}
 
 The runoff modelling is split into three parts:
 \begin{enumerate}
@@ -60,16 +74,20 @@ as
 \begin{equation}
 Q_d\left[ N+1 \right] \cdot \Delta t = 
 \begin{cases}
-	P \cdot \Delta t - W_1^c + W_i^- \left[ N+1 \right], &  i_0 + P \Delta t \geq i_m\\
-	P \cdot \Delta t - W_1^c + W_1^- \left[ N+1 \right] \\ + W_1^c \left[  1 - 
+	P \cdot \Delta t - W_1^c + W_i^t \left[ N+1 \right], &  i_0 + P \Delta t \geq i_m\\
+	P \cdot \Delta t - W_1^c + W_1^t \left[ N+1 \right] \\ + W_1^c \left[  1 - 
     \frac{i_0 + P \cdot \Delta t}{i_m} \right]^{l+b_i}, & i + P \cdot \Delta t \leq i_m
 \end{cases}
 \end{equation}
+To better fit with the notation of this thesis we have gone from the original 
+notation from \cite{VIC} where time steps are noted with $W_i^+$ and $W_i^-$ to a more 
+standard notation of $W_i^t$ and $W_i^{t+1}$.
+
 Information about the soil moisture of the previous time step is stores in the 
 relationship between previous upper layer soil moisture $W_1^-$ and the new 
 upper layer soil moisture 
 \begin{equation}
-	W_1^+ \left[N+1 \right] = W_1^- \left[ N+1  \right] + \left( P - Q_d\left[ 
+    W_1^{t+1} \left[N+1 \right] = W_1^t \left[ N+1  \right] + \left( P - Q_d\left[ 
 N+1 \right] - Q_{12}\left[ N+1 \right] - E_1 \right) \cdot \Delta t
 \end{equation}
 Based on this new soil layer 1 moisture we then get an expression for the flow 
@@ -82,16 +100,16 @@ Using this relationship VIC now models subsurface flow (flow in soil layer 2) as
 \begin{equation}
 	Q_b'[N+1] = 
 	\begin{cases}
-\frac{D_s D_m}{W_s W_2^c}W_2^-[N+1], &  W_2^-\left[ N+1 \right] \in [0, W_s W_2^c] \\
-\frac{D_sD_m}{W_sW_2^c}W_2^-\left[ N+1  \right]\\ + \left( D_M - \frac{D_sD_m}{W_s}  \right) 
-\\ \cdot \left( \frac{W_2^-\left[ N+1  \right] - W_sW_2^c}{W_2^c - W_sW_2^c}  \right), 
-& W_2^-\left[ N+1  \right] \geq W_sW_2^c
+\frac{D_s D_m}{W_s W_2^c}W_2^t[N+1], &  W_2^t\left[ N+1 \right] \in [0, W_s W_2^c] \\
+\frac{D_sD_m}{W_sW_2^c}W_2^t\left[ N+1  \right]\\ + \left( D_M - \frac{D_sD_m}{W_s}  \right) 
+\\ \cdot \left( \frac{W_2^t\left[ N+1  \right] - W_sW_2^c}{W_2^c - W_sW_2^c}  \right), 
+& W_2^t\left[ N+1  \right] \geq W_sW_2^c
 	\end{cases}
 \end{equation}
 
 Updating the lower layer soil moisture is then described as 
 \begin{align}
-    W_2^+\left[ N + 1 \right] &= \text{min}\left( W_2^- \left[N+1\right] \right. \nonumber
+    W_2^+\left[ N + 1 \right] &= \text{min}\left( W_2^t \left[N+1\right] \right. \nonumber
     \\& \left. +\left(Q_{12} \left[N+1\right]  - Q_b'\left[ N+1 \right] - E_2 \right)
     \cdot \Delta t, W_2^c\right).
 \end{align}
@@ -99,7 +117,7 @@ Updating the lower layer soil moisture is then described as
 At the edge case of $W_2^+ = W_2^c$, the second soil layer cannot absorb more 
 water and all the excess streamflow is added to the runoff. An extra runoff term 
 \begin{equation}
-    Q_b''\left[ N + 1 \right] =  W_2^- \left[N+1\right]+\left(Q_{12}
+    Q_b''\left[ N + 1 \right] =  W_2^t \left[N+1\right]+\left(Q_{12}
     \left[N+1\right]  - Q_b'\left[ N+1 \right] - E_2 \right) \cdot \Delta t - W_2^c
 \end{equation}
 is therefore added.
@@ -108,8 +126,8 @@ The total streamflow is expressed as
 \begin{equation}
     Q_b = 
     \begin{cases}
-        Q_b', & W_2^+ < W_2^c \\
-        Q_b' + Q_b'', & W_2^+ = W_2^c
+        Q_b', & W_2^{t+1} < W_2^c \\
+        Q_b' + Q_b'', & W_2^{t+1} = W_2^c
     \end{cases}
 \end{equation}
 
@@ -120,20 +138,19 @@ our focus to the next challenge of the VIC: Frozen soil and snow modelling.
 While \cite{VIC} included a simple way to model snow which treated snow coverage as 
 a special land coverage feature where it was assumed that all the land was covered 
 by a uniformly divided snow layer, many updates later down the line by users of VIC 
-have added to and improved these representations. The original VIC did not account 
+have added to and improved these representations. The original VIC also did not account 
 properly for frozen soil either, the effect of which is important in cold climates.
 The newest version of VIC \cite{VIC5} uses a modification from \cite{VICFrozenSoil}
 to model frozen soil. 
 
-The model is based on the heat equation written for frozen soil, which is defined 
-as 
+The model is based on the heat equation for frozen soil, which is defined as 
 \begin{equation}
 C_s\pdv{T}{t}=\pdv{}{z}\left( \kappa \pdv{T}{z} \right) + \rho_i L_f \left( \pdv{\theta_i}{t}\right).
 \label{VIC heat equation}
 \end{equation}
 From (\ref{VIC heat equation}) \cite{VICFrozenSoil} then uses an explicit first order 
 finite difference scheme to solve this one dimensional partial differential 
-equation, discretizing  $\partial t\approx \Delta t$ and $\partial z \ approx \Delta z_i$.
+equation, discretizing $\partial t\approx \Delta t$ and $\partial z \approx \Delta z_i$.
 For the top two layers it is then easy to rewrite the equation on numerical form as
 \begin{align}
 	C_s\frac{T_i^t - T_i^{t-1}}{\Delta t} &= \left( \frac{\kappa_{i+1}^t - 
@@ -172,6 +189,18 @@ The water content of layer $i$ when ice is present is then described as
     \item $B_p$: Pore-size distribution [-]
     \item $g$: Surface average gravitational acceleration [m$/$s$^2$]
 \end{itemize}
+
+The reason we explain this model in such detail here is to show that while it 
+generally seems to be physically motivated, it still has a non-trivial amount of 
+parameters that need to be set. Many of these parameters are given a-priori 
+physical meaning, but experiments have shown that the model actually performs 
+significantly better when more parameters are optimized instead of using physically 
+motivated values \cite{VICbench}. 
+
+
+Speaking in the language of machine learning, the fact that adding more "learn-able" 
+parameters implies a lack of model complexity, complexity in this scenario 
+meaning the ability of a model to fit to a given dataset.
 
 Explain all terms. Try to understand what the next terms mean. Then argue why 
 this model isn't ideal (it is constrained, not that physical, blah blah).
