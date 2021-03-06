@@ -71,20 +71,30 @@ W^c_1 = \frac{i_m}{1+b_i} \label{VIC max moisture surface}
 Using (\ref{VIC max moisture surface}) we can get an expression for the surface 
 runoff\footnote{For a complete derivation of this we refer to \cite{VIC}.} written 
 as 
+{\Large FIND OUT WHY THESE ARE SO DIFFERENT}
 \begin{equation}
 Q_d\left[ N+1 \right] \cdot \Delta t = 
 \begin{cases}
-	P \cdot \Delta t - W_1^c + W_i^t \left[ N+1 \right], &  i_0 + P \Delta t \geq i_m\\
+	P \cdot \Delta t - W_1^c + W_1^t \left[ N+1 \right], &  i_0 + P \Delta t \geq i_m\\
 	P \cdot \Delta t - W_1^c + W_1^t \left[ N+1 \right] \\ + W_1^c \left[  1 - 
-    \frac{i_0 + P \cdot \Delta t}{i_m} \right]^{l+b_i}, & i + P \cdot \Delta t \leq i_m
+    \frac{i_0 + P \cdot \Delta t}{i_m} \right]^{l+b_i}, & i_0 + P \cdot \Delta t \leq i_m
 \end{cases}
 \end{equation}
-To better fit with the notation of this thesis we have gone from the original 
+{\Large $\theta$ is volumetric water content. $W$ is soil moisture content. Are these the same?? Seems like $W_c=\theta_s |z|$.}
+\begin{equation}
+Q_d\left[ N+1 \right] \cdot \Delta t = 
+\begin{cases}
+    P \cdot \Delta t - z_2 (\theta_s - \theta_2), &  i_0 + P \Delta t \geq i_m\\
+    P \cdot \Delta t - z_2 (\theta_s - \theta_2) \\ + z_2 \theta_s \left[  1 - 
+    \frac{i_0 + P \cdot \Delta t}{i_m} \right]^{l+b_i}, & i_0 + P \cdot \Delta t \leq i_m
+\end{cases}
+\end{equation}
+\footnote{To better fit with the notation of this thesis we have gone from the original 
 notation from \cite{VIC} where time steps are noted with $W_i^+$ and $W_i^-$ to a more 
-standard notation of $W_i^t$ and $W_i^{t+1}$.
+standard notation of $W_i^t$ and $W_i^{t-1}$.}
 
-Information about the soil moisture of the previous time step is stores in the 
-relationship between previous upper layer soil moisture $W_1^-$ and the new 
+Information about the soil moisture of the previous time step is stored in the 
+relationship between previous upper layer soil moisture $W_1^t$ and the new 
 upper layer soil moisture 
 \begin{equation}
     W_1^{t+1} \left[N+1 \right] = W_1^t \left[ N+1  \right] + \left( P - Q_d\left[ 
@@ -102,7 +112,7 @@ Using this relationship VIC now models subsurface flow (flow in soil layer 2) as
 	\begin{cases}
 \frac{D_s D_m}{W_s W_2^c}W_2^t[N+1], &  W_2^t\left[ N+1 \right] \in [0, W_s W_2^c] \\
 \frac{D_sD_m}{W_sW_2^c}W_2^t\left[ N+1  \right]\\ + \left( D_M - \frac{D_sD_m}{W_s}  \right) 
-\\ \cdot \left( \frac{W_2^t\left[ N+1  \right] - W_sW_2^c}{W_2^c - W_sW_2^c}  \right), 
+\\ \cdot \left( \frac{W_2^t\left[ N+1  \right] - W_sW_2^c}{W_2^c - W_sW_2^c}  \right)^2, 
 & W_2^t\left[ N+1  \right] \geq W_sW_2^c
 	\end{cases}
 \end{equation}
@@ -304,7 +314,8 @@ This concept also generalizes to other types of modelling than machine learning.
 	\caption{Illustration of the bias-variance tradeoff. The analogy to physics-
 	constrained runoff models is included in the figure to give context for as to 
 	why this is important for the problem in this thesis work. The concept and 
-	function form is inspired by Figure ?? in \cite{elemstatlearn}.}
+	function form is in part inspired by Figure 2.11 in \cite{elemstatlearn}. For 
+    real world data the effect is not guaranteed to be this drastic.}
 	\label{Bias Variance rainfall}
 \end{figure}
 In \cite{VICbench} the concept of model flexibility is mentioned. This is 
