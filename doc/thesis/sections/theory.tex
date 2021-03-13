@@ -55,7 +55,7 @@ instead used for rainfall-runoff modelling using real-world data instead of the 
 from a circulation model \citationneeded. The rainfall-runoff modelling aspect 
 of the model is presented in short here for context. It works by splitting the catchment 
 area into $N$ land coverage categories and the ground (vertically) into several soil layers. 
-One upper soil layer and one lower soil layer. This is an attempt at physically 
+One thin  upper soil layer and two lower soil layers. This is an attempt at physically 
 representing underground streamflow\footnote{While \cite{VIC} originally used a 
 two layer setup, later versions of the VIC model have introduced more layers. 
 \cite{VIC2L} for instance showed that adding a top smaller layer improved performance 
@@ -104,7 +104,7 @@ where $\theta_s=\frac{W_c^i}{z_i}$ and $\theta_i = \frac{W_i}{z_i}$.
 The baseflow $Q_b$ is defined as \cite{VIC2L}
 \begin{equation}
     \pdv{\theta_3}{t} \left(z_3 - z_2\right) = K(\theta)|_{-z_2} + D(\theta)
-    \pdv{\theta}{z}|_{-z_2} - Q_b.
+    \pdv{\theta}{z}|_{-z_2} - Q_b. \label{Qb}
 \end{equation}
 
 Summing direct runoff and baseflow gives total runoff $Q=Q_d + Q_b$. For other ground covers 
@@ -154,10 +154,10 @@ The terms in (\ref{VIC heat equation}) and (\ref{vic frozen soil pde}) are as fo
 Perhaps add equations for $\kappa$ and $C_s$?
 
 
-The water content of layer $i$ when ice is present is then described as 
+The unfrozen  water content of layer $i$ when ice is present is then described as 
 \begin{equation}
     W_i = W_i^c \left[ \left( \frac{1}{g \psi_e} \right) \left( \frac{L_fT}{T+273.16
-    \text{ K}}  \right) \right]^{-B_p}.
+    \text{ K}}  \right) \right]^{-B_p}. \label{VIC wi frozen}
 \end{equation}
 
 \begin{itemize}
@@ -165,6 +165,9 @@ The water content of layer $i$ when ice is present is then described as
     \item $B_p$: Pore-size distribution [-]
     \item $g$: Surface average gravitational acceleration [m$/$s$^2$]
 \end{itemize}
+Obtaining $\theta$ for use in (\ref{VIC direct runoff}) and (\ref{Qb}) is then done 
+using (\ref{VIC wi frozen}) for cases where frozen soil is present (though not for 
+drainage). 
 
 While \cite{VIC} included a simple way to model snow which treated snow coverage as 
 a special land coverage feature where it was assumed that all the land was covered 
@@ -172,11 +175,11 @@ by a uniformly divided snow layer, many updates later down the line by users of 
 have added to and improved these representations. 
 The reason we explain this model in such detail here is to show that while it 
 generally seems to be physically motivated, it still has a non-trivial amount of 
-parameters that need to be set. Many of these parameters are given a-priori 
+parameters that need to be set. Many of these parameters are given an a-priori 
 physical meaning, but experiments have shown that the model actually performs 
 significantly better when more parameters are optimized instead of using physically 
-motivated values \cite{VICbench}. 
-
+motivated values \cite{VICbench}. This could imply that the model does not account 
+for several important physical phenomena.
 
 Speaking in the language of machine learning, the fact that adding more "learn-able" 
 parameters implies a lack of model complexity, complexity in this scenario 
@@ -191,28 +194,19 @@ in this section.
 
 
 \subsection{Drawbacks}
-Several terms in the SAC-SMA model are purely parametrized, needing different parameters 
-for each basin if we want to see acceptable results. This leads to a plethora of 
-issues:
-\begin{itemize}
-    \item It is not possible for the model to generalize well over several basins. \citationneeded
-    \item The terms in the model are often hard to interpret. This is acceptable for people merely interested in a well performing model in practice, but it is a large detriment to hydrologists, physicists and people from other practices who may want to use the model for scientific discovery.
-    \item Coming from the above stated problem, it is also hard to use such a 
-        complex and highly parametrized model to find out what information it lacks to be able to improve.
-\end{itemize}
-While there do exist more physically driven models than SAC-SMA \citationneeded, 
-we use the SAC-SMA model as our example of a traditional model in this thesis because
-the CAMELS dataset includes benchmarks of it \cite{CAMELS_US}. 
-There is a likelihood that some of these even more physical models can also benefit 
-from the analysis in this thesis, however, as they are also highly parameter 
-driven. Finding a relationship between easily obtainable data such as the static 
-features in \cite{CAMELS_US} and \cite{CAMELS_GB} and physical constants in 
-hydrological models is something we and \citationneeded predict will be a very 
-interesting research topic for quite some time, hopefully giving insight into the 
-physics of hydrology as well as improving the prediction power of hydrological models.
+The reason we briefly describe several traditional models in this chapter is to 
+give proper motivation for why it is of interest to see whether the information 
+contained in easily obtainable data such as the static catchment attributes 
+provided by \cite{CAMELS_US} and \cite{CAMELS_GB} has the potential to improve 
+our physical understanding of the relationship between rainfall and runoff. It has 
+been shown by \ref{lstm_third_paper} that one can, using machine learning, extract 
+useful information from these attributes. Understanding the limitations of process 
+driven models such as VIC and NWM is important if one is to try finding a 
+meaningful relationship between the physics not currently described fully in these 
+(or other) models and the catchment attributes. If anything, this would at least 
+make the calibration effort of these models a simpler task without sacrificing 
+performance.
 
-One of the many aspects of the model that are not well understood is the melting 
-of snow and how that melted water spreads via the ground \citationneeded. 
 
 \section{Machine Learning}
 We give a brief explanation of the basics in Machine Learning here for better context 
