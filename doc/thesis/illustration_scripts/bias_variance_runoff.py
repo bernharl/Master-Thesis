@@ -11,13 +11,15 @@ x = np.linspace(-2, 2, 1000)
 
 bias = np.exp(-x)
 variance = np.exp(x)
+training = np.exp(-x) - 0.2
 total = bias + variance
 
 
 ax.plot(x, bias)
 ax.plot(x, variance)
 ax.plot(x, total)
-ax.legend(["Bias", "Variance", "Total error"])
+ax.plot(x, training)
+ax.legend(["Bias", "Variance", "Testing error", "Training error"])
 ax.tick_params(
     axis="both",  # changes apply to the x-axis
     which="both",  # both major and minor ticks are affected

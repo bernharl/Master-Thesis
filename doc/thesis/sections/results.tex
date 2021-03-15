@@ -5,21 +5,21 @@ approach the problem the way we do further down.
 \section{Feature reduction}
 Note that when doing model selection we do not look at test set performance, only 
 performance on the cross validated train set.
-\begin{table}
-    \begin{adjustbox}{width=\textwidth}
-    \input{tables/linreg_no_static.tex}
-    \end{adjustbox}
-    \caption{Table for attempt at linear regression. This model is fit on the static
-    features as input values, and the NSE of an LSTM trained without static features
-    for each basin in the validation set. The $R^2$ score of this model is $\approx 0.5$}
-    \label{linreg_no_static_table}
-\end{table}
-In table \ref{linreg_no_static_table} we can see that our linear regression used to model 
-the relationship between NSE value of models and static features has decided that 
-several features are important. All these coefficients have a p-value $<0.5$. The 
-problem with this model was that it achieved an $R^2$ score of $\approx 0.5$, meaning 
-it does not actually explain the relationship well. We therefore choose to change 
-strategy for feature selection. 
+%\begin{table}
+%    \begin{adjustbox}{width=\textwidth}
+%    \input{tables/linreg_no_static.tex}
+%    \end{adjustbox}
+%    \caption{Table for attempt at linear regression. This model is fit on the static
+%    features as input values, and the NSE of an LSTM trained without static features
+%    for each basin in the validation set. The $R^2$ score of this model is $\approx 0.5$}
+%    \label{linreg_no_static_table}
+%\end{table}
+%In table \ref{linreg_no_static_table} we can see that our linear regression used to model 
+%the relationship between NSE value of models and static features has decided that 
+%several features are important. All these coefficients have a p-value $<0.5$. The 
+%problem with this model was that it achieved an $R^2$ score of $\approx 0.5$, meaning 
+%it does not actually explain the relationship well. We therefore choose to change 
+%strategy for feature selection. 
 \begin{figure}
     \includegraphics{{correlation_reduction/all_features/corr_and_dendrogram}.pdf}
     \caption{The Pearson correlation matrix and the corresponding hierarchial
@@ -53,3 +53,10 @@ to the permutation test}
     \caption{Common features}
     \label{Common features}
 \end{table}
+
+\begin{figure}
+    \centering
+    \includegraphics{{CDFs/mixed_model_comparisons}.pdf}
+    \caption{top kjeks}
+    \label{main cdf}
+\end{figure}
