@@ -1,0 +1,27 @@
+train_start: 01101971
+train_end: 30092015
+val_start: 01101971
+val_end: 30092015
+epochs: 30
+learning_rate: 1e-3
+seq_length: 270
+batch_size: 4096
+hidden_size:  256
+initial_forget_gate_bias: 5
+log_interval: 50
+clip_norm: True
+clip_value: 1
+dropout: 0.4
+seed: 19970204
+cache_data: True
+no_static: False
+concat_static: True
+# If evaluating:
+evaluate_on_epoch: True
+early_stopping: False
+early_stopping_steps: 5
+attribute_selection_file: attribute_selection.txt
+attribute_dataset: camels_gb
+camels_us_root: /work/bernharl/camels_us
+camels_gb_root: /work/bernharl/camels_gb
+dataset: camels_us, camels_gb
