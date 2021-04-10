@@ -17,4 +17,3 @@ conductivity_cosby
 sand_perc
 silt_perc
 clay_perc
-gvf_max
