@@ -1,16 +1,17 @@
-In this chapter we describe how we implement what we lay out in the Theory chapter.
+In this chapter we discuss the implementation of the LSTM models described in Chapter 
+\ref{lstm theory} and how the predictions of these models are used to try and gain 
+insight into what physical processes our models deem the most important.
 \section{CamelsML}
 Originally a fork of the code in \cite{lstm_second_paper} with a few modifications, 
 the machine learning code of this thesis is now implemented to be a fully fledged 
 Python package. As the original code it is forked from, it is released under the 
 Apache 2.0 license and anyone is therefore free to modify and implement the code 
 into their own experiments in the future.
-
 We dub this package CamelsML (Camels Machine Learning).
 
 
 See Appendix \ref{camelsml documentation} for documentation on how to use the python 
-package.
+package as well as a minimal running example.
 
 \section{Model configuration}
 \begin{figure}
@@ -32,10 +33,10 @@ we have analyzed the results.
 \begin{figure}
 \centering
 \input{figures/tikz/mini_batch_training.tex}
-\caption{A minibatch. $\bm{x}_{i,t}$ represents the input parameters $\bm{x}$ at time step $t$ for time series $t \in [0, b]$ where $b$ is the batch size.}
+\caption{A minibatch. $\bm{x}_{i,t}$ represents the input parameters $\bm{x}$ at time step $t$ for time series $i \in [0, b]$ where $b$ is the batch size.}
 \label{minibatch}
 \end{figure}
-Our training algorithm can be described as this:
+Our training algorithm can be described as:
 \begin{enumerate}
     \item Split the basins in the training set into 5 parts. Repeat this 5 times, each time using 4/5 parts for training and 1/5 for validation.\begin{enumerate}
         \item Initialize LSTM model with random weights and zero biases, except for the bias of the forget gate $\bm{b}_f$ which is initialized as 5 to make the initial model either forget or remember idk \citationneeded
@@ -59,6 +60,45 @@ therefore need to train a new model with the same configuration (using the same 
 hyperparameters, etc.) on the entire, undivided training set and test that model 
 on the test set. This test result cannot be used to determine relative performance 
 between different model configurations, but it can give an indication of the actual, 
-real-world performance. "Absolute performance" versus "relative performance".
+real-world performance of a final selected model. Statistically, this is due to the 
+fact that optimizing model configuration using the test set would mean overfitting 
+on said test set. See \cite{elemstatlearn} for a more detailed explanation.
+
+For models used to validate transfer learning between Camels and Camels-GB, we 
+cross validate on one dataset and use all five models from the cross validation 
+to make ensemble predictions on the validation split of the other dataset. This 
+way we can get more robust statistics also in these results, as \cite{lstm_second_paper} 
+showed that there often is a non trivial performance difference between a single
+model and a model ensemble. In our case we assume this effect to be even higher 
+because of the nature of training and validating on different datasets.
 
 \section{Hardware}
+The models are run on three different hardware configurations. The important difference 
+between these hardware configurations is the amount of available VRAM. As LSTM models 
+are recurrent neural networks they are not as parallelizable as other machine learning 
+models (see (\ref{LSTM})). This means that the only way for us to fully exploit 
+an increase in VRAM is to parallelize data-wize. To do this we increase the batch size.
+The three hardware configurations are listed as follows \footnote{Note that we only 
+state the used graphics card as this is the only important difference, we run no 
+calculations on processors and do not use a significant amount of ordinary RAM.}:
+\begin{enumerate}
+    \item Nvidia GTX 980 ti: This has 6 GB of VRAM, we found a batch size of 1024 
+        to be a sweet spot here.
+    \item Nvidia GTX 1660 ti: Same as above.
+    \item Nvidia Tesla V100 (Provided by Simula's eX3 cluster): This has 32 GB of VRAM, we find a batch size of 4096 
+        to be a sweet spot. Anything more leads to a downgrade in speed because 
+        of limitations in transferring data from the storage device to the GPU. 
+        This is still not ideal and leads to an approximate 30\% utilization of the 
+        GPU.
+\end{enumerate}
+We acknowledge that the inconsistent use of batch sizes across models may somewhat 
+impact the model performance, as previously stated in Chapter \ref{stochastic gradient descent}.
+However, as long as the amount of minibatches is sufficiently smaller than the number of datapoints we 
+still get an acceptable amount of stochasticity in the training process and the batch 
+size is usually set as high as possible in most machine learning practices because 
+of model speed. Batch size is usually set as high as the hardware supports, as long 
+as the total size of training data is $>>$VRAM \citationneeded.
+Still, in an ideal situation we would use the same hardware for all training runs, 
+but in this case we are limited by queue times on Simula's eX3 cluster in addition 
+to the as of Q4 2020 $\rightarrow$ Q2 2021 silicon shortage making the acquisition of 
+new graphics cards next to impossible \cite{GPUShortage}.
