@@ -37,8 +37,8 @@ The name stems from the equation for variable infiltration capacity
 \end{equation}
 where
 \begin{equation}
-    i_m = (1+b_i)\theta_s|z|. \cite{VIC2L} \label{imVIC}
-\end{equation}
+    i_m = (1+b_i)\theta_s|z|.  \label{imVIC}
+\end{equation} \cite{VIC2L}
 The terms in (\ref{iVIC}) and (\ref{imVIC}) are as follows:
 \begin{itemize}
     \item $i$: Infiltration capacity [m]
@@ -403,8 +403,9 @@ For a normal feed forward neural network, the backpropagation algorithm can be w
 as 
 \begin{align}
     \delta^L_j &= \dv{f^L(z)}{z}\left(z^L_j\right) \pdv{C}{y^L_j} \label{output_backprop}\\
-    \delta^l_j &= \sum_k \delta^{l+1}_k \omega^{l+1}_{kj} \dv{f^l(z)}{z}\left(z^l_j\right) \cite{fysstkweek40} \label{backprop}
+    \delta^l_j &= \sum_k \delta^{l+1}_k \omega^{l+1}_{kj} \dv{f^l(z)}{z}\left(z^l_j\right)  \label{backprop}
 \end{align}
+as shown by \cite{fysstkweek40}.
 The first equation (\ref{output_backprop}) is for the special case of the output 
 layer, where $l=L$. This needs to be calculated first for us to be able to use 
 (\ref{backprop}) to calculate $\delta^l_j$ for the neurons in the rest of the layer. 
@@ -558,8 +559,9 @@ mathematical terms as well:
     \bm{c}_t &= \bm{c}_{t-1} \circ \bm{f}_t + \bm{i}_t \\
     \bm{h}_t &= \sigma \left( \bm{\omega}_o \left[ \bm{h}_{t-1}, \bm{x}_t \right] 
     + \bm{b}_o \right) \circ \tanh(\bm{c}_t) \label{output gate}
-    \cite{hochreiter1997long} \cite{gers1999learning}
-\end{align}
+    \end{align}
+\cite{hochreiter1997long} \cite{gers1999learning}.
+
 The terms are as follows:
 \begin{itemize}
     \item $\sigma$: The Sigmoid function (\ref{sigmoid}).
@@ -645,9 +647,10 @@ permutation test:
 Given a feature $j$, the permutation importance 
 $i_j$ is equal to 
 \begin{equation}
-i_j = s - \frac{1}{K} \sum_{k=1}^K s_{k,j}\quad \cite{permutation} \cite{breiman2001random}.
+i_j = s - \frac{1}{K} \sum_{k=1}^K s_{k,j}\quad 
 \label{Permutation equation}
 \end{equation}
+\cite{permutation} \cite{breiman2001random}.
 Here $K$ denotes how many permutations we average over for each feature, $s$ is
 the model's score on the original data and $s_{k,j}$ is the score of permutation 
 number $k$ of the feature $j$. In essence (\ref{Permutation equation}) describes 
