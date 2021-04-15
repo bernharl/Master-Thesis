@@ -26,23 +26,31 @@ over several years, but it is indeed a problem for the static features of which 
 are only one data point per basin. To improve our statistics we therefore use 
 cross validation. All results in this thesis that compare models to each other 
 are made from the same 5-fold cross validation split. The test set is separate 
-from this and is only used to say something about our best performing model after 
+from this and is only used to later show the performance of a selected model.
 we have analyzed the results.
 
 \section{Training Algorithm}
 \begin{figure}
 \centering
 \input{figures/tikz/mini_batch_training.tex}
-\caption{A minibatch. $\bm{x}_{i,t}$ represents the input parameters $\bm{x}$ at time step $t$ for time series $i \in [0, b]$ where $b$ is the batch size.}
+\caption{A minibatch. $\bm{x}_{i,t}$ represents the input parameters $\bm{x}$ at time step $t$ for time series $i \in [0, b]$ where $b$ is the batch size. A minibatch consists of $b \times t$ FP32 numbers.}
 \label{minibatch}
 \end{figure}
 Our training algorithm can be described as:
 \begin{enumerate}
     \item Split the basins in the training set into 5 parts. Repeat this 5 times, each time using 4/5 parts for training and 1/5 for validation.\begin{enumerate}
         \item Initialize LSTM model with random weights and zero biases, except for the bias of the forget gate $\bm{b}_f$ which is initialized as 5 to make the initial model either forget or remember idk \citationneeded
-        \item Split each training basin's time series into len(time series) / sequence length parts, feeding batch size of these small parts into the model in parallel. 
-        \item After running through these, update the parameters using ADAM.
-        \item After an epoch, evaluate on the evaluation set. If early stopping is enabled, check whether or not to stop training.
+        \item Split each training basin's time series into several parts, the length 
+            of which are decided by the sequence length variable $s$. A minibatch 
+            consists of a batch size $s$ amount of these $s$ long timeseries.
+        \item For each minibatch:
+        \begin{enumerate}
+            \item Use the model to predict the outcomes of each timeseries in the 
+                minibatch. This can be done in parallel.
+            \item Use the average loss of all predictions in the minibatch to update 
+                the model parameters using ADAM (see Section \ref{ADAM}).
+        \end{enumerate}
+        \item Evaluate on the validation set without updating parameters.
     \end{enumerate}
 \end{enumerate}
 Evaluating our model is done using the Nash–Sutcliffe model efficiency coefficient (NSE). \cite{NSE}
@@ -52,7 +60,7 @@ It is defined as
 \begin{equation}
     \text{NSE} = 1 - \frac{\sum_{t=0}^T\left( y^t - \hat{y}^t\right)}{\sum_{t=0}^T\left(y^t - \bar{\hat{y}}\right)} \label{NSE}
 \end{equation}
-As we employ cross validation, what we actually end up with is 5 different models 
+As we employ cross validation, we  end up with is 5 different models 
 for each training run. These models do not necessarily converge to the same parameters 
 as each other, making them potentially quite different from one another. To test the 
 actual performance of a model (not just relative to other model configurations) we 
