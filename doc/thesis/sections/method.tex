@@ -2,7 +2,7 @@ In this chapter we discuss the implementation of the LSTM models described in Ch
 \ref{lstm theory} and how the predictions of these models are used to try and gain 
 insight into what physical processes our models deem the most important.
 \section{CamelsML}
-Originally a fork of the code in \cite{lstm_second_paper} with a few modifications, 
+Originally a fork of the code in \citet{lstm_second_paper} with a few modifications, 
 the machine learning code of this thesis is now implemented to be a fully fledged 
 Python package. As the original code it is forked from, it is released under the 
 Apache 2.0 license and anyone is therefore free to modify and implement the code 
@@ -15,7 +15,7 @@ package as well as a minimal running example.
 
 \section{Model configuration}
 \begin{figure}
-\caption{Our full model configuration using an EA-LSTM \cite{lstm_second_paper}}.
+\caption{Our full model configuration using an EA-LSTM \citep{lstm_second_paper}}.
 \end{figure}
 The models we apply in this thesis are all variants of the LSTM model described 
 in \ref{LSTM Theory}.
@@ -53,7 +53,7 @@ Our training algorithm can be described as:
         \item Evaluate on the validation set without updating parameters.
     \end{enumerate}
 \end{enumerate}
-Evaluating our model is done using the Nash–Sutcliffe model efficiency coefficient (NSE). \cite{NSE}
+Evaluating our model is done using the Nash–Sutcliffe model efficiency coefficient (NSE) \citep{NSE}.
 This metric is similar to the $R^2$ score, but it is specialized for usage 
 on hydrological time series.
 It is defined as 
@@ -70,12 +70,12 @@ on the test set. This test result cannot be used to determine relative performan
 between different model configurations, but it can give an indication of the actual, 
 real-world performance of a final selected model. Statistically, this is due to the 
 fact that optimizing model configuration using the test set would mean overfitting 
-on said test set. See \cite{elemstatlearn} for a more detailed explanation.
+on said test set. See \citet{elemstatlearn} for a more detailed explanation.
 
 For models used to validate transfer learning between Camels and Camels-GB, we 
 cross validate on one dataset and use all five models from the cross validation 
 to make ensemble predictions on the validation split of the other dataset. This 
-way we can get more robust statistics also in these results, as \cite{lstm_second_paper} 
+way we can get more robust statistics also in these results, as \citet{lstm_second_paper} 
 showed that there often is a non trivial performance difference between a single
 model and a model ensemble. In our case we assume this effect to be even higher 
 because of the nature of training and validating on different datasets.
@@ -109,4 +109,4 @@ as the total size of training data is $>>$VRAM \citationneeded.
 Still, in an ideal situation we would use the same hardware for all training runs, 
 but in this case we are limited by queue times on Simula's eX3 cluster in addition 
 to the as of Q4 2020 $\rightarrow$ Q2 2021 silicon shortage making the acquisition of 
-new graphics cards next to impossible \cite{GPUShortage}.
+new graphics cards next to impossible \citep{GPUShortage}.
