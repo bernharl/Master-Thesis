@@ -1,0 +1,29 @@
+from pathlib import Path
+import pickle
+import random
+
+import numpy as np
+
+from camelsml import permutation_test, load_config
+
+
+permutation_folder = Path("/work/bernharl/train_us_val_gb_no_organic_no_gvf/permutation")
+permutation_folder.mkdir(exist_ok=True)
+cfg = load_config("run_config.txt", device="cuda:0", num_workers=30)
+np.random.seed(cfg["seed"])
+random.seed(cfg["seed"])
+cfg["val_basin_file"] = Path("../train_us_val_gb/gb_split/split_seed_19970204/basins_validation.txt")
+#for i in range(0,1):
+for i in range(5):
+    save_path = permutation_folder / f"{i}"
+    save_path.mkdir(exist_ok=True)
+    cv_dir = list((Path("/work/bernharl/train_us_val_gb_no_organic_no_gvf").absolute() / f"{i}").glob("*"))
+    if len(cv_dir) != 1:
+        raise RuntimeError(f"cv_dir must contain only one run")
+    else:
+        cv_dir = cv_dir[0]
+    cfg["run_dir"] = cv_dir
+    cfg["train_basin_file"]=Path(f"../train_us_val_gb/cv/cross_validation_seed_19970204/{i}/basins_train.txt")
+    perm = permutation_test(cfg, k=5, epoch=10)
+    with open(save_path / "i_list.pickle", "wb") as outfile:
+        pickle.dump(perm, outfile)
