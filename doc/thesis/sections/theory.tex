@@ -8,7 +8,7 @@ of classical rainfall-runoff models. These two types are
 Because they attempt to predict runoff using physically modelled processes process based models
 have been referred to as the models of choice when predicting runoff in ungauged 
  (meaning basins where there is no forcing data available for calibration) basins. 
- \cite{lstm_third_paper} argues that this is not necessarily the case and data driven 
+ \citet{lstm_third_paper} argues that this is not necessarily the case and data driven 
  machine learning models can also give state of the art predictions.
  While this may be the case, we still argue that the ideal scenario would be having 
  a well performing process-based model. This is because all models are likely to 
@@ -17,10 +17,10 @@ have been referred to as the models of choice when predicting runoff in ungauged
  to the possibility of being able to know whether one can trust a specific prediction or not. 
  For ungauged basins this is a clear benefit.
 \subsection{Sacramento Soil Moisture Accounting}
-The Sacramento Soil Moisture Accounting (SAC-SMA) \cite{SAC-SMA} rainfall-runoff model is a widely 
+The Sacramento Soil Moisture Accounting (SAC-SMA) \citep{SAC-SMA} rainfall-runoff model is a widely 
 used hydrological and serves the purpose of being a conceptual model in this thesis.
 Originally introduced in 1973 the model has since been modified and improved by 
-several other papers \cite{SAC-SMA-physics}.
+several other papers \citep{SAC-SMA-physics}.
 \begin{align}
     \bm{S}^1(t + \Delta t,x) &= \bm{S}(t,x) + f\left(\bm{S}(t,x),P(t+\Delta t,x),E_p (t+\Delta t, x), \bm{V}(x) \right) \\
     \bm{S}^{(n+1)}(t+\Delta t,x) &= \bm{S}^{(n)}(t+\Delta t, x) \nonumber \\
@@ -28,7 +28,7 @@ several other papers \cite{SAC-SMA-physics}.
 \end{align}
 
 \subsection{The Variable Infiltration Capacity model}
-The Variable Infiltration Capacity (VIC) model \cite{VIC} is a process driven model 
+The Variable Infiltration Capacity (VIC) model \citep{VIC} is a process driven model 
 with emphasis on simulating the physical process of water running through soil.
 
 The name stems from the equation for variable infiltration capacity
@@ -38,7 +38,7 @@ The name stems from the equation for variable infiltration capacity
 where
 \begin{equation}
     i_m = (1+b_i)\theta_s|z|.  \label{imVIC}
-\end{equation} \cite{VIC2L}
+\end{equation} \citep{VIC2L}
 The terms in (\ref{iVIC}) and (\ref{imVIC}) are as follows:
 \begin{itemize}
     \item $i$: Infiltration capacity [m]
@@ -56,10 +56,10 @@ from a circulation model \citationneeded. The rainfall-runoff modelling aspect
 of the model is presented in short here for context. It works by splitting the catchment 
 area into $N$ land coverage categories and the ground (vertically) into several soil layers. 
 One thin  upper soil layer and two lower soil layers. This is an attempt at physically 
-representing underground streamflow\footnote{While \cite{VIC} originally used a 
+representing underground streamflow\footnote{While \citet{VIC} originally used a 
 two layer setup, later versions of the VIC model have introduced more layers. 
-\cite{VIC2L} for instance showed that adding a top smaller layer improved performance 
-significantly. This three layer structure is also what has been used by \cite{VICbench} 
+\citet{VIC2L} for instance showed that adding a top smaller layer improved performance 
+significantly. This three layer structure is also what has been used by \citet{VICbench} 
 which is the reason we include VIC as an example process-driven model in this thesis.}
 
 The runoff modelling is split into several parts. Some examples are:
@@ -82,15 +82,15 @@ To obtain the direct runoff $Q_d$ [mm/day] Richard's equation which is defined a
 \end{equation}
 where $D(\theta)$ is the soil water diffusivity [mm$^2$/day]{\Large ??} and $K(\theta)$ is hydraulic
 conductivity [mm/day]
-is numerically integrated from $-z_{2}$ to $0$\footnote{\cite{VIC2L} argues that 
-calculating direct runoff separately for layer 1 and 2 is not beneficial.}, giving \cite{VIC2L}
+is numerically integrated from $-z_{2}$ to $0$\footnote{\citet{VIC2L} argues that 
+calculating direct runoff separately for layer 1 and 2 is not beneficial.}, giving \citep{VIC2L}
 \begin{equation}
     \pdv{\theta_2}{t}z_2 = I - E - K(\theta) |_{-z_2}^0 - D(\theta) \pdv{\theta}{z} |_{-z_2}^0.
     \label{richards numerical}
 \end{equation}
 Here $I = P - Q_d$ is the infiltration rate and $\theta_2$ according to (\ref{theta i}) 
 is $\theta_i = \frac{1}{z_2}\int_{-z_2}^0 \theta dz$.
-Using this value for $\theta_i$, direct runoff $Q_d$ is then modelled as \cite{VIC2L}
+Using this value for $\theta_i$, direct runoff $Q_d$ is then modelled as \citep{VIC2L}
 \begin{equation}
 Q_d\left[ N+1 \right] \cdot \Delta t = 
 \begin{cases}
@@ -101,7 +101,7 @@ Q_d\left[ N+1 \right] \cdot \Delta t =
 \end{equation}
 where $\theta_s=\frac{W_c^i}{z_i}$ and $\theta_i = \frac{W_i}{z_i}$.
 
-The baseflow $Q_b$ is defined as \cite{VIC2L}
+The baseflow $Q_b$ is defined as \citep{VIC2L}
 \begin{equation}
     \pdv{\theta_3}{t} \left(z_3 - z_2\right) = K(\theta)|_{-z_2} + D(\theta)
     \pdv{\theta}{z}|_{-z_2} - Q_b. \label{Qb}
@@ -115,7 +115,7 @@ instead shift our focus to the next challenge of the VIC: Frozen soil and snow m
 
 The original VIC did not account 
 properly for frozen soil, the effect of which is important in cold climates.
-The newest version of VIC \cite{VIC5} uses a modification from \cite{VICFrozenSoil}
+The newest version of VIC \citep{VIC5} uses a modification from \citet{VICFrozenSoil}
 to model frozen soil. 
 
 The frozen soil model is based on the heat equation for frozen soil, which 
@@ -124,7 +124,7 @@ is defined as
 C_s\pdv{T}{t}=\pdv{}{z}\left( \kappa \pdv{T}{z} \right) + \rho_i L_f \left( \pdv{\theta_i}{t}\right).
 \label{VIC heat equation}
 \end{equation}
-From (\ref{VIC heat equation}) \cite{VICFrozenSoil} then uses an explicit first order 
+From (\ref{VIC heat equation}) \citet{VICFrozenSoil} then uses an explicit first order 
 finite difference scheme to solve this one dimensional partial differential 
 equation, discretizing $\partial t\approx \Delta t$ and $\partial z \approx \Delta z_i$.
 For the top two layers it is then easy to rewrite the equation on numerical form as
@@ -169,7 +169,7 @@ Obtaining $\theta$ for use in (\ref{VIC direct runoff}) and (\ref{Qb}) is then d
 using (\ref{VIC wi frozen}) for cases where frozen soil is present (though not for 
 drainage). 
 
-While \cite{VIC} included a simple way to model snow which treated snow coverage as 
+While \citet{VIC} included a simple way to model snow which treated snow coverage as 
 a special land coverage feature where it was assumed that all the land was covered 
 by a uniformly divided snow layer, many updates later down the line by users of VIC 
 have added to and improved these representations. 
@@ -178,7 +178,7 @@ generally seems to be physically motivated, it still has a non-trivial amount of
 parameters that need to be set. Many of these parameters are given an a-priori 
 physical meaning, but experiments have shown that the model actually performs 
 significantly better when more parameters are optimized instead of using physically 
-motivated values \cite{VICbench}. This could imply that the model does not account 
+motivated values \citep{VICbench}. This could imply that the model does not account 
 for several important physical phenomena.
 
 Speaking in the language of machine learning, the fact that adding more "learn-able" 
@@ -197,7 +197,7 @@ in this section.
 The reason we briefly describe several traditional models in this chapter is to 
 give proper motivation for why it is of interest to see whether the information 
 contained in easily obtainable data such as the static catchment attributes 
-provided by \cite{CAMELS_US} and \cite{CAMELS_GB} has the potential to improve 
+provided by \citet{CAMELS_US} and \citet{CAMELS_GB} has the potential to improve 
 our physical understanding of the relationship between rainfall and runoff. It has 
 been shown by \ref{lstm_third_paper} that one can, using machine learning, extract 
 useful information from these attributes. Understanding the limitations of process 
@@ -260,7 +260,7 @@ In the case of the OLS model the MSE can be rewritten into four parts:
     MSE = \text{Bias}^2 + \text{Variance} + \sigma^2
     \label{Bias Variance Decomp}
 \end{equation}
-For a full derivation of this, see \cite{vijayakumar2007bias}. When selecting and 
+For a full derivation of this, see \citet{vijayakumar2007bias}. When selecting and 
 configuring machine learning models this trade-off is essential. The following is 
 a qualitative explanation of what each term in (\ref{Bias Variance Decomp})
 represents:
@@ -278,11 +278,11 @@ This concept also generalizes to other types of modelling than machine learning.
 	\caption{Illustration of the bias-variance tradeoff. The analogy to physics-
 	constrained runoff models is included in the figure to give context for as to 
 	why this is important for the problem in this thesis work. The concept and 
-	function form is in part inspired by Figure 2.11 in \cite{elemstatlearn}. For 
+	function form is in part inspired by Figure 2.11 in \citet{elemstatlearn}. For 
     real world data the effect is not guaranteed to be this drastic.}
 	\label{Bias Variance rainfall}
 \end{figure}
-In \cite{VICbench} the concept of model flexibility is mentioned. This is 
+In \citet{VICbench} the concept of model flexibility is mentioned. This is 
 analogous to a model with high variance, making it able to predict well in more scenarios, 
 but possibly losing performance (overfitting) and interpretability if taken too far. 
 In traditional 
@@ -294,7 +294,7 @@ the bias-variance tradeoff concept is illustrated  in Figure
 While the simple case of linear regression has an easily attainable analytical solution 
 as seen in (\ref{OLS solution}), more advanced models may not. \citationneeded 
 A generic computational optimization algorithm known as Gradient Descent can therefore 
-be beneficial to employ in such a case \cite{elemstatlearn} \cite{handson}. The 
+be beneficial to employ in such a case \citep{elemstatlearn} \citep{handson}. The 
 fundamental concept of Gradient Descent is to calculate the gradient $\Delta F(\mathbf{x})$ 
 of the loss function $F(\mathbf{x})$. In the case of regression this function would 
 be the MSE as described in (\ref{MSE}) while the variable $\mathbf{x}$ would be 
@@ -310,7 +310,7 @@ $\lambda$ is called the learning rate and is known as a hyperparameter.
 A hyperparameter is a model parameter that is not trained in the training process 
 and has to be optimized in a different way. More on this in chapter \ref{Hyperparameters}
 A problem with (\ref{Gradient descent}) is that one is never guaranteed to find the 
-absolute minimum of $F(\mathbf{x})$, the algorithm often converges at local minima \cite{elemstatlearn}.
+absolute minimum of $F(\mathbf{x})$, the algorithm often converges at local minima \citep{elemstatlearn}.
 The solution to this is to introduce stochasticity to the optimization algorithm. 
 Stochastic Gradient Descent is a modification of (\ref{Gradient descent}) which 
 iterates over minibatches of your dataset instead of the entire dataset at once. 
@@ -324,9 +324,9 @@ This is the amount of datapoints to be used in each iterations. An iteration is
 defined as when the optimizer has seen all data points in a minibatch, and there are 
 therefore several iterations in an epoch.
 Adding more complexity to Stochastic Gradient Descent (SGD) we get to the optimizer 
-known as Adaptive Moment EstimAtioN (Adam) \cite{adam}. The ADAM optimizer is 
+known as Adaptive Moment EstimAtioN (Adam) \citep{adam}. The ADAM optimizer is 
 an optimizer which uses minibatches and also what is known as a momentum based approach.
-As a slight simplification from what's written in \cite{fysstkweek40} the ADAM 
+As a slight simplification from what is written in \citet{fysstkweek40} the ADAM 
 algorithm in terms of equations looks like:
 \begin{align}
     \mathbf{g}_i &= \Delta_x E(\bm{x}) \\
@@ -340,9 +340,9 @@ for $\beta_{1/2}^i$, where it means power).
 $\beta_1$ and $\beta_2$ are two constants usually set to $\beta_1 = 0.9$ and 
 $\beta_2 = 0.999$. $\epsilon$ is a regularization constant to avoid numerical 
 instability in the fraction and is usually $\epsilon=1E-8$\footnote{These values 
-for $\beta_1$, $\beta_2$ and $\epsilon$ are mentioned in \cite{adam} and seem 
+for $\beta_1$, $\beta_2$ and $\epsilon$ are mentioned in \citet{adam} and seem 
 to be used in practice in most cases. They are also the default values of the 
-ADAM implementation in the Machine Learning Framework Pytorch \cite{NEURIPS2019_9015}.}.
+ADAM implementation in the Machine Learning Framework Pytorch \citep{NEURIPS2019_9015}.}.
 $\bm{m}$ and $\bm{s}$ are known as the first and second momentum of the gradient 
 $\bm{g}$ respectively. The learning rate $\eta_i$\\ is here subscripted with the 
 epoch $i$. This is to allow for non-constant learning rates which is often beneficial \citationneeded.
@@ -361,17 +361,17 @@ Neural Networks (RNNs).
 A neural network is a non-linear machine learning model that can be used for both 
 regression and classification. In this thesis we focus on the regression case and 
 will therefore stick to describing that. The concept of the neural network was 
-first described in \cite{rosenblatt1958perceptron}. 
+first described in \citet{rosenblatt1958perceptron}. 
 \begin{figure}
     \input{figures/tikz/neural_network.tex}
-    \caption{A multilayer perceptron model as described in \cite{rosenblatt1958perceptron}. Figure taken and modified from \cite{neuralnetfig}.}
+    \caption{A multilayer perceptron model as described in \citet{rosenblatt1958perceptron}. Figure taken and modified from \citet{neuralnetfig}.}
     \label{Neural network figure}
 \end{figure}
 Mathematically, a neural network can be written in this form:
 \begin{equation}
     y_i^l = f^l \left( \sum_{j=1}^{N_{l-1}}\omega_{ij}^l y^{l-1}_j+b^l_i  \right)
-    \footnote{While the concept is cited to \cite{rosenblatt1958perceptron}, this 
-    equation was taken from Morten Hjorth-Jensen's great lecture notes \cite{fysstkweek40}
+    \footnote{While the concept is cited to \citet{rosenblatt1958perceptron}, this 
+    equation was taken from Morten Hjorth-Jensen's great lecture notes \citet{fysstkweek40}
     from the Universuty of Oslo course Fys-Stk4155 as this is the author's favorite 
     mathematical description of a neural network}
     \label{MLP equation}
@@ -405,7 +405,7 @@ as
     \delta^L_j &= \dv{f^L(z)}{z}\left(z^L_j\right) \pdv{C}{y^L_j} \label{output_backprop}\\
     \delta^l_j &= \sum_k \delta^{l+1}_k \omega^{l+1}_{kj} \dv{f^l(z)}{z}\left(z^l_j\right)  \label{backprop}
 \end{align}
-as shown by \cite{fysstkweek40}.
+as shown by \citet{fysstkweek40}.
 The first equation (\ref{output_backprop}) is for the special case of the output 
 layer, where $l=L$. This needs to be calculated first for us to be able to use 
 (\ref{backprop}) to calculate $\delta^l_j$ for the neurons in the rest of the layer. 
@@ -479,7 +479,7 @@ network layer. This is what is done in (\ref{RNN output}).
 
 The backpropagation algorithm for an RNN is quite a bit different although the 
 underlying concept is the same. We argue it is not necessary to include the algorithm 
-in this thesis but if the reader is interested they should read this source \cite{BPTT}.
+in this thesis but if the reader is interested they should read this source \citet{BPTT}.
 The important takeaway from the backpropagation algorithm used for RNNs (called 
 Backpropagation Through Time), is that it uses high amounts of memory because 
 it needs to store values for every time step to be able to get proper gradients 
@@ -501,7 +501,7 @@ of a major drawback with the ordinary RNN. An RNN as described in the previous s
 struggles to learn long-term dependencies as the Backpropagation Through Time 
 algorithm starts to downplay the importance of previous time-steps the further one 
 advances in time. The fenomenon that causes this is known as the vanishing gradient 
-problem \cite{bengio1994learning} \cite{graves2012long} \footnote{Mentions of 
+problem \citep{bengio1994learning} \citep{graves2012long} \footnote{Mentions of 
 vanishing and exploding gradients are common in Machine Learning and are not 
 exclusive to Recurrent Neural Networks. Historically the popularity of activation 
 functions in normal neural networks has also been dictated by these issues. The 
@@ -517,7 +517,7 @@ happens and more discharge once the snow starts to melt.
 
 As opposed to the case of the vanilla RNN, trunctating the Backpropagation Through 
 Time algorithm actually doesn't break long-term dependencies in an LSTM as the 
-model architecture itself is designed to keep track of these \cite{graves2012long}.
+model architecture itself is designed to keep track of these \citep{graves2012long}.
 This means that the LSTM has two clear advantages:
 \begin{enumerate}
 	\item An LSTM does not suffer from the same vanishing gradient problem that the RNN does.
@@ -527,12 +527,12 @@ This means that the LSTM has two clear advantages:
 \begin{figure}
 \centering
     \input{figures/tikz/lstm.tex}
-\caption{A single basic LSTM cell as proposed in \cite{hochreiter1997long}. Visually we see the point of the Cell State $C$ here is to not retain more information 
+\caption{A single basic LSTM cell as proposed in \citet{hochreiter1997long}. Visually we see the point of the Cell State $C$ here is to not retain more information 
 by being affected less over time than the hidden state $h$. This is how the LSTM 
 avoids the gradient issues regarding long term dependencies that the RNN suffers 
 from.
 The Tikz code for creating this figure is released under the permissive Beerware license 
-and is a modified version of the figure in \cite{tikzlstm}.
+and is a modified version of the figure in \citet{tikzlstm}.
 }
 \label{LSTM figure}
 \end{figure}
@@ -549,7 +549,7 @@ $\bm{h}$ and cell state $\bm{c}$ are often called "gates".
 \begin{enumerate}
     \item The first (from left to right) is often called the "forget gate". This is because $\sigma(x) \in \left<0,1\right>$, making the forget gate either not affect the hidden state at all or lower the values in the $\bm{c}_{t-1}$-vector.
     \item The second gate is called the "input gate". This is where new information is added to the cell state through multiplying the output from two neural network layers, one with Sigmoid activation and one with $\tanh$ activation and then adding that product to the cell state.
-    \item The third gate is called the "output gate" and it dictates the flow of information from the cell state to the hidden state. It is defined as the pointwise product of $\tanh{\bm{c}_t}$ and the output of the concatenated previous hidden state and current input $\left[\bm{h}_{t-1},\bm{x}_t\right]$. The output of this gate is both used as the updated hidden state $\bm{h}_t$ and as the output\footnote{At least in the model configuration we use, there are many variants of the LSTM model \cite{graves2012long}.}.
+    \item The third gate is called the "output gate" and it dictates the flow of information from the cell state to the hidden state. It is defined as the pointwise product of $\tanh{\bm{c}_t}$ and the output of the concatenated previous hidden state and current input $\left[\bm{h}_{t-1},\bm{x}_t\right]$. The output of this gate is both used as the updated hidden state $\bm{h}_t$ and as the output\footnote{At least in the model configuration we use, there are many variants of the LSTM model \citep{graves2012long}.}.
 \end{enumerate}
 Now that we have a qualitative explanation of the LSTM model, we lay it down in 
 mathematical terms as well:
@@ -560,7 +560,7 @@ mathematical terms as well:
     \bm{h}_t &= \sigma \left( \bm{\omega}_o \left[ \bm{h}_{t-1}, \bm{x}_t \right] 
     + \bm{b}_o \right) \circ \tanh(\bm{c}_t) \label{output gate}
     \end{align}
-\cite{hochreiter1997long} \cite{gers1999learning}.
+\citep{hochreiter1997long} \citep{gers1999learning}.
 
 The terms are as follows:
 \begin{itemize}
@@ -596,11 +596,11 @@ machine learning models. \citationneeded}. This way we train the exact same type
 of model and do not need to modify anything.
 
 Recently a small modification to the LSTM model was proposed for this purpose. 
-It is called the Entity Aware LSTM(EA-LSTM) \cite{lstm_second_paper}. The paper 
+It is called the Entity Aware LSTM(EA-LSTM) \citet{lstm_second_paper}. The paper 
 indicates that this modified LSTM performs worse than the naive approach, going 
-from a median NSE of 0.76 to 0.74 on the CAMELS dataset \cite{CAMELS_US}. The 
+from a median NSE of 0.76 to 0.74 on the CAMELS dataset \citep{CAMELS_US}. The 
 underlying philosophy of this thesis however still makes us believe that this is 
-the model we should employ, as it is the most interpretable model \cite{lstm_second_paper} 
+the model we should employ, as it is the most interpretable model \citep{lstm_second_paper} 
 and the goal of this thesis is to get a better understanding of the underlying 
 physics in rainfall-runoff modelling that these static features can help explain.
 
@@ -650,7 +650,7 @@ $i_j$ is equal to
 i_j = s - \frac{1}{K} \sum_{k=1}^K s_{k,j}\quad 
 \label{Permutation equation}
 \end{equation}
-\cite{permutation} \cite{breiman2001random}.
+\citep{permutation} \citep{breiman2001random}.
 Here $K$ denotes how many permutations we average over for each feature, $s$ is
 the model's score on the original data and $s_{k,j}$ is the score of permutation 
 number $k$ of the feature $j$. In essence (\ref{Permutation equation}) describes 
@@ -686,13 +686,13 @@ A method to remove correlated features that is fairly simple to use is hierarchi
 clustering on the correlation of the features in a dataset. 
 The most well known algorithm for finding correlation is called Pearson correlation. It has 
 the drawback of only finding linear correlation. Spearman correlation on the other 
-hand is more general and can find non-linear correlation \cite{spearman}. After 
+hand is more general and can find non-linear correlation \citep{spearman}. After 
 finding the correlations of the features one then uses a clustering method to 
-visualize these correlations. The source at \cite{permutation_clustering} suggests 
+visualize these correlations. The source at \citet{permutation_clustering} suggests 
 using hierarchical clustering and choosing a single feature from each branch below 
 a chosen threshold. For illustrational purposes we include such a clustering figure
 created on synthetic data, it can be seen in figure \ref{wald example}.
-While \cite{permutation_clustering} suggests using the Spearman rank order correlation,
+While \citet{permutation_clustering} suggests using the Spearman rank order correlation,
 we instead choose to use the Pearson correlation as it is more easily interpretable.
 Also, when removing features we argue that it should not matter whether two variables 
 are strongly positively or negatively correlated, so we choose to do hierarchical 
@@ -719,7 +719,7 @@ While analyzing machine learning models can be very difficult, that is not neces
 always the case. It depends greatly on how complex the model is how much different 
 data the model uses among other things. A linear regression model is easy to interpret, 
 but it becomes much less easy to interpret if it needs several thousand different 
-inputs \cite{elemstatlearn}. This is the reason we employ feature selection here 
+inputs \citep{elemstatlearn}. This is the reason we employ feature selection here 
 in this thesis. Our goal is not to get the highest performing model, but rather 
 to use the model as a tool for physical discovery. This also addresses point 2: 
 We  are in fact not looking to use LSTM models as replacements for physical models, 
@@ -727,6 +727,6 @@ but are instead interested in improving existing models like SAC-SMA \citationne
 by seeing if there is any possibility for improving the sometimes lacking physical 
 modelling of classical models. It is important to remember that the best performing 
 classical rainfall-runoff models also include lots of trained/optimized parameters 
-that do not necessarily represent any physical phenomena. We agree with \cite{hybrid_paper} 
+that do not necessarily represent any physical phenomena. We agree with \citet{hybrid_paper} 
 that the power of machine learning when it comes to leveraging data should be 
 used in a way that improves our understanding of Physics.
