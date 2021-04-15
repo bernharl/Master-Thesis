@@ -2,7 +2,7 @@
 %\subsection{Value of accurate rainfall-runoff modelling}
 Rainfall-runoff modelling is a very important problem for scientists and 
 companies in the field of hydrology.
-Results found by \cite{lstm_first_paper} indicate that given a good dataset,
+Results found by \citet{lstm_first_paper} indicate that given a good dataset,
 recurrent neural networks in the form of Long Short-Term Memory cells (LSTMs)
 can give results equal in quality to more classical hydrological models.
 This was an important step towards data driven hydrological modelling. 
@@ -12,9 +12,9 @@ A drawback of these models is that they have a lot of parameters that havbe to b
 calibrated for each basin individually. They lack generalisation because of a lack of 
 physical information in the models. \citationneeded In 2019 Kratzert et. al. showed
 that we can use Long Short-Term Memory (LSTM) models to model several basins with the same model
-given enough static information about the basins \cite{lstm_second_paper}. These 
+given enough static information about the basins \citep{lstm_second_paper}. These 
 static features are easily obtainable through for example observational satelite 
-data \cite{CAMELS_US}. While these LSTM models did not outperform traditional models when calibrated on a single basin at 
+data \citep{CAMELS_US}. While these LSTM models did not outperform traditional models when calibrated on a single basin at 
 a time, they did outperform traditional models when used for generalisation.
 
 In addition to the benefits of LSTM models performing well on several basins, 
@@ -23,26 +23,26 @@ ability to do predictions on basins where no prior streamflow data is available.
 This would grant companies the ability to model older basins without proper sensors
 and would allow companies to model the basins of their competitors to better price 
 their produced electricity as a response to this. There has been made some initial 
-progress on trying LSTM models for this use case showing promising results \cite{lstm_third_paper}. 
+progress on trying LSTM models for this use case showing promising results \citep{lstm_third_paper}. 
 
-I should perhaps mention something about SHYFT \cite{Shyft} and Statkraft's motivation for 
+I should perhaps mention something about SHYFT \citep{Shyft} and Statkraft's motivation for 
 researching this topic.
 
 \section{Goals}
 Our main goal of this thesis is to improve the understanding of the underlying 
-physics in rainfall-runoff modelling. While we already know that \cite{lstm_third_paper} 
+physics in rainfall-runoff modelling. While we already know that \citet{lstm_third_paper} 
 shows promising results from using a purely data-driven model, but there are several 
 disadvantages of using so called "black box" models. What we therefore are interested 
 in is to show that such a black box model can be used for analysis of a dataset 
 to give an indication on the best way forward to include the easily obtained 
-static data included in the CAMELS \cite{CAMELS_US} and CAMELS-GB \cite{CAMELS_GB} 
+static data included in the CAMELS \citep{CAMELS_US} and CAMELS-GB \citep{CAMELS_GB} 
 datasets. 
 While previous work has been focusing on the 
-CAMELS dataset \cite{CAMELS_US}, it is important to see what results one may get 
+CAMELS dataset \citep{CAMELS_US}, it is important to see what results one may get 
 also on different datasets. In this thesis we will mainly focus doing prediction on 
-the CAMELS GB dataset \cite{CAMELS_GB}. This way even if our attempts at finding 
+the CAMELS GB dataset \citep{CAMELS_GB}. This way even if our attempts at finding 
 relevant physical information in the static features we will at least have shown 
-that the results of \cite{lstm_third_paper} also seem to apply on a separate dataset 
+that the results of \citet{lstm_third_paper} also seem to apply on a separate dataset 
 gathered from a different place in the world. 
 \section{Our contribution}
 We show that our model performs better using the extra information in the static 
@@ -51,7 +51,7 @@ We are able to do an analysis on the importance of these features and give a bri
 indication where to begin using these features for better calibration of physics-
 based traditional models. For further analysis we also provide the main bulk of 
 the code used in this thesis as a python package released under the Apache 2.0 
-license. This code is originally based on the code used in \cite{lstm_second_paper}.
+license. This code is originally based on the code used in \citet{lstm_second_paper}.
 \section{Thesis structure}
 This thesis is divided into 7 chapters, most chapters also being sub-divided into
 sections. 
