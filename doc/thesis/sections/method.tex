@@ -13,12 +13,6 @@ We dub this package CamelsML (Camels Machine Learning).
 See Appendix \ref{camelsml documentation} for documentation on how to use the python 
 package as well as a minimal running example.
 
-\section{Model configuration}
-\begin{figure}
-\caption{Our full model configuration using an EA-LSTM \citep{lstm_second_paper}}.
-\end{figure}
-The models we apply in this thesis are all variants of the LSTM model described 
-in \ref{LSTM Theory}.
 \section{Data split}
 With 671 basins in the CAMELS-GB dataset, we run into an issue with perhaps not 
 having enough data. This is not a problem for the time series, as they have data 
@@ -80,6 +74,29 @@ showed that there often is a non trivial performance difference between a single
 model and a model ensemble. In our case we assume this effect to be even higher 
 because of the nature of training and validating on different datasets.
 
+%\section{Model configuration}
+%\begin{figure}
+%\caption{Our full model configuration using an EA-LSTM \citep{lstm_second_paper}}.
+%\end{figure}
+\begin{table}
+    \centering
+    \begin{tabular}{lll}
+        \hline
+        Label & jeff & poop \\
+        \hline
+    \end{tabular}
+    \caption{Table containing all models trained in this thesis along with their 
+    given labels and configuration. The information contained here together with 
+    CamelsML should be enough to easily be able to recreate the results in this thesis.
+    The model configuration files are also located on the Github page of this thesis.}
+    \label{all models}
+\end{table}
+The models we apply in this thesis are all variants of the LSTM model described 
+in Section \ref{LSTM Theory}. Table \ref{all models} shows all model configurations 
+trained to create the results in this thesis. Note that we reimplement the same model 
+as \cite{lstm_third_paper}, but we train it ourselves. This is to be able to compare 
+this model more accurately to the new models trained by having it train and validate 
+using the same cross validation seed.
 \section{Hardware}
 The models are run on three different hardware configurations. The important difference 
 between these hardware configurations is the amount of available VRAM. As LSTM models 
