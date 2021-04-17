@@ -1,5 +1,4 @@
 area
-dpsbar
 elev_10
 elev_50
 elev_90
@@ -11,7 +10,6 @@ crop_perc
 urban_perc
 inwater_perc
 bares_perc
-dom_land_cover
 sand_perc
 silt_perc
 clay_perc
