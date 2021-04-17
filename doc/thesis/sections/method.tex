@@ -82,10 +82,19 @@ because of the nature of training and validating on different datasets.
     \centering
     \input{tables/all_model_configs.tex}
     \caption{Table containing all models trained in this thesis along with their 
-    given labels and configuration. The information contained here together with 
+    given labels and configuration. All models are trained with a sequence length of 
+    270 days and are initiated with the seed 19970204. 
+    The attribute subsets a-f are shown in Table \ref{attribute table}
+    The information contained here together with 
     CamelsML should be enough to easily be able to recreate the results in this thesis.
     The model configuration files are also located on the Github page of this thesis.}
     \label{all models}
+\end{table}
+\begin{table}
+    \centering
+    \input{tables/attribute_selection.tex}
+    \caption{hi}
+    \label{attribute table}
 \end{table}
 The models we apply in this thesis are all variants of the LSTM model described 
 in Section \ref{LSTM Theory}. Table \ref{all models} shows all model configurations 
