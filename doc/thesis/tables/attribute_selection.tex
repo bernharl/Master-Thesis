@@ -1,34 +1,34 @@
-\begin{tabular}{ll|lllll}
+\begin{tabular}{ll|lll}
 \hline 
-\multicolumn {2}{c}{a}  &  b & c & d & e & f \\
+\multicolumn {2}{c}{a}  &  b & c & d  \\
 \hline
-num\_reservoir & reservoir\_cap & area \\
- dwood\_perc & ewood\_perc & elev\_10\\
- grass\_perc & shrub\_perc & elev\_50\\
- crop\_perc urban\_perc & elev\_90 \\
- inwater\_perc &bares\_perc & dwood\_perc \\
- p\_mean & pet\_mean & ewood\_perc \\
- aridity & p\_seasonality & grass\_perc \\
- frac\_snow & high\_prec\_freq & shrub\_perc \\
- high\_prec\_dur & low\_prec\_freq & crop\_perc \\
- low\_prec\_dur & inter\_high\_perc & urban\_perc \\
- inter\_mod\_perc & inter\_low\_perc & inwater\_perc \\
- frac\_high\_perc & frac\_mod\_perc & bares\_perc \\
- frac\_low\_perc & no\_gw\_perc & sand\_perc \\
- low\_nsig\_perc & nsig\_low\_perc & silt\_perc \\
- gauge\_lat & gauge\_lon & clay\_perc \\
- gauge\_easting & gauge\_northing & organic\_perc \\
- gauge\_elev & area & bulkdens \\
- elev\_min & elev\_10 & tawc \\
- elev\_50 & elev\_90 & porosity\_cosby \\
- elev\_max & sand\_perc & porosity\_hypres \\
- silt\_perc & clay\_perc & conductivity\_cosby \\
- organic\_perc & bulkdens & conductivity\_hypres \\
- tawc & porosity\_cosby & root\_depth \\
- porosity\_hypres & conductivity\_cosby & soil\_depth\_pelletier \\
- conductivity\_hypres & root\_depth & inter\_high\_perc \\
- soil\_depth\_pelletier & & inter\_high\_perc \\
-& & inter\_mod\_perc \\
+    num\_reservoir & reservoir\_cap & area & soil\_depth\_pelletier & soil\_depth\_pelletier \\
+    dwood\_perc & ewood\_perc & elev\_10 & soil\_depth\_statsgo & frac\_forest \\
+    grass\_perc & shrub\_perc & elev\_50 & soil\_porosity & gvf\_max \\
+    crop\_perc &  urban\_perc   & elev\_90 & soil\_conductivity & p\_mean \\
+    inwater\_perc &bares\_perc & dwood\_perc & max\_water\_content & pet\_mean \\
+    p\_mean & pet\_mean & ewood\_perc & sand\_frac  & p\_seasonality \\
+    aridity & p\_seasonality & grass\_perc & silt\_frac &  frac\_snow \\
+    frac\_snow & high\_prec\_freq & shrub\_perc & clay\_frac & aridity \\
+    high\_prec\_dur & low\_prec\_freq & crop\_perc & frac\_forest & high\_prec\_frec \\
+    low\_prec\_dur & inter\_high\_perc & urban\_perc & lai\_max & high\_prec\_dur  \\
+    inter\_mod\_perc & inter\_low\_perc & inwater\_perc & lai\_diff & low\_prec\_frec  \\
+    frac\_high\_perc & frac\_mod\_perc & bares\_perc & gvf\_max & low\_prec\_dur  \\
+    frac\_low\_perc & no\_gw\_perc & sand\_perc & gvf\_diff & area  \\
+    low\_nsig\_perc & nsig\_low\_perc & silt\_perc & p\_mean & porosity\_cosby  \\
+    gauge\_lat & gauge\_lon & clay\_perc & pet\_mean & conductivity\_cosby  \\
+    gauge\_easting & gauge\_northing & organic\_perc & p\_seasonality & sand\_perc  \\
+    gauge\_elev & area & bulkdens & frac\_snow & silt\_perc  \\
+    elev\_min & elev\_10 & tawc & aridity & clay\_perc  \\
+    elev\_50 & elev\_90 & porosity\_cosby & high\_prec\_frec & organic\_perc  \\
+    elev\_max & sand\_perc & porosity\_hypres & high\_prec\_dur  \\
+    silt\_perc & clay\_perc & conductivity\_cosby & low\_prec\_frec  \\
+    organic\_perc & bulkdens & conductivity\_hypres &  low\_prec\_dur  \\
+    tawc & porosity\_cosby & root\_depth & elev\_mean  \\
+    porosity\_hypres & conductivity\_cosby & soil\_depth\_pelletier & slope\_mean  \\
+    conductivity\_hypres & root\_depth & inter\_high\_perc & area\_gages2  \\
+    soil\_depth\_pelletier & & inter\_high\_perc &  carbonate\_rocks\_frac  \\
+    & & inter\_mod\_perc & geol\_permeability\\
 & & inter\_low\_perc \\
 & & frac\_high\_perc \\
 & & frac\_mod\_perc \\

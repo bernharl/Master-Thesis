@@ -84,18 +84,21 @@ because of the nature of training and validating on different datasets.
     \caption{Table containing all models trained in this thesis along with their 
     given labels and configuration. All models are trained with a sequence length of 
     270 days and are initiated with the seed 19970204. 
-    The attribute subsets a-f are shown in Table \ref{attribute table}
+    The attribute subsets a-e are shown in Table \ref{attribute table}
     The information contained here together with 
     CamelsML should be enough to easily be able to recreate the results in this thesis.
     The model configuration files are also located on the Github page of this thesis.}
     \label{all models}
 \end{table}
+\begin{landscape}
 \begin{table}
     \centering
     \input{tables/attribute_selection.tex}
-    \caption{hi}
+    \caption{Table containing all basin attribute dataset subsets. Set e is equal 
+    to set d but without organic\_perc and gvf\_max.}
     \label{attribute table}
 \end{table}
+\end{landscape}
 The models we apply in this thesis are all variants of the LSTM model described 
 in Section \ref{LSTM Theory}. Table \ref{all models} shows all model configurations 
 trained to create the results in this thesis. Note that we reimplement the same model 
