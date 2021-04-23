@@ -13,14 +13,65 @@ We dub this package CamelsML (Camels Machine Learning).
 See Appendix \ref{camelsml documentation} for documentation on how to use the python 
 package as well as a minimal running example.
 
+\section{Preprocessing and combining datasets}
+In statistical models it is important to have all inputs and outputs in unit-less 
+form. A common way to achieve this is to normalize each input feature and outcome 
+feature \citep{elemstatlearn}. 
+We split the data basin-wise into train (75\%) and test (25\%) sets. 
+Five-fold cross validation is used on the training set to evaluate model performance.
+For each fold in the cross validation run, the data is normalized based on the current 
+training set, excluding the chosen validation set in each cross validation iteration.
+Mathematically this can be written as 
+\begin{equation}
+    \bm{a}_\text{norm} = \frac{\bm{a} - \bar{\bm{a}}_\text{train}}{\sigma_{\bm{a}_\text{train}}}. \label{normalization}
+\end{equation}
+Here $\bm{a}$ represents any variable, input or output. If $\bm{a}$ is a timeseries, 
+the averaging is still done for all time steps in all basins in the training set, 
+not individually per basin.
+
+\begin{table}
+    \begin{adjustbox}{width=\textwidth}
+    \input{tables/common_features_us_gb.tex}
+    \end{adjustbox}
+    \caption{Timeseries and attributes in Camels and Camels-GB that we treat as 
+    equivalent. The names are taken directly from \citet{CAMELS_US} and \citet{CAMELS_GB}.}
+    \label{attribute transfer}
+\end{table}
+When using a combination of CAMELS and CAMELS-GB we are limited in both which 
+timeseries and which basin attributes we can use.
+As seen in Chapter \ref{data} there are only two overlapping timeseries: precipitation 
+and shortwave radiation. CAMELS-GB only has 
+average daily temperature, while CAMELS has both minimum and maximum temperature 
+per day. To include temperature as a feature we therefore make the assumption that 
+\begin{equation}
+    \bar{t}_\text{daily} \approx \frac{t_\text{min, daily} + t_\text{max, daily}}{2}. \label{average temp}
+\end{equation}
+The assumption in (\ref{average temp}) only holds when the daily temperature maxima 
+and minima vary symmetrically around an equilibrium  \citationneeded.
+Most of the basin attributes we include in the combined dataset have natural equivalents 
+in both datasets, but there are two exceptions. We get an equivalent of the attribute 
+forest\_frac in CAMELS in CAMELS-GB by assuming that
+\begin{equation}
+    \text{forest\_frac}_\text{GB} \approx \text{dwood\_frac} + \text{ewood\_frac} \label{forest gb}
+\end{equation}
+Our reasoning for (\ref{forest gb}) is that dwood\_frac and ewood\_frac are the only 
+forest attributes in CAMELS-GB and it should therefore be safe to assume that adding 
+these together yields the total percentage of wood cover.
+For the CAMELS attribute gvf\_max we make a less safe assumption. \citet{CAMELS_US} 
+describes this attribute as "maximum monthly mean of the green vegetation frac-tion". 
+It could then follow that the percentage of land covers not categorized as urban 
+or in water in CAMELS-GB can substitute this attribute. This yields
+\begin{equation}
+    \text{gvf\_max}_\text{GB} \approx 1 - \frac{\text{urban\_perc} + \text{inwater\_perc}}{100}. \label{gvf gb}
+\end{equation}
+We view the assumption (\ref{gvf gb}) to potentially be weak, and therefore exclude 
+this attribute in one of our models.
+
 \section{Full training algorithm}
 The training procedure described here is heavily based on and uses code from 
 \cite{lstm_second_paper}.
 
-First we split the data basin-wise into train (75\%) and test (25\%) sets. The test 
-set is discarded and only used in the very end to show test performance of our best 
-performing models for each scenario. We use cross validation on the training set 
-to evaluate model performance. More details on this is shown in the following 
+More details on this is shown in the following 
 algorithm:
 \begin{figure}
 \centering
@@ -137,14 +188,6 @@ a-e we present this short summary:
         5-fold cross validation. 
     \item d: This is an attribute selection used for training models on both 
         CAMELS and CAMELS-GB at the same time in addition to transfer learning. 
-\begin{table}
-    \begin{adjustbox}{width=\textwidth}
-    \input{tables/common_features_us_gb.tex}
-    \end{adjustbox}
-    \caption{Timeseries and attributes in Camels and Camels-GB that we treat as 
-    equivalent. The names are taken directly from \citet{CAMELS_US} and \citet{CAMELS_GB}.}
-    \label{attribute transfer}
-\end{table}
         The attribute names stated in Table \ref{attribute table} are based on the 
         attribute names in CAMELS-GB. CAMELS and CAMELS-GB have different attributes 
         and different names for the same attributes. Which attributes we deem to 
