@@ -99,12 +99,90 @@ because of the nature of training and validating on different datasets.
     \label{attribute table}
 \end{table}
 \end{landscape}
+
+Table \ref{all models} shows all trained models who's results are presented in this 
+thesis. The largest differences between these models are often which basin attributes 
+are included in the training process. One should be able to reproduce the results 
+of this work using this CamelsML, Table \ref{all models} and \ref{attribute table}. 
+Doing exhaustive validation to decide which subset of attributes to use is not 
+feasible with the amount of attributes present in the data of interest. What we instead 
+do to end up with the subsets in Table \ref{attribute table} is a mix of a priori 
+knowledge and validation: First we manually check which attributes to include based 
+on perceived importance in accordance to known physical processes related to rainfall-runoff 
+modelling. After training a model on a subset, we evaluate it using cross validation 
+as mentioned earlier in this chapter. To give further context for the chosen subsets 
+a-e we present this short summary:
+\begin{itemize}
+    \item a: This is a subset using all numerical static attributes in CAMELS-GB 
+        \citep{CAMELS_GB} that are not derived from the outcome (runoff). 
+    \item b: This is a smaller subset of the static attributes contained in CAMELS-GB. 
+        This subset was created with emphasis on perceived importance with respect 
+        to known physical processes. As many process-driven models (see Section \ref{VIC} and \ref{NWM}) have a high 
+        emphasis on radiation (from vegetation), soil types and land cover we have 
+        included all attributes related to soil, water content, vegetation and general land cover. 
+        The geographical layout of a basin is also of interest and elevation attributes 
+        are therefore included. The inclusion of the feature p\_mean (mean precipitation)
+        is however not 
+        physically motivated and merely stems from the fact that it was recognized 
+        as one of the most important features in \citet{lstm_second_paper}'s analysis 
+        using LSTMs on CAMELS \citep{CAMELS_US}. Mean precipitation should in 
+        theory be information already given in the precipitation time series, but 
+        our models do not have access to the entire precipitation time series while 
+        training because of the limited sequence length. 
+    \item c: This attribute selection is taken from \cite{lstm_third_paper} and 
+        is used to reproduce the results of said paper with a different cross validation 
+        setup to fit better with the rest of our analysis. \cite{lstm_third_paper} 
+        used 12-fold cross validation while we use the more commonly employed 
+        5-fold cross validation. 
+    \item d: This is an attribute selection used for training models on both 
+        CAMELS and CAMELS-GB at the same time in addition to transfer learning. 
+        The attribute names stated in Table \ref{attribute table} are based on the 
+        attribute names in CAMELS-GB. CAMELS and CAMELS-GB have different attributes 
+        and different names for the same attributes. Which attributes we deem to 
+        be equivalent are shown in Table \ref{attribute transfer}.
+    \item e: The attributes organic\_perc and gvf\_max are excluded in this subset, 
+        otherwise it is identical to subset e. We exclude these two features because 
+        of uncertainty of whether our synthetic attribute creation works.
+\end{itemize}
+
 The models we apply in this thesis are all variants of the LSTM model described 
-in Section \ref{LSTM Theory}. Table \ref{all models} shows all model configurations 
-trained to create the results in this thesis. Note that we reimplement the same model 
-as \cite{lstm_third_paper}, but we train it ourselves. This is to be able to compare 
-this model more accurately to the new models trained by having it train and validate 
-using the same cross validation seed.
+
+%\subsection{Feature selection}
+\section{Using the permutation test to determine the model's perceived feature importance}
+%\subsubsection{Permutation test}
+\label{Feature selection}
+One of the criticisms of machine learning methods
+is that they are not easily interpretable. This 
+is especially true if one wants to train a model 
+on a dataset with an overwhelming amount of 
+features. There are several strategies for 
+selecting a smaller subset of features in a dataset.
+The method we briefly describe here is called the 
+permutation test:
+Given a feature $j$, the permutation importance 
+$i_j$ is equal to 
+\begin{equation}
+i_j = s - \frac{1}{K} \sum_{k=1}^K s_{k,j}\quad 
+\label{Permutation equation}
+\end{equation}
+\citep{permutation} \citep{breiman2001random}.
+Here $K$ denotes how many permutations we average over for each feature, $s$ is
+the model's score on the original data and $s_{k,j}$ is the score of permutation 
+number $k$ of the feature $j$. In essence (\ref{Permutation equation}) describes 
+how much the performance of a model varies when "destroying" the information 
+contained in a feature, therefore explaining the importance of the feature 
+according to the current model. It is then important to remember that this is not 
+the true importance of the feature, only the importance the model thinks the feature 
+has. The scoring method $s$ can be any model scoring statistic, often the $R^2$
+score for regression.
+A major problem for this method is that (\ref{Permutation equation}) could give 
+unrealistically low significance to features that are highly correlated to other 
+features. In this case the feature may very well be important, but the information 
+contained in it is also contained in one or more other correlated features, meaning 
+the model doesn't lose as much information as one may think. This would be fine 
+if we were just looking to simplify a well performing model, but what we aim for 
+is improved interpretability so that we may know which features are actually important 
+to the physical system.
 \section{Hardware}
 The models are run on three different hardware configurations. The important difference 
 between these hardware configurations is the amount of available VRAM. As LSTM models 

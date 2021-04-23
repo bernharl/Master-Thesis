@@ -28,6 +28,7 @@ several other papers \citep{SAC-SMA-physics}.
 \end{align}
 
 \subsection{The Variable Infiltration Capacity model}
+\label{VIC}
 The Variable Infiltration Capacity (VIC) model \citep{VIC} is a process driven model 
 with emphasis on simulating the physical process of water running through soil.
 
@@ -188,6 +189,7 @@ meaning the ability of a model to fit to a given dataset.
 Explain all terms. Try to understand what the next terms mean. Then argue why 
 this model isn't ideal (it is constrained, not that physical, blah blah).
 \subsection{National Water Model}
+\label{NWM}
 The National Water Model (NWA) is a process based hydrological model. For completeness 
 we briefly describe what we deem the most important underlying physics in the model 
 in this section.
@@ -633,41 +635,6 @@ LSTM the most relevant hyperparameters are:
     \item Initial forget gate bias
     \item Gradient norm clip threshold
 \end{itemize}
-\subsection{Feature selection}
-\subsubsection{Permutation test}
-\label{Feature selection}
-One of the criticisms of machine learning methods
-is that they are not easily interpretable. This 
-is especially true if one wants to train a model 
-on a dataset with an overwhelming amount of 
-features. There are several strategies for 
-selecting a smaller subset of features in a dataset.
-The method we briefly describe here is called the 
-permutation test:
-Given a feature $j$, the permutation importance 
-$i_j$ is equal to 
-\begin{equation}
-i_j = s - \frac{1}{K} \sum_{k=1}^K s_{k,j}\quad 
-\label{Permutation equation}
-\end{equation}
-\citep{permutation} \citep{breiman2001random}.
-Here $K$ denotes how many permutations we average over for each feature, $s$ is
-the model's score on the original data and $s_{k,j}$ is the score of permutation 
-number $k$ of the feature $j$. In essence (\ref{Permutation equation}) describes 
-how much the performance of a model varies when "destroying" the information 
-contained in a feature, therefore explaining the importance of the feature 
-according to the current model. It is then important to remember that this is not 
-the true importance of the feature, only the importance the model thinks the feature 
-has. The scoring method $s$ can be any model scoring statistic, often the $R^2$
-score for regression.
-A major problem for this method is that (\ref{Permutation equation}) could give 
-unrealistically low significance to features that are highly correlated to other 
-features. In this case the feature may very well be important, but the information 
-contained in it is also contained in one or more other correlated features, meaning 
-the model doesn't lose as much information as one may think. This would be fine 
-if we were just looking to simplify a well performing model, but what we aim for 
-is improved interpretability so that we may know which features are actually important 
-to the physical system.
 
 A way around this is to first remove unneeded correlated features so that the model 
 contains as little duplicate information as possible. Reducing the amount of 
