@@ -1,5 +1,6 @@
 In this chapter we discuss the implementation of the LSTM models described in Chapter 
-\ref{lstm theory} and how the predictions of these models are used to try and gain 
+\ref{LSTM Theory}, how we preprocess and combine the datasets 
+and how the predictions of these models are used to try and gain 
 insight into what physical processes our models deem the most important.
 \section{Code available as Python package: CamelsML}
 Originally a fork of the code in \citet{lstm_second_paper} with a few modifications, 
@@ -12,6 +13,131 @@ We dub this package CamelsML (Camels Machine Learning).
 
 See Appendix \ref{camelsml documentation} for documentation on how to use the python 
 package as well as a minimal running example.
+
+\section{Training algorithm}
+%The training procedure described here is heavily based on and uses code from 
+%\cite{lstm_second_paper}.
+\begin{figure}
+\centering
+\input{figures/tikz/mini_batch_training.tex}
+\caption{A mini batch. $\bm{x}_{i,t}$ represents the input parameters $\bm{x}$ at time step $t$ for time series $i \in [0, b]$ where $b$ is the batch size. A mini batch consists of $b \times t$ FP32 numbers.}
+\label{mini batch}
+\end{figure}
+The training algorithm excluding mathematical details shown in Chapter \ref{LSTM Theory} 
+is shown here:
+\begin{enumerate}
+    \item Split the training data basin-wise into five parts of equal size.
+    \item Repeat the following five times, each time using a different 1/5 of the 
+        split data as the validation set: \begin{enumerate}
+            \item Initialize LSTM model with random weights and zero biases, except for the bias of the forget gate $\bm{b}_f$ which is initialized as $\bm{b}_f=\bm{5}$ to make the initial model either forget or remember idk \citationneeded
+        \item Split each training time seres into several parts, the length 
+            of which is decided by the sequence length variable $s$. A mini batch 
+            consists of a batch size $s$ amount of these $s$ long time series. This 
+                structure is shown in Figure \ref{mini batch}.
+        \item For each mini batch:
+        \begin{enumerate}
+            \item Use the model to predict the outcomes of each time series in the 
+                mini batch. This can be done in parallel.
+            \item Use the average loss of all predictions in the mini batch to update 
+                the model parameters using ADAM (see Section \ref{ADAM}).
+        \end{enumerate}
+        \item Evaluate on the validation set without updating parameters.
+    \end{enumerate}
+\end{enumerate}
+We evaluate models using the Nash–Sutcliffe model efficiency coefficient (NSE) \citep{NSE}.
+This metric is similar to the $R^2$ score, but it is specialized for usage 
+on hydrological time series.
+It is defined as 
+\begin{equation}
+    \text{NSE} = 1 - \frac{\sum_{t=0}^T\left( y^t - \hat{y}^t\right)}{\sum_{t=0}^T\left(y^t - \bar{\hat{y}}\right)} \label{NSE}
+\end{equation}
+As we employ cross validation, we  end up with is 5 different models 
+for each training run. These models do not necessarily converge to the same parameters 
+as each other, making them potentially quite different from one another. To test the 
+actual performance of a model (not just relative to other model configurations) we 
+therefore need to train a new model with the same configuration (using the same features, 
+hyperparameters, etc.) on the entire, undivided training set and test that model 
+on the test set. This test result cannot be used to determine relative performance 
+between different model configurations, but it can give an indication of the actual, 
+real-world performance of a final selected model. Statistically, this is due to the 
+fact that optimizing model configuration using the test set would mean overfitting 
+on said test set. See \citet{elemstatlearn} for a more detailed explanation.
+
+For models used to validate transfer learning between Camels and Camels-GB, we 
+cross validate on one dataset and use all five models from the cross validation 
+to make ensemble predictions on the validation split of the other dataset. This 
+way we can get more robust statistics also in these results, as \citet{lstm_second_paper} 
+showed that there often is a non trivial performance difference between a single
+model and a model ensemble. In our case we assume this effect to be even higher 
+because of the nature of training and validating on different datasets.
+
+%\section{Model configuration}
+%\begin{figure}
+%\caption{Our full model configuration using an EA-LSTM \citep{lstm_second_paper}}.
+%\end{figure}
+\begin{table}
+    \centering
+    \caption{Table containing all models trained in this thesis along with their 
+    given labels and configuration. All models are trained with a sequence length of 
+    270 days and are initiated with the seed 19970204. 
+    The attribute subsets a-e are shown in Table \ref{attribute table}.}
+    \input{tables/all_model_configs.tex}
+    \label{all models}
+\end{table}
+\begin{landscape}
+\begin{table}
+    \centering
+    \caption{Table containing all basin attribute dataset subsets. Set e is equal 
+    to set d but without organic\_perc and gvf\_max.}
+    \input{tables/attribute_selection.tex}
+    \label{attribute table}
+\end{table}
+\end{landscape}
+
+Table \ref{all models} shows all trained models from which results are presented in this 
+thesis. The largest differences between these models are often which basin attributes 
+are included in the training process. One should be able to reproduce the results 
+of this work using CamelsML Table \ref{attribute transfer}, \ref{all models} and \ref{attribute table}. 
+Doing exhaustive validation to decide which subset of attributes to use is not 
+feasible with the amount of attributes present in the data of interest. What we instead 
+do to end up with the subsets in Table \ref{attribute table} is a mix of a priori 
+knowledge and validation: First we manually check which attributes to include based 
+on perceived importance in accordance to known physical processes related to rainfall-runoff 
+modelling. After training a model on a subset, we evaluate it using cross validation 
+as mentioned earlier in this chapter. To give further context for the chosen subsets 
+a-e we present this short summary:
+\begin{itemize}
+    \item a: This is a subset using all numerical static attributes in CAMELS-GB 
+        \citep{CAMELS_GB} that are not derived from the outcome (runoff). 
+    \item b: This is a smaller subset of the static attributes contained in CAMELS-GB. 
+        This subset was created with emphasis on perceived importance with respect 
+        to known physical processes. As many process-driven models (see Section \ref{VIC} and \ref{NWM}) have a high 
+        emphasis on radiation (from vegetation), soil types and land cover we have 
+        included all attributes related to soil, water content, vegetation and general land cover. 
+        The geographical layout of a basin is also of interest and elevation attributes 
+        are therefore included. The inclusion of the feature p\_mean (mean precipitation)
+        is however not 
+        physically motivated and merely stems from the fact that it was recognized 
+        as one of the most important features in \citet{lstm_second_paper}'s analysis 
+        using LSTMs on CAMELS \citep{CAMELS_US}. Mean precipitation should in 
+        theory be information already given in the precipitation time series, but 
+        our models do not have access to the entire precipitation time series while 
+        training because of the limited sequence length. 
+    \item c: This attribute selection is taken from \cite{lstm_third_paper} and 
+        is used to reproduce the results of said paper with a different cross validation 
+        setup to fit better with the rest of our analysis. \cite{lstm_third_paper} 
+        used 12-fold cross validation while we use the more commonly employed 
+        5-fold cross validation. 
+    \item d: This is an attribute selection used for training models on both 
+        CAMELS and CAMELS-GB at the same time in addition to transfer learning. 
+        The attribute names stated in Table \ref{attribute table} are based on the 
+        attribute names in CAMELS-GB. CAMELS and CAMELS-GB have different attributes 
+        and different names for the same attributes. Which attributes we deem to 
+        be equivalent are shown in Table \ref{attribute transfer}.
+    \item e: The attributes organic\_perc and gvf\_max are excluded in this subset, 
+        otherwise it is identical to subset e. We exclude these two features because 
+        of uncertainty of whether our synthetic attribute creation works.
+\end{itemize}
 
 \section{Preprocessing and combining datasets}
 In statistical models it is important to have all inputs and outputs in unit-less 
@@ -82,137 +208,9 @@ Table \ref{attribute transfer}.
     iteration in model the mixed LSTM and EA-LSTM models trained on attribute subset d.}
     \label{attribute comparison}
 \end{figure}
-
-\section{Full training algorithm}
-The training procedure described here is heavily based on and uses code from 
-\cite{lstm_second_paper}.
-
-More details on this is shown in the following 
-algorithm:
-\begin{figure}
-\centering
-\input{figures/tikz/mini_batch_training.tex}
-\caption{A mini batch. $\bm{x}_{i,t}$ represents the input parameters $\bm{x}$ at time step $t$ for time series $i \in [0, b]$ where $b$ is the batch size. A mini batch consists of $b \times t$ FP32 numbers.}
-\label{mini batch}
-\end{figure}
-The training algorithm can be described as:
-\begin{enumerate}
-    \item Split the training data basin-wise into five parts of equal size.
-    \item Repeat the following five times, each time using a different 1/5 of the 
-        split data as the validation set: \begin{enumerate}
-            \item Initialize LSTM model with random weights and zero biases, except for the bias of the forget gate $\bm{b}_f$ which is initialized as $\bm{b}_f=\bm{5}$ to make the initial model either forget or remember idk \citationneeded
-        \item Split each training time seres into several parts, the length 
-            of which is decided by the sequence length variable $s$. A mini batch 
-            consists of a batch size $s$ amount of these $s$ long time series. This 
-                structure is shown in Figure \ref{mini batch}.
-        \item For each mini batch:
-        \begin{enumerate}
-            \item Use the model to predict the outcomes of each time series in the 
-                mini batch. This can be done in parallel.
-            \item Use the average loss of all predictions in the mini batch to update 
-                the model parameters using ADAM (see Section \ref{ADAM}).
-        \end{enumerate}
-        \item Evaluate on the validation set without updating parameters.
-    \end{enumerate}
-\end{enumerate}
-We evaluate models using the Nash–Sutcliffe model efficiency coefficient (NSE) \citep{NSE}.
-This metric is similar to the $R^2$ score, but it is specialized for usage 
-on hydrological time series.
-It is defined as 
-\begin{equation}
-    \text{NSE} = 1 - \frac{\sum_{t=0}^T\left( y^t - \hat{y}^t\right)}{\sum_{t=0}^T\left(y^t - \bar{\hat{y}}\right)} \label{NSE}
-\end{equation}
-As we employ cross validation, we  end up with is 5 different models 
-for each training run. These models do not necessarily converge to the same parameters 
-as each other, making them potentially quite different from one another. To test the 
-actual performance of a model (not just relative to other model configurations) we 
-therefore need to train a new model with the same configuration (using the same features, 
-hyperparameters, etc.) on the entire, undivided training set and test that model 
-on the test set. This test result cannot be used to determine relative performance 
-between different model configurations, but it can give an indication of the actual, 
-real-world performance of a final selected model. Statistically, this is due to the 
-fact that optimizing model configuration using the test set would mean overfitting 
-on said test set. See \citet{elemstatlearn} for a more detailed explanation.
-
-For models used to validate transfer learning between Camels and Camels-GB, we 
-cross validate on one dataset and use all five models from the cross validation 
-to make ensemble predictions on the validation split of the other dataset. This 
-way we can get more robust statistics also in these results, as \citet{lstm_second_paper} 
-showed that there often is a non trivial performance difference between a single
-model and a model ensemble. In our case we assume this effect to be even higher 
-because of the nature of training and validating on different datasets.
-
-%\section{Model configuration}
-%\begin{figure}
-%\caption{Our full model configuration using an EA-LSTM \citep{lstm_second_paper}}.
-%\end{figure}
-\begin{table}
-    \centering
-    \caption{Table containing all models trained in this thesis along with their 
-    given labels and configuration. All models are trained with a sequence length of 
-    270 days and are initiated with the seed 19970204. 
-    The attribute subsets a-e are shown in Table \ref{attribute table}
-    The information contained here together with 
-    CamelsML should be enough to easily be able to recreate the results in this thesis.
-    The model configuration files are also located on the Github page of this thesis.}
-    \input{tables/all_model_configs.tex}
-    \label{all models}
-\end{table}
-\begin{landscape}
-\begin{table}
-    \centering
-    \caption{Table containing all basin attribute dataset subsets. Set e is equal 
-    to set d but without organic\_perc and gvf\_max.}
-    \input{tables/attribute_selection.tex}
-    \label{attribute table}
-\end{table}
-\end{landscape}
-
-Table \ref{all models} shows all trained models from which results are presented in this 
-thesis. The largest differences between these models are often which basin attributes 
-are included in the training process. One should be able to reproduce the results 
-of this work using this CamelsML, Table \ref{all models} and \ref{attribute table}. 
-Doing exhaustive validation to decide which subset of attributes to use is not 
-feasible with the amount of attributes present in the data of interest. What we instead 
-do to end up with the subsets in Table \ref{attribute table} is a mix of a priori 
-knowledge and validation: First we manually check which attributes to include based 
-on perceived importance in accordance to known physical processes related to rainfall-runoff 
-modelling. After training a model on a subset, we evaluate it using cross validation 
-as mentioned earlier in this chapter. To give further context for the chosen subsets 
-a-e we present this short summary:
-\begin{itemize}
-    \item a: This is a subset using all numerical static attributes in CAMELS-GB 
-        \citep{CAMELS_GB} that are not derived from the outcome (runoff). 
-    \item b: This is a smaller subset of the static attributes contained in CAMELS-GB. 
-        This subset was created with emphasis on perceived importance with respect 
-        to known physical processes. As many process-driven models (see Section \ref{VIC} and \ref{NWM}) have a high 
-        emphasis on radiation (from vegetation), soil types and land cover we have 
-        included all attributes related to soil, water content, vegetation and general land cover. 
-        The geographical layout of a basin is also of interest and elevation attributes 
-        are therefore included. The inclusion of the feature p\_mean (mean precipitation)
-        is however not 
-        physically motivated and merely stems from the fact that it was recognized 
-        as one of the most important features in \citet{lstm_second_paper}'s analysis 
-        using LSTMs on CAMELS \citep{CAMELS_US}. Mean precipitation should in 
-        theory be information already given in the precipitation time series, but 
-        our models do not have access to the entire precipitation time series while 
-        training because of the limited sequence length. 
-    \item c: This attribute selection is taken from \cite{lstm_third_paper} and 
-        is used to reproduce the results of said paper with a different cross validation 
-        setup to fit better with the rest of our analysis. \cite{lstm_third_paper} 
-        used 12-fold cross validation while we use the more commonly employed 
-        5-fold cross validation. 
-    \item d: This is an attribute selection used for training models on both 
-        CAMELS and CAMELS-GB at the same time in addition to transfer learning. 
-        The attribute names stated in Table \ref{attribute table} are based on the 
-        attribute names in CAMELS-GB. CAMELS and CAMELS-GB have different attributes 
-        and different names for the same attributes. Which attributes we deem to 
-        be equivalent are shown in Table \ref{attribute transfer}.
-    \item e: The attributes organic\_perc and gvf\_max are excluded in this subset, 
-        otherwise it is identical to subset e. We exclude these two features because 
-        of uncertainty of whether our synthetic attribute creation works.
-\end{itemize}
-
+Looking at Figure \ref{attribute comparison} we see that most attributes have higher 
+variance in CAMELS than in CAMELS-GB. Exceptions to this are organic\_perc and gvf\_max. 
+We therefore include transfer learning models both with and without these two features.
 %\subsection{Feature selection}
 \section{Using the permutation test to determine the model's perceived feature importance}
 %\subsubsection{Permutation test}
@@ -258,10 +256,12 @@ The three hardware configurations are listed as follows \footnote{Note that we o
 state the used graphics card as this is the only important difference, we run no 
 calculations on processors and do not use a significant amount of ordinary RAM.}:
 \begin{enumerate}
-    \item Nvidia GTX 980 ti: This has 6 GB of VRAM, we found a batch size of 1024 
-        to be a sweet spot here.
-    \item Nvidia GTX 1660 ti: Same as above.
-    \item Nvidia Tesla V100 (Provided by Simula's eX3 cluster): This has 32 GB of VRAM, we find a batch size of 4096 
+    \item Nvidia GTX 980 ti: This has 6 GB of VRAM, we find a batch size of $b\in{1024, 1536}$ 
+     depending on the model size to be a sweet spot here.
+    \item Nvidia GTX 1660 ti: This GPU is similar to the GTX 980 ti and has the 
+        same amount of VRAM. Therefore the same batch sizes apply here too.
+    \item Nvidia Tesla V100 (Provided by Simula's eX3 cluster): This has 32 GB of VRAM, 
+        we find a batch size of $b\in[2048,4096]$ depending on the model size
         to be a sweet spot. Anything more leads to a downgrade in speed because 
         of limitations in transferring data from the storage device to the GPU. 
         This is still not ideal and leads to an approximate 30\% utilization of the 
