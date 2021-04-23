@@ -2,19 +2,25 @@
 \toprule
 Camels-US &     Camels-GB \\
 \midrule
-feature [unit]    & feature [unit] \\
 timeseries: & \\
-prcp$($mm$/$day$)$ $[$mm$/$day$]$ & precipitation [same] \\
-tmax $+$ tmin $->$ temp [K] & temperature [K]\\
-srad(W$/$M$^2$) [W$/$M] & shortwave\_rad [W$/$M$^2$] \\
+\midrule
+prcp$($mm$/$day$)$ $[$mm$/$day$]$ & precipitation [mm/day] \\
+    $\frac{\text{tmax} + \text{tmin}}{2}$ [K] & temperature [K]\\
+    srad(W/m2) [W$/$m$^2$] & shortwave\_rad [W$/$m$^2$] \\
+\midrule
+    attributes: & \\
+\midrule
 elev\_mean [m]  & elev\_mean [m] \\
 area\_gages2 [km$^2$] & area [km$^2$] \\
 p\_mean [mm/day] & p\_mean [mm/day] \\
-pet\_mean [] & pet\_mean [] \\
-p\_seasonility [] & p\_seasonality [] \\
+    pet\_mean [mm/day] & pet\_mean [mm/day] \\
+p\_seasonility & p\_seasonality \\
 frac\_snow & frac\_snow \\
-*\_frec\_* & *\_frec\_* \\
-aridity [] & aridity [] \\
+high\_prec\_freq & high\_prec\_freq \\
+    high\_prec\_dur & high\_pref\_dur \\
+    low\_prec\_freq & low\_prec\_freq \\
+    low\_prec\_dur & low\_prec\_dur \\
+aridity & aridity \\
 forest\_frac & dwood\_frac + ewood\_frac \\ 
 root\_depth\_50 [m] & root\_depth\_50 [m] \\
 soil\_depth\_pelletier [m] & soil\_depth\_pelletier [m] \\
@@ -24,7 +30,7 @@ sand\_frac & sand\_perc \\
 silt\_frac & silt\_perc \\ 
 clay\_frac & clay\_perc \\ 
 organic\_frac & organic\_perc \\
-gfv\_max & all green things  or $1 -$urban\_perc$-$inwater\_perc  \\
+gvf\_max & $1 -$urban\_perc$-$inwater\_perc  \\
 \bottomrule
 \end{tabular}
 
