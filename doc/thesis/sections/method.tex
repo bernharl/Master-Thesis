@@ -1,7 +1,7 @@
 In this chapter we discuss the implementation of the LSTM models described in Chapter 
 \ref{lstm theory} and how the predictions of these models are used to try and gain 
 insight into what physical processes our models deem the most important.
-\section{CamelsML}
+\section{Code available as Python package: CamelsML}
 Originally a fork of the code in \citet{lstm_second_paper} with a few modifications, 
 the machine learning code of this thesis is now implemented to be a fully fledged 
 Python package. As the original code it is forked from, it is released under the 
@@ -13,30 +13,31 @@ We dub this package CamelsML (Camels Machine Learning).
 See Appendix \ref{camelsml documentation} for documentation on how to use the python 
 package as well as a minimal running example.
 
-\section{Data split}
-With 671 basins in the CAMELS-GB dataset, we run into an issue with perhaps not 
-having enough data. This is not a problem for the time series, as they have data 
-over several years, but it is indeed a problem for the static features of which there 
-are only one data point per basin. To improve our statistics we therefore use 
-cross validation. All results in this thesis that compare models to each other 
-are made from the same 5-fold cross validation split. The test set is separate 
-from this and is only used to later show the performance of a selected model.
-we have analyzed the results.
+\section{Full training algorithm}
+The training procedure described here is heavily based on and uses code from 
+\cite{lstm_second_paper}.
 
-\section{Training Algorithm}
+First we split the data basin-wise into train (75\%) and test (25\%) sets. The test 
+set is discarded and only used in the very end to show test performance of our best 
+performing models for each scenario. We use cross validation on the training set 
+to evaluate model performance. More details on this is shown in the following 
+algorithm:
 \begin{figure}
 \centering
 \input{figures/tikz/mini_batch_training.tex}
 \caption{A minibatch. $\bm{x}_{i,t}$ represents the input parameters $\bm{x}$ at time step $t$ for time series $i \in [0, b]$ where $b$ is the batch size. A minibatch consists of $b \times t$ FP32 numbers.}
 \label{minibatch}
 \end{figure}
-Our training algorithm can be described as:
+The training algorithm can be described as:
 \begin{enumerate}
-    \item Split the basins in the training set into 5 parts. Repeat this 5 times, each time using 4/5 parts for training and 1/5 for validation.\begin{enumerate}
-        \item Initialize LSTM model with random weights and zero biases, except for the bias of the forget gate $\bm{b}_f$ which is initialized as 5 to make the initial model either forget or remember idk \citationneeded
-        \item Split each training basin's time series into several parts, the length 
-            of which are decided by the sequence length variable $s$. A minibatch 
-            consists of a batch size $s$ amount of these $s$ long timeseries.
+    \item Split the training data basin-wise into five parts of equal size.
+    \item Repeat the following five times, each time using a different 1/5 of the 
+        split data as the validation set: \begin{enumerate}
+            \item Initialize LSTM model with random weights and zero biases, except for the bias of the forget gate $\bm{b}_f$ which is initialized as $\bm{b}_f=\bm{5}$ to make the initial model either forget or remember idk \citationneeded
+        \item Split each training time series into several parts, the length 
+            of which is decided by the sequence length variable $s$. A minibatch 
+            consists of a batch size $s$ amount of these $s$ long timeseries. This 
+                structure is shown in Figure \ref{minibatch}.
         \item For each minibatch:
         \begin{enumerate}
             \item Use the model to predict the outcomes of each timeseries in the 
@@ -47,7 +48,7 @@ Our training algorithm can be described as:
         \item Evaluate on the validation set without updating parameters.
     \end{enumerate}
 \end{enumerate}
-Evaluating our model is done using the Nash–Sutcliffe model efficiency coefficient (NSE) \citep{NSE}.
+We evaluate models using the Nash–Sutcliffe model efficiency coefficient (NSE) \citep{NSE}.
 This metric is similar to the $R^2$ score, but it is specialized for usage 
 on hydrological time series.
 It is defined as 
@@ -100,7 +101,7 @@ because of the nature of training and validating on different datasets.
 \end{table}
 \end{landscape}
 
-Table \ref{all models} shows all trained models who's results are presented in this 
+Table \ref{all models} shows all trained models from which results are presented in this 
 thesis. The largest differences between these models are often which basin attributes 
 are included in the training process. One should be able to reproduce the results 
 of this work using this CamelsML, Table \ref{all models} and \ref{attribute table}. 
@@ -136,6 +137,14 @@ a-e we present this short summary:
         5-fold cross validation. 
     \item d: This is an attribute selection used for training models on both 
         CAMELS and CAMELS-GB at the same time in addition to transfer learning. 
+\begin{table}
+    \begin{adjustbox}{width=\textwidth}
+    \input{tables/common_features_us_gb.tex}
+    \end{adjustbox}
+    \caption{Timeseries and attributes in Camels and Camels-GB that we treat as 
+    equivalent. The names are taken directly from \citet{CAMELS_US} and \citet{CAMELS_GB}.}
+    \label{attribute transfer}
+\end{table}
         The attribute names stated in Table \ref{attribute table} are based on the 
         attribute names in CAMELS-GB. CAMELS and CAMELS-GB have different attributes 
         and different names for the same attributes. Which attributes we deem to 
@@ -145,8 +154,6 @@ a-e we present this short summary:
         of uncertainty of whether our synthetic attribute creation works.
 \end{itemize}
 
-The models we apply in this thesis are all variants of the LSTM model described 
-
 %\subsection{Feature selection}
 \section{Using the permutation test to determine the model's perceived feature importance}
 %\subsubsection{Permutation test}
@@ -155,10 +162,10 @@ One of the criticisms of machine learning methods
 is that they are not easily interpretable. This 
 is especially true if one wants to train a model 
 on a dataset with an overwhelming amount of 
-features. There are several strategies for 
-selecting a smaller subset of features in a dataset.
-The method we briefly describe here is called the 
-permutation test:
+features. 
+A way to interpret a machine learning model is to look at feature importance. There 
+are many algorithms to determine feature importance, we choose to use the permutation 
+test for its simplicity and ability to be used on any type of trained model.
 Given a feature $j$, the permutation importance 
 $i_j$ is equal to 
 \begin{equation}
@@ -179,10 +186,9 @@ A major problem for this method is that (\ref{Permutation equation}) could give
 unrealistically low significance to features that are highly correlated to other 
 features. In this case the feature may very well be important, but the information 
 contained in it is also contained in one or more other correlated features, meaning 
-the model doesn't lose as much information as one may think. This would be fine 
-if we were just looking to simplify a well performing model, but what we aim for 
-is improved interpretability so that we may know which features are actually important 
-to the physical system.
+the model doesn't lose as much information as one may think. Essentially the rule 
+of thumb is that the feature importance is the feature's importance as learned by 
+the model, not the actual importance in the real world. 
 \section{Hardware}
 The models are run on three different hardware configurations. The important difference 
 between these hardware configurations is the amount of available VRAM. As LSTM models 
