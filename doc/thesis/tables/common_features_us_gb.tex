@@ -1,4 +1,4 @@
-\begin{tabular}{lr}
+\begin{tabular}{l|l}
 \toprule
 Camels-US &     Camels-GB \\
 \midrule
@@ -26,11 +26,11 @@ root\_depth\_50 [m] & root\_depth\_50 [m] \\
 soil\_depth\_pelletier [m] & soil\_depth\_pelletier [m] \\
 soil\_porosity & porosity\_cosby \\
 soil\_conductivity [cm/h] & conductivity\_cosby [cm/h] \\
-sand\_frac & sand\_perc \\
-silt\_frac & silt\_perc \\ 
-clay\_frac & clay\_perc \\ 
-organic\_frac & organic\_perc \\
-gvf\_max & $1 -$urban\_perc$-$inwater\_perc  \\
-\bottomrule
+sand\_frac & sand\_perc  / 100 \\
+silt\_frac & silt\_perc / 100 \\ 
+clay\_frac & clay\_perc  / 100 \\ 
+organic\_frac & organic\_perc / 100 \\
+    gvf\_max & $1 -\frac{\text{urban\_perc}+\text{inwater\_perc}}{100} $ \\
+%\bottomrule
 \end{tabular}
 

@@ -25,21 +25,25 @@ Mathematically this can be written as
 \begin{equation}
     \bm{a}_\text{norm} = \frac{\bm{a} - \bar{\bm{a}}_\text{train}}{\sigma_{\bm{a}_\text{train}}}. \label{normalization}
 \end{equation}
-Here $\bm{a}$ represents any variable, input or output. If $\bm{a}$ is a timeseries, 
+Here $\bm{a}$ represents any variable, input or output. If $\bm{a}$ is a time series, 
 the averaging is still done for all time steps in all basins in the training set, 
-not individually per basin.
+not individually per basin. This normalization is implemented in CamelsML by saving 
+the standard deviations and averages of each feature in the training set to the disk 
+and is implemented by us. \citet{lstm_third_paper} has likely also implemented this 
+in a different way, but this code is not used here.
 
 \begin{table}
-    \begin{adjustbox}{width=\textwidth}
-    \input{tables/common_features_us_gb.tex}
-    \end{adjustbox}
+    %\begin{adjustbox}{width=\textwidth}
+    \centering
     \caption{Timeseries and attributes in Camels and Camels-GB that we treat as 
     equivalent. The names are taken directly from \citet{CAMELS_US} and \citet{CAMELS_GB}.}
+    \input{tables/common_features_us_gb.tex}
+    %\end{adjustbox}
     \label{attribute transfer}
 \end{table}
 When using a combination of CAMELS and CAMELS-GB we are limited in both which 
-timeseries and which basin attributes we can use.
-As seen in Chapter \ref{data} there are only two overlapping timeseries: precipitation 
+time series and which basin attributes we can use.
+As seen in Chapter \ref{data} there are only two overlapping time series: precipitation 
 and shortwave radiation. CAMELS-GB only has 
 average daily temperature, while CAMELS has both minimum and maximum temperature 
 per day. To include temperature as a feature we therefore make the assumption that 
@@ -66,6 +70,18 @@ or in water in CAMELS-GB can substitute this attribute. This yields
 \end{equation}
 We view the assumption (\ref{gvf gb}) to potentially be weak, and therefore exclude 
 this attribute in one of our models.
+A full overview of attributes deemed equivalent in CAMELS and CAMELS-GB is shown in 
+Table \ref{attribute transfer}.
+
+\begin{figure}
+    \centering
+    \includegraphics{feature_comparison_mixed/big_boxplot_mixed_validation.pdf}
+    \caption{Boxplots of the basin attributes in CAMELS and CAMELS-GB compared. 
+    CAMELS is on the left, CAMELS-GB is on the right. The subset of basins used 
+    for this figure is taken from the validation basins in the first cross validation 
+    iteration in model the mixed LSTM and EA-LSTM models trained on attribute subset d.}
+    \label{attribute comparison}
+\end{figure}
 
 \section{Full training algorithm}
 The training procedure described here is heavily based on and uses code from 
@@ -76,8 +92,8 @@ algorithm:
 \begin{figure}
 \centering
 \input{figures/tikz/mini_batch_training.tex}
-\caption{A minibatch. $\bm{x}_{i,t}$ represents the input parameters $\bm{x}$ at time step $t$ for time series $i \in [0, b]$ where $b$ is the batch size. A minibatch consists of $b \times t$ FP32 numbers.}
-\label{minibatch}
+\caption{A mini batch. $\bm{x}_{i,t}$ represents the input parameters $\bm{x}$ at time step $t$ for time series $i \in [0, b]$ where $b$ is the batch size. A mini batch consists of $b \times t$ FP32 numbers.}
+\label{mini batch}
 \end{figure}
 The training algorithm can be described as:
 \begin{enumerate}
@@ -85,15 +101,15 @@ The training algorithm can be described as:
     \item Repeat the following five times, each time using a different 1/5 of the 
         split data as the validation set: \begin{enumerate}
             \item Initialize LSTM model with random weights and zero biases, except for the bias of the forget gate $\bm{b}_f$ which is initialized as $\bm{b}_f=\bm{5}$ to make the initial model either forget or remember idk \citationneeded
-        \item Split each training time series into several parts, the length 
-            of which is decided by the sequence length variable $s$. A minibatch 
-            consists of a batch size $s$ amount of these $s$ long timeseries. This 
-                structure is shown in Figure \ref{minibatch}.
-        \item For each minibatch:
+        \item Split each training time seres into several parts, the length 
+            of which is decided by the sequence length variable $s$. A mini batch 
+            consists of a batch size $s$ amount of these $s$ long time series. This 
+                structure is shown in Figure \ref{mini batch}.
+        \item For each mini batch:
         \begin{enumerate}
-            \item Use the model to predict the outcomes of each timeseries in the 
-                minibatch. This can be done in parallel.
-            \item Use the average loss of all predictions in the minibatch to update 
+            \item Use the model to predict the outcomes of each time series in the 
+                mini batch. This can be done in parallel.
+            \item Use the average loss of all predictions in the mini batch to update 
                 the model parameters using ADAM (see Section \ref{ADAM}).
         \end{enumerate}
         \item Evaluate on the validation set without updating parameters.
@@ -132,7 +148,6 @@ because of the nature of training and validating on different datasets.
 %\end{figure}
 \begin{table}
     \centering
-    \input{tables/all_model_configs.tex}
     \caption{Table containing all models trained in this thesis along with their 
     given labels and configuration. All models are trained with a sequence length of 
     270 days and are initiated with the seed 19970204. 
@@ -140,14 +155,15 @@ because of the nature of training and validating on different datasets.
     The information contained here together with 
     CamelsML should be enough to easily be able to recreate the results in this thesis.
     The model configuration files are also located on the Github page of this thesis.}
+    \input{tables/all_model_configs.tex}
     \label{all models}
 \end{table}
 \begin{landscape}
 \begin{table}
     \centering
-    \input{tables/attribute_selection.tex}
     \caption{Table containing all basin attribute dataset subsets. Set e is equal 
     to set d but without organic\_perc and gvf\_max.}
+    \input{tables/attribute_selection.tex}
     \label{attribute table}
 \end{table}
 \end{landscape}
@@ -237,7 +253,7 @@ The models are run on three different hardware configurations. The important dif
 between these hardware configurations is the amount of available VRAM. As LSTM models 
 are recurrent neural networks they are not as parallelizable as other machine learning 
 models (see (\ref{LSTM})). This means that the only way for us to fully exploit 
-an increase in VRAM is to parallelize data-wize. To do this we increase the batch size.
+an increase in VRAM is to parallelize data-wise. To do this we increase the batch size.
 The three hardware configurations are listed as follows \footnote{Note that we only 
 state the used graphics card as this is the only important difference, we run no 
 calculations on processors and do not use a significant amount of ordinary RAM.}:
@@ -253,7 +269,7 @@ calculations on processors and do not use a significant amount of ordinary RAM.}
 \end{enumerate}
 We acknowledge that the inconsistent use of batch sizes across models may somewhat 
 impact the model performance, as previously stated in Chapter \ref{stochastic gradient descent}.
-However, as long as the amount of minibatches is sufficiently smaller than the number of datapoints we 
+However, as long as the amount of mini batches is sufficiently smaller than the number of data points we 
 still get an acceptable amount of stochasticity in the training process and the batch 
 size is usually set as high as possible in most machine learning practices because 
 of model speed. Batch size is usually set as high as the hardware supports, as long 
