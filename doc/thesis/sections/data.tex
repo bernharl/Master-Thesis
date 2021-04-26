@@ -1,20 +1,14 @@
+In this chapter we briefly describe the two datasets used to get all results in 
+this thesis. We introduce the CAMELS dataset \citep{CAMELS_US} first as it is the 
+original dataset and is used as the basis for the analysis of \citet{lstm_first_paper, lstm_second_paper, lstm_third_paper}.
 \section{The CAMELS dataset}
-The Catchment Attributes and MEteorology for Large-sample Studies (CAMELS) dataset \citep{CAMELS_US}
-is a dataset providing data for 671 catchments spanning the United States, each
-containing timeseries describing every day from 1980-2008. While 
-it is a rather large dataset, 
-in this section we will only describe the relevant parts of it for this study. 
-As mentioned earlier what interests us is modelling streamflow with additional 
-static information for the catchment we are modelling. The interesting parts of
-the CAMELS dataset to us are then:
-\begin{itemize}
-    \item Meteorological forcing timeseries for each catchment.
-    \item Streamflow timeseries for each catchment.
-    \item Static attributes for each catchment.
-\end{itemize}
-There are three meteorological datasets in CAMELS, the one that is studied in \citet{CAMELS_US}
-and \citet{lstm_first_paper,lstm_second_paper,lstm_third_paper} is the data sourced from Daymet \citep{thornton2012daymet}.
-Daymet contains several timeseries, the ones used in \citet{lstm_second_paper} are:
+The Catchment Attributes and Meteorology for Large-sample Studies (CAMELS) dataset \citep{CAMELS_US}
+is a dataset compiled from several previous hydrological datasets in an attempt to 
+improve the availability of data for large-scale hydrological modelling.
+
+As CAMELS consists of several datasets, we choose to focus on the time series data 
+used by \citet{lstm_second_paper}. This selection of data consists of an extension 
+of the original Maurer dataset \citationneeded contained in CAMELS provided by \citet{maurer_hydroshare}. 
 \begin{itemize}
     \item Precipitation
     \item Shortwave Radiation
@@ -22,21 +16,22 @@ Daymet contains several timeseries, the ones used in \citet{lstm_second_paper} a
     \item Minimum air temperature
     \item Water vapor pressure
 \end{itemize}
-We also stick to these for easy comparison's sake.
-The dataset also contains results from popular physical models used in hydrological 
-modelling. This makes it easy to use the dataset for benchmarking without having 
-to run the physical models ourselves. The models we compare to are \begin{Large}
-FIND OUT NAMES OF MODELS, DESCRIBE THEM IN DETAIL IN THEORY!!
-\end{Large}
-The interesting part of the CAMELS dataset to us is the addition of the static 
-features. These contain information not used in traditional, physical models. 
-\citet{lstm_second_paper,lstm_third_paper} showed that that
-with the addition of these static features a purely data driven LSTM model generalizes
-better than traditional physical models. For more details on what we mean by 
-"generalizes", see \ref{theory}. For a further describtion of the static features
-we use in this thesis, see \ref{appendix: features camels us}.
-For each day of forcing data, each catchment (with some erros) also contains 
-streamflow data. This is what is used as the output for models.
+
+The streamflow data corresponding to the meteorological forcing data mentioned above 
+stems from \citet{usgs_streamflow}.
+
+In addition to time series CAMELS contains several static basin attributes describing 
+hydrological, geological and geographical properties of each basin. It has been 
+shown that including these basins improves the performance and generalization of 
+statistical models such as LSTMs \cite{lstm_second_paper}. 
+
+Complementing the CAMELS dataset are several hydrological models provided by \citet{CAMELS_hydroshare}. 
+These are calibrated and run on the time series data contained in CAMELS or the data 
+it is derived from. In this thesis we include the benchmark of the VIC model we 
+briefly describe in Section \cite{VIC}. Additionally \citet{lstm_third_paper} used 
+a benchmark of the NWM (see Section \ref{NWM}). This benchmark is provided by 
+\cite{NWM_benchmark}. 
+
 
 \section{The CAMELS-GB dataset}
 As per the Open Government License v3 the dataset is distributed under we are required 
@@ -44,12 +39,13 @@ to include the statement "Contains data supplied by Natural Environment Research
 The CAMELS-GB dataset \citep{CAMELS_GB} is inspired by the CAMELS dataset and is 
 essentially an attempt to replicating the CAMELS dataset on catchments in Great Britain, 
 as opposed to American basins in the CAMELS dataset. The dataset is the same in size,
-also containing 671 basins. The timeseries span from 1970-2015, though, making 
+also containing 671 basins. The time series span from 1970-2015, though, making 
 it span roughly 15 more years than the CAMELS dataset.
- The meteorological timeseries 
-in this dataset however differ, so we cannot use the same models for both datasets
-although that would be interesting to do in the search for better generalization.
-The ones we use in this study are:
+ The meteorological time series in addition to the catchment attributes are however 
+ not all equivalent with CAMELS, so it is unlikely to get an optimal universal model 
+ for both datasets as we need to exclude a significant amount of data from both 
+ datasets to make them overlap.
+We use all time series in the dataset in this thesis, they are:
 \begin{itemize}
     \item Precipitation
     \item Temperature
@@ -58,9 +54,10 @@ The ones we use in this study are:
     \item Shorwave radiation
     \item Longwave radiation
 \end{itemize}
-The dataset contains no physical model benchmarks, so we are a bit more limited 
-with how we can measure the physical information lacking from traditional models.
-It is still important for the assessment of LSTM-based models to show that it works
-well on more than just one dataset, however. 
-The CAMELS-GB dataset contains several static features, 76 of which are investigated
-in this thesis.
+
+
+As far as we know there is no currently available traditional model benchmark dataset 
+akin to \cite{CAMELS_hydroshare} for CAMELS-GB. The creation of such a dataset would 
+likely be a challenge because of the time series contained in CAMELS-GB. There is for 
+instance not enough information available to run VIC (see section \ref{VIC}) on 
+the dataset.
