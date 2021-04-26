@@ -1,20 +1,23 @@
 In this chapter we briefly describe the two datasets used to get all results in 
 this thesis. We introduce the CAMELS dataset \citep{CAMELS_US} first as it is the 
-original dataset and is used as the basis for the analysis of \citet{lstm_first_paper, lstm_second_paper, lstm_third_paper}.
+older dataset and is used as the basis for the analysis of \citet{lstm_first_paper, lstm_second_paper, lstm_third_paper}.
 \section{The CAMELS dataset}
 The Catchment Attributes and Meteorology for Large-sample Studies (CAMELS) dataset \citep{CAMELS_US}
 is a dataset compiled from several previous hydrological datasets in an attempt to 
-improve the availability of data for large-scale hydrological modelling.
+improve the availability of data for large-scale hydrological modelling. It includes 
+data for 671 basins across the United States. 
 
 As CAMELS consists of several datasets, we choose to focus on the time series data 
 used by \citet{lstm_second_paper}. This selection of data consists of an extension 
-of the original Maurer dataset \citationneeded contained in CAMELS provided by \citet{maurer_hydroshare}. 
+of the original Maurer dataset contained in CAMELS provided by \citet{maurer_hydroshare}.
+The time series provided by the extender Maurer dataset that we use as inputs are 
+the following:
 \begin{itemize}
-    \item Precipitation
-    \item Shortwave Radiation
-    \item Maximum air temperature
-    \item Minimum air temperature
-    \item Water vapor pressure
+    \item Precipitation [mm/day]
+    \item Shortwave Radiation [W/m$^2$]
+    \item Maximum air temperature [C\degree]
+    \item Minimum air temperature [C\degree]
+    \item Water vapor pressure [Pa]
 \end{itemize}
 
 The streamflow data corresponding to the meteorological forcing data mentioned above 
@@ -29,8 +32,13 @@ Complementing the CAMELS dataset are several hydrological models provided by \ci
 These are calibrated and run on the time series data contained in CAMELS or the data 
 it is derived from. In this thesis we include the benchmark of the VIC model we 
 briefly describe in Section \cite{VIC}. Additionally \citet{lstm_third_paper} used 
-a benchmark of the NWM (see Section \ref{NWM}). This benchmark is provided by 
-\cite{NWM_benchmark}. 
+and provided a preprocessed  benchmark of the NWM (see Section \ref{NWM}). 
+This benchmark is known as the 
+NOAA (National Oceanic and Atmospheric Administration) NWM reanalysis. The benchmark 
+is released with no license and can as of April 2021  be found at 
+\url{https://registry.opendata.aws/nwm-archive/}.
+The preprocessed version is available on said paper's 
+Github page: \url{https://github.com/kratzert/lstm_for_pub/blob/master/data/nwm/nwm_daily.pkl}.
 
 
 \section{The CAMELS-GB dataset}
@@ -45,15 +53,18 @@ it span roughly 15 more years than the CAMELS dataset.
  not all equivalent with CAMELS, so it is unlikely to get an optimal universal model 
  for both datasets as we need to exclude a significant amount of data from both 
  datasets to make them overlap.
-We use all time series in the dataset in this thesis, they are:
+The time series we use in this thesis are
 \begin{itemize}
-    \item Precipitation
-    \item Temperature
-    \item Windspeed
-    \item Humidity
-    \item Shorwave radiation
-    \item Longwave radiation
+    \item Precipitation [mm/day]
+    \item Average temperature [C\degree]
+    \item Wind speed [m/s]
+    \item Humidity [g/kg]
+    \item Shortwave radiation [W/m$^2$]
+    \item Longwave radiation [W/m$^2$]
 \end{itemize}
+In addition there two more time series which we exclude that describe potential 
+evapotranspiration for well-watered grass. We exclude these as they are derived 
+features and not measured.
 
 
 As far as we know there is no currently available traditional model benchmark dataset 
