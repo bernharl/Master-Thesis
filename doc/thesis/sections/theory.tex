@@ -289,9 +289,21 @@ analogous to a model with high variance, making it able to predict well in more 
 but possibly losing performance (overfitting) and interpretability if taken too far. 
 In traditional 
 rainfall-runoff modelling we could call a purely process-driven model biased, while 
-a more data driven conceptual model would have higher variance. The concept of 
+a more data driven conceptual model would have higher variance. 
+
+The concept of 
 the bias-variance tradeoff concept is illustrated  in Figure 
-\ref{Bias Variance rainfall}.
+\ref{Bias Variance rainfall}. When a model is to simple it fails to properly capture 
+the behavior of a given system and the error increases. When a model is too complex 
+it starts fitting the train set perfectly and loses all generalizability, the test 
+error therefore increases.
+
+There are many ways to combat this issue. The most obvious solution is to increase the 
+amount of data a model is trained on. This reduces the amount of model parameters 
+compared to the model of data points and makes the model less likely to overfit. 
+Another way is to forcefully increase the bias of a model with high complexity 
+through a process known as regularization. Regularization comes in many forms, often 
+specific to the models that are being regularized.
 \subsection{Gradient Descent}
 \label{GD Theory}
 While the simple case of linear regression has an easily attainable analytical solution 
@@ -588,9 +600,9 @@ To predict the output $\bm{y}_t$ at time step $t$:
     \item Feed it through the LSTM cell, saving the hidden vector $\bm{h}_t$.
     \item Feed $\bm{h}_t$ through an ordinary neural network layer. This is essentially to do a weighted sum of the elements in $\bm{h}_t$ so that we get an output vector of the same dimensions as the output $\bm{y}_t$. With only one output as with rainfall-runoff modeling this means summing all the values $\bm{h}_t$ into a single scalar $y_t$.
 \end{enumerate}
-\subsection{Implementing static features along with time series}
+\subsection{Implementing static attributes along with time series}
 The description of the LSTM model we give in the above section only contains information 
-for how to implement time series, not static features such "area" that do not vary 
+for how to implement time series, not static attributes that do not vary 
 with time. There are multiple ways to implement this. An obvious choice here is to 
 naively treat each static feature as a time series that does not change. This seems 
 counter-intuitive as it makes the model not see any difference between time series and 
@@ -599,15 +611,8 @@ the training algorithm too much\footnote{Memory is often the bottleneck of train
 machine learning models. \citationneeded}. This way we train the exact same type 
 of model and do not need to modify anything.
 
-Recently a small modification to the LSTM model was proposed for this purpose. 
-It is called the Entity Aware LSTM(EA-LSTM) \citet{lstm_second_paper}. The paper 
-indicates that this modified LSTM performs worse than the naive approach, going 
-from a median NSE of 0.76 to 0.74 on the CAMELS dataset \citep{CAMELS_US}. The 
-underlying philosophy of this thesis however still makes us believe that this is 
-the model we should employ, as it is the most interpretable model \citep{lstm_second_paper} 
-and the goal of this thesis is to get a better understanding of the underlying 
-physics in rainfall-runoff modelling that these static features can help explain.
-
+Recently a small modification to the LSTM model was proposed for this purpose:
+The Entity Aware LSTM (EA-LSTM) \citep{lstm_second_paper}. 
 Mathematically, an EA-LSTM is very similar to an LSTM. We only need to change the 
 input gate described in (\ref{input gate}): 
 \begin{equation}
@@ -616,16 +621,20 @@ input gate described in (\ref{input gate}):
 This way the part of the input gate is affected by the static features, making 
 the static features able to affect the cell state. This makes the model able to 
 change how it views long-term dependencies based on information from the static features. 
-The neuron activation $\sigma (\bm{\omega}_i \bm{x}_s + \bm{b}_i)$ is a metric that 
-is of interest as it is likely the key to understanding how the model interprets 
-the physical information of the data\footnote{Although we are of course aware that 
-the model may not at all use any physical information from the static features, but 
-instead just learns that basins with similar static features behave similarly.}. 
-
+The paper 
+indicates that this modified LSTM performs worse than the naive approach, going 
+from a median NSE of 0.76 to 0.74 on the CAMELS dataset \citep{CAMELS_US}. 
+This may not always be the case, though. 
+The EA-LSTM has fewer model parameters than an ordinary LSTM and can therefore 
+be described as less complex. This may lead to better generalization in some cases as it could 
+function as a form of regularization.
 
 \subsection{Hyperparameters}
 \label{Hyperparameters}
-Is this section actually needed?
+This sections needs expansion. I think renaming it to mention regularization makes sense 
+if you read the end of the above section. I should describe dropout here as well as 
+maybe further dwell on using EA-LSTMs as a form of regularization.
+You may skip it for now!
 There are mentions of a concept known as hyperparameters in this chapter. A hyperparameter 
 is a parameter that is not trained as part of the optimization algorithm. For an 
 LSTM the most relevant hyperparameters are:
@@ -638,6 +647,7 @@ LSTM the most relevant hyperparameters are:
     \item Gradient norm clip threshold
 \end{itemize}
 
+\iffalse
 A way around this is to first remove unneeded correlated features so that the model 
 contains as little duplicate information as possible. Reducing the amount of 
 features also has the added benefit of reducing the model variance because of 
@@ -675,6 +685,7 @@ represent the same information. A problem with this method is that there is no
 automatic way to determine which features to actually choose. Often this is done at 
 random, but it could for instance be an idea to use some existing domain knowledge 
 for this decision.
+\fi
 
 \subsection{Addressing common criticisms of Machine Learning}
 There are several common criticisms of machine learning and other data driven 
@@ -689,13 +700,12 @@ always the case. It depends greatly on how complex the model is how much differe
 data the model uses among other things. A linear regression model is easy to interpret, 
 but it becomes much less easy to interpret if it needs several thousand different 
 inputs \citep{elemstatlearn}. This is the reason we employ feature selection here 
-in this thesis. Our goal is not to get the highest performing model, but rather 
-to use the model as a tool for physical discovery. This also addresses point 2: 
+in this thesis. Our goal is not to just get the highest performing model, but rather 
+to use the model as a tool for physical discovery and as a supplement to traditional models. This also addresses point 2: 
 We  are in fact not looking to use LSTM models as replacements for physical models, 
-but are instead interested in improving existing models like SAC-SMA \citationneeded 
-by seeing if there is any possibility for improving the sometimes lacking physical 
-modelling of classical models. It is important to remember that the best performing 
+but instead we look to explore options for improving traditional models.
+It is important to remember that the best performing 
 classical rainfall-runoff models also include lots of trained/optimized parameters 
 that do not necessarily represent any physical phenomena. We agree with \citet{hybrid_paper} 
 that the power of machine learning when it comes to leveraging data should be 
-used in a way that improves our understanding of Physics.
+used in a way that improves our understanding of the underlying system we are modelling. 
