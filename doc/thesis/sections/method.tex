@@ -1,5 +1,7 @@
 In this chapter we discuss the implementation of the LSTM models described in Chapter 
-\ref{LSTM Theory}, how we preprocess and combine the datasets 
+\ref{LSTM Theory}. The goal is to use the hydrological data from the datasets
+described in Chapter \ref{Data} to predict runoff.
+We describe how we preprocess and combine the datasets 
 and how the predictions of these models are used to try and gain 
 insight into what physical processes our models deem the most important.
 \section{Code available as Python package: CamelsML}
@@ -8,7 +10,7 @@ the machine learning code of this thesis is now implemented to be a fully fledge
 Python package. As the original code it is forked from, it is released under the 
 Apache 2.0 license and anyone is therefore free to modify and implement the code 
 into their own experiments in the future.
-We dub this package CamelsML (Camels Machine Learning).
+We dub this package CamelsML (CAMELS Machine Learning).
 
 
 See Appendix \ref{camelsml documentation} for documentation on how to use the python 
@@ -29,19 +31,19 @@ is shown here:
     \item Split the training data basin-wise into five parts of equal size.
     \item Repeat the following five times, each time using a different 1/5 of the 
         split data as the validation set: \begin{enumerate}
-            \item Initialize LSTM model with random weights and zero biases, except for the bias of the forget gate $\bm{b}_f$ which is initialized as $\bm{b}_f=\bm{5}$ to make the initial model either forget or remember idk \citationneeded
+            \item Initialize LSTM model with random weights and zero biases, except for the bias of the forget gate $\bm{b}_f$ which is initialized as $\bm{b}_f=\bm{5}$ to make the initial model either forget or remember idk (fix this later!!!) \citationneeded
         \item Split each training time seres into several parts, the length 
             of which is decided by the sequence length variable $s$. A mini batch 
-            consists of a batch size $s$ amount of these $s$ long time series. This 
+            consists of a batch size $b$ amount of these $s$ long time series. This 
                 structure is shown in Figure \ref{mini batch}.
         \item For each mini batch:
         \begin{enumerate}
             \item Use the model to predict the outcomes of each time series in the 
                 mini batch. This can be done in parallel.
             \item Use the average loss of all predictions in the mini batch to update 
-                the model parameters using ADAM (see Section \ref{ADAM}).
+                the model parameters using ADAM (see (\ref{ADAM.1}-\ref{ADAM.4})).
         \end{enumerate}
-        \item Evaluate on the validation set without updating parameters.
+        \item Evaluate on the validation set without updating the model parameters.
     \end{enumerate}
 \end{enumerate}
 We evaluate models using the Nash–Sutcliffe model efficiency coefficient (NSE) \citep{NSE}.
@@ -51,8 +53,12 @@ It is defined as
 \begin{equation}
     \text{NSE} = 1 - \frac{\sum_{t=0}^T\left( y^t - \hat{y}^t\right)}{\sum_{t=0}^T\left(y^t - \bar{\hat{y}}\right)} \label{NSE}
 \end{equation}
-As we employ cross validation, we  end up with is 5 different models 
-for each training run. These models do not necessarily converge to the same parameters 
+
+Here $T$ is the amount of time steps in a time series, $y^t$ is the observed runoff 
+used as the ground truth at time step $t\in[0,T]$, $\tilde{y}^t$ is the predicted runoff at time step $t\in[0,T]$ and $\hat{\tilde{y}}$ is the average predicted runoff.
+
+As we employ cross validation, we  end up with 5 different models 
+for each training run. These models do not necessarily converge to the same model parameters 
 as each other, making them potentially quite different from one another. To test the 
 actual performance of a model (not just relative to other model configurations) we 
 therefore need to train a new model with the same configuration (using the same features, 
@@ -63,11 +69,11 @@ real-world performance of a final selected model. Statistically, this is due to 
 fact that optimizing model configuration using the test set would mean overfitting 
 on said test set. See \citet{elemstatlearn} for a more detailed explanation.
 
-For models used to validate transfer learning between Camels and Camels-GB, we 
+For models used to validate transfer learning between CAMELS and CAMELS-GB, we 
 cross validate on one dataset and use all five models from the cross validation 
 to make ensemble predictions on the validation split of the other dataset. This 
 way we can get more robust statistics also in these results, as \citet{lstm_second_paper} 
-showed that there often is a non trivial performance difference between a single
+showed that there often is a non-trivial performance difference between a single
 model and a model ensemble. In our case we assume this effect to be even higher 
 because of the nature of training and validating on different datasets.
 
@@ -125,7 +131,7 @@ a-e we present this short summary:
         training because of the limited sequence length. 
     \item c: This attribute selection is taken from \cite{lstm_third_paper} and 
         is used to reproduce the results of said paper with a different cross validation 
-        setup to fit better with the rest of our analysis. \cite{lstm_third_paper} 
+        setup to better fit with the rest of our analysis. \cite{lstm_third_paper} 
         used 12-fold cross validation while we use the more commonly employed 
         5-fold cross validation. 
     \item d: This is an attribute selection used for training models on both 
@@ -151,7 +157,9 @@ Mathematically this can be written as
 \begin{equation}
     \bm{a}_\text{norm} = \frac{\bm{a} - \bar{\bm{a}}_\text{train}}{\sigma_{\bm{a}_\text{train}}}. \label{normalization}
 \end{equation}
-Here $\bm{a}$ represents any variable, input or output. If $\bm{a}$ is a time series, 
+Here $\bm{a}$ represents any variable, input or output, $\hat{\bm{a}}_\text{train}$ is 
+the average of said variable in the train set and $\sigma_{\bm{a}_\text{train}}$ is 
+the standard deviation of said variable in the train set. If $\bm{a}$ is a time series, 
 the averaging is still done for all time steps in all basins in the training set, 
 not individually per basin. This normalization is implemented in CamelsML by saving 
 the standard deviations and averages of each feature in the training set to the disk 
@@ -161,7 +169,7 @@ in a different way, but this code is not used here.
 \begin{table}
     %\begin{adjustbox}{width=\textwidth}
     \centering
-    \caption{Timeseries and attributes in Camels and Camels-GB that we treat as 
+    \caption{Timeseries and attributes in CAMELS and CAMELS-GB that we treat as 
     equivalent. The names are taken directly from \citet{CAMELS_US} and \citet{CAMELS_GB}.}
     \input{tables/common_features_us_gb.tex}
     %\end{adjustbox}
@@ -174,28 +182,33 @@ and shortwave radiation. CAMELS-GB only has
 average daily temperature, while CAMELS has both minimum and maximum temperature 
 per day. To include temperature as a feature we therefore make the assumption that 
 \begin{equation}
-    \bar{t}_\text{daily} \approx \frac{t_\text{min, daily} + t_\text{max, daily}}{2}. \label{average temp}
+    \bar{t}_\text{daily} \approx \frac{t_\text{min, daily} + t_\text{max, daily}}{2} \label{average temp}
 \end{equation}
+where $\hat{t}_\text{daily}$ is the day-averaged temperature, $t_\text{min, daily}$ is 
+the day-minimum temperature and $t_\text{max, daily}$ is the day-maximum temperature.
 The assumption in (\ref{average temp}) only holds when the daily temperature maxima 
 and minima vary symmetrically around an equilibrium  \citationneeded.
 Most of the basin attributes we include in the combined dataset have natural equivalents 
 in both datasets, but there are two exceptions. We get an equivalent of the attribute 
 forest\_frac in CAMELS in CAMELS-GB by assuming that
 \begin{equation}
-    \text{forest\_frac}_\text{GB} \approx \text{dwood\_frac} + \text{ewood\_frac} \label{forest gb}
+    \text{forest\_frac}_\text{GB} \approx \text{dwood\_frac} + \text{ewood\_frac}. \label{forest gb}
 \end{equation}
+As described in \citet{CAMELS_GB} dwood\_perc is the percentage of deciduous woodland 
+and ewood\_frac is the percentage of evergreen woodland.
 Our reasoning for (\ref{forest gb}) is that dwood\_frac and ewood\_frac are the only 
 forest attributes in CAMELS-GB and it should therefore be safe to assume that adding 
 these together yields the total percentage of wood cover.
+
 For the CAMELS attribute gvf\_max we make a less safe assumption. \citet{CAMELS_US} 
-describes this attribute as "maximum monthly mean of the green vegetation frac-tion". 
-It could then follow that the percentage of land covers not categorized as urban 
-or in water in CAMELS-GB can substitute this attribute. This yields
+describes this attribute as "maximum monthly mean of the green vegetation fraction". 
+It could then follow that the if we subtract all land covers without vegetation 
+we end up with something similar. In CAMELS-GB the two land covers not covered in 
+vegetation are urban\_perc (percentage of suburban or urban land) and inwater\_perc 
+(the percentage covered by inland water). This yields
 \begin{equation}
     \text{gvf\_max}_\text{GB} \approx 1 - \frac{\text{urban\_perc} + \text{inwater\_perc}}{100}. \label{gvf gb}
 \end{equation}
-We view the assumption (\ref{gvf gb}) to potentially be weak, and therefore exclude 
-this attribute in one of our models.
 A full overview of attributes deemed equivalent in CAMELS and CAMELS-GB is shown in 
 Table \ref{attribute transfer}.
 
@@ -203,24 +216,28 @@ Table \ref{attribute transfer}.
     \centering
     \includegraphics{feature_comparison_mixed/big_boxplot_mixed_validation.pdf}
     \caption{Boxplots of the basin attributes in CAMELS and CAMELS-GB compared. 
-    CAMELS is on the left, CAMELS-GB is on the right. The basins included in this 
+    In each subplot CAMELS-GB is on the left, CAMELS is on the right. The basins included in this 
     figure are the basins contained in the full training set used by all models 
     in this analysis.}
     \label{attribute comparison}
 \end{figure}
-Looking at Figure \ref{attribute comparison} we see that most attributes have higher 
+Figure \ref{attribute comparison} shows boxplots of the training data of all attributes 
+in dataset d (see Table 
+\ref{attribute table}) for both CAMELS and CAMELS-GB. In each subplot CAMELS-GB is 
+on the left and CAMELS is on the right. We see that most attributes have higher 
 variance in CAMELS than in CAMELS-GB. Exceptions to this are organic\_perc and gvf\_max. 
-We therefore include transfer learning models both with and without these two features.
+We therefore include transfer learning models both with and without these two features. 
+This also implies that the assumption made in (\ref{gvf gb}) may not be of use.
 %\subsection{Feature selection}
 \section{Using the permutation test to determine the model's perceived feature importance}
 %\subsubsection{Permutation test}
 \label{Feature selection}
-One of the criticisms of machine learning methods
+One of the criticisms of machine learning models
 is that they are not easily interpretable. This 
 is especially true if one wants to train a model 
 on a dataset with an overwhelming amount of 
 features. 
-A way to interpret a machine learning model is to look at feature importance. There 
+ To interpret our models we implement a way to determine feature importance. There 
 are many algorithms to determine feature importance, we choose to use the permutation 
 test for its simplicity and ability to be used on any type of trained model.
 Given a feature $j$, the permutation importance 
@@ -233,7 +250,7 @@ i_j = s - \frac{1}{K} \sum_{k=1}^K s_{k,j}\quad
 Here $K$ denotes how many permutations we average over for each feature, $s$ is
 the model's score on the original data and $s_{k,j}$ is the score of permutation 
 number $k$ of the feature $j$. In essence (\ref{Permutation equation}) describes 
-how much the performance of a model varies when "destroying" the information 
+how much the performance of a model varies when scrambling the information 
 contained in a feature, therefore explaining the importance of the feature 
 according to the current model. It is then important to remember that this is not 
 the true importance of the feature, only the importance the model thinks the feature 
@@ -246,35 +263,43 @@ contained in it is also contained in one or more other correlated features, mean
 the model doesn't lose as much information as one may think. Essentially the rule 
 of thumb is that the feature importance is the feature's importance as learned by 
 the model, not the actual importance in the real world. 
+
+To validate that this method is implemented correctly and gives meaningful results 
+in our case we train a model on CAMELS-GB that in addition to the attributes in 
+attribute subset a of Table \ref{attribute table} has access to attributes directly 
+derived from the runoff. This model cannot be used for anything but to validate 
+the permutation test as it having access to parts of the outcome as an input 
+compromises it's ability to do predictions on ungauged basins.  The attributes in 
+question are stated in Table 2 in \ref{CAMELS_GB} under the "Hydrologic signatures" 
+class. One of them is for instance q\_mean which is the mean daily discharge (runoff).
 \section{Hardware}
 The models are run on three different hardware configurations. The important difference 
 between these hardware configurations is the amount of available VRAM. As LSTM models 
 are recurrent neural networks they are not as parallelizable as other machine learning 
-models (see (\ref{LSTM})). This means that the only way for us to fully exploit 
+models (see Section \ref{RNN Theory} and \ref{LSTM Theory}). This means that the only way for us to fully exploit 
 an increase in VRAM is to parallelize data-wise. To do this we increase the batch size.
 The three hardware configurations are listed as follows \footnote{Note that we only 
 state the used graphics card as this is the only important difference, we run no 
 calculations on processors and do not use a significant amount of ordinary RAM.}:
 \begin{enumerate}
-    \item Nvidia GTX 980 ti: This has 6 GB of VRAM, we find a batch size of $b\in{1024, 1536}$ 
+    \item Nvidia\textregistered  GTX\texttrademark  980 ti: This has 6 GB of VRAM. We find a batch size of $b\in{1024, 1536}$ 
      depending on the model size to be a sweet spot here.
-    \item Nvidia GTX 1660 ti: This GPU is similar to the GTX 980 ti and has the 
+    \item Nvidia\textregistered   GTX\texttrademark  1660 ti: This GPU is similar to the GTX 980 ti and has the 
         same amount of VRAM. Therefore the same batch sizes apply here too.
-    \item Nvidia Tesla V100 (Provided by Simula's eX3 cluster): This has 32 GB of VRAM, 
-        we find a batch size of $b\in[2048,4096]$ depending on the model size
+    \item Nvidia\textregistered   Tesla\texttrademark  V100 (Provided by Simula's eX3 cluster): This has 32 GB of VRAM. 
+        We find a batch size of $b\in[2048,4096]$ depending on the model size
         to be a sweet spot. Anything more leads to a downgrade in speed because 
         of limitations in transferring data from the storage device to the GPU. 
         This is still not ideal and leads to an approximate 30\% utilization of the 
         GPU.
 \end{enumerate}
 We acknowledge that the inconsistent use of batch sizes across models may somewhat 
-impact the model performance, as previously stated in Chapter \ref{stochastic gradient descent}.
+impact the model performance, as previously stated in Section \ref{GD Theory}.
 However, as long as the amount of mini batches is sufficiently smaller than the number of data points we 
-still get an acceptable amount of stochasticity in the training process and the batch 
-size is usually set as high as possible in most machine learning practices because 
-of model speed. Batch size is usually set as high as the hardware supports, as long 
-as the total size of training data is $>>$VRAM \citationneeded.
-Still, in an ideal situation we would use the same hardware for all training runs, 
-but in this case we are limited by queue times on Simula's eX3 cluster in addition 
-to the as of Q4 2020 $\rightarrow$ Q2 2021 silicon shortage making the acquisition of 
+still get an acceptable amount of stochasticity in the training process. As an increase 
+in batch size is often directly correlated to the speed of training, the batch size usually set as high as the hardware supports. This is in most cases fine as long 
+as the total size of training data is much larger than the available RAM (if training on CPU) or VRAM (if training on GPU) \citationneeded.
+Still, in an ideal situation we would use the same hardware for all training runs.
+%but in this case we are limited by queue times on Simula's eX3 cluster in addition 
+%to the as of Q4 2020 $\rightarrow$ Q2 2021 silicon shortage making the acquisition of 
 new graphics cards next to impossible \citep{GPUShortage}.

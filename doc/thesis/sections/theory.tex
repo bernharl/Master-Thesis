@@ -293,6 +293,7 @@ a more data driven conceptual model would have higher variance. The concept of
 the bias-variance tradeoff concept is illustrated  in Figure 
 \ref{Bias Variance rainfall}.
 \subsection{Gradient Descent}
+\label{GD Theory}
 While the simple case of linear regression has an easily attainable analytical solution 
 as seen in (\ref{OLS solution}), more advanced models may not. \citationneeded 
 A generic computational optimization algorithm known as Gradient Descent can therefore 
@@ -331,10 +332,10 @@ an optimizer which uses minibatches and also what is known as a momentum based a
 As a slight simplification from what is written in \citet{fysstkweek40} the ADAM 
 algorithm in terms of equations looks like:
 \begin{align}
-    \mathbf{g}_i &= \Delta_x E(\bm{x}) \\
+    \mathbf{g}_i &= \Delta_x E(\bm{x}) \label{ADAM.1} \\
     \bm{m}_i &= \frac{\beta_1 \bm{m}_{i-1} + (1 - \beta_1)\bm{g}_i}{1 - \beta_1^i} \\
     \bm{s}_i &= \frac{\beta_2 \bm{s}_{i-1} + (1-\beta_2)\bm{g}^2_i}{1 - \beta_2^i} \\
-    \bm{x}_{i+1} &= \bm{x}_i - \eta_i \frac{\bm{m}_i}{\sqrt{\bm{s}_i}+ \epsilon}
+    \bm{x}_{i+1} &= \bm{x}_i - \eta_i \frac{\bm{m}_i}{\sqrt{\bm{s}_i}+ \epsilon} \label{ADAM.4}
 \end{align}
 Following the same naming scheme as (\ref{Gradient descent}), $\bm{x}$ is the 
 learning parameter of the model and the subscript $i$ denotes the epoch (except 
@@ -430,6 +431,7 @@ The parameter-loss space is a complex high dimensional space often with infinite
 many local minima that can lead the model to a worse fit than would be possible 
 otherwise. \citationneeded
 \subsection{Recurrent Neural Networks}
+\label{RNN Theory}
 \begin{figure}
     \input{figures/tikz/rnn.tex}
     \caption{Illustration of an RNN cell. The squared Tanh indicated a neural 
