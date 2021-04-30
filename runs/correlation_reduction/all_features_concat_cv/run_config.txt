@@ -22,4 +22,4 @@ concat_static: True
 evaluate_on_epoch: True
 early_stopping: False
 early_stopping_steps: 5
-attribute_selection_file: /home/bernhard/git/Master-Thesis/runs/correlation_reduction/all_features_fixed_cv/use_features.txt
+attribute_selection_file: use_features.txt
