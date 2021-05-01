@@ -1,7 +1,11 @@
 In this chapter we present our results in chronological order. Many of the results 
-are found based on earlier results, so we find it natural to include some amount 
+ARE Found based on earlier results, so we find it natural to include some amount 
 of discussion of the results as they are presented to be able to argue for why we 
 approach the problem the way we do further down.
+
+\begin{table}
+    \caption{Hyperparameters chosen for each model in Table \ref{all models}.}
+\end{table}
 \section{CAMELS-GB}
 In this sections we present the results related to model selection and feature 
 importance when training and predicting on CAMELS-GB \citep{CAMELS_GB}.
@@ -61,6 +65,7 @@ performance on the cross validated train set.
 %problem with this model was that it achieved an $R^2$ score of $\approx 0.5$, meaning 
 %it does not actually explain the relationship well. We therefore choose to change 
 %strategy for feature selection. 
+\begin{comment}
 \begin{figure}
     \includegraphics{{correlation_reduction/all_features/corr_and_dendrogram}.pdf}
     \caption{The Pearson correlation matrix and the corresponding hierarchial
@@ -87,10 +92,10 @@ to the permutation test}
 
 
 
-
 \begin{figure}
     \centering
     \includegraphics{{CDFs/mixed_model_comparisons}.pdf}
     \caption{top kjeks}
     \label{main cdf}
 \end{figure}
+\end{comment}

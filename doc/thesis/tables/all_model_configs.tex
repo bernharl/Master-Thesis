@@ -1,23 +1,23 @@
-\begin{tabular}{llll}
+\begin{tabular}{lllll}
     \toprule
-    Label & attribute subset & batch size & dropout rate\\
+    Label & attribute subset & batch size & dropout \\
     \midrule
-    GB$_\text{ea-lstm, all}$ & a &  1536 \\
-    GB$_\text{lstm, all}$ & a & 1024 \\
-    GB$_\text{ea-lstm, chosen}$ & b & 1152 \\
-    GB$_\text{lstm, chosen}$ & b & 1280 \\
-    GB$_\text{none}$ & n/a & 1280 \\
-    US$_\text{Kratzert}$  & c & 1024 \\
-    US$_\text{none}$  & n/a & 2048 \\
-    Mixed$_\text{ea-lstm}$ & d & 1024 \\
-    Mixed$_\text{lstm}$ & d & 1024 \\
-    Mixed$_\text{none}$ & n/a & 1024 \\
-    Transfer$_\text{GB, ea-lstm}$ & d  & 1024 \\
-    Transfer$_\text{GB, lstm}$ & d  & 4096 \\
-    Transfer$_\text{GB, none}$ & n/a & 1024 \\
-    Transfer$_\text{US, ea-lstm}$ & d & 4096 \\
-    Transfer$_\text{US, lstm}$  & d & 4096 \\ 
-    Transfer$_\text{US, none}$  & n/a & 4096 \\
-    Transfer$_\text{US, ea-lstm 2}$ & e & 2048 \\
+    GB$_\text{ea-lstm, all}$ & a &  1536  & 0\\
+    GB$_\text{lstm, all}$ & a & 1024 & 0  \\
+    GB$_\text{ea-lstm, chosen}$ & b & 1152 & 0 \\
+    GB$_\text{lstm, chosen}$ & b & 1280 & 0\\
+    GB$_\text{none}$ & n/a & 1280 & 0.4 NOTE TRAIN NEW MODEL!!!!!!\\
+    US$_\text{Kratzert}$  & c & 1024 & 0.4 \\
+    US$_\text{none}$  & n/a & 2048 & 0.4\\
+    Mixed$_\text{ea-lstm}$ & d & 1024 & 0.4\\
+    Mixed$_\text{lstm}$ & d & 1024 & 0.4\\
+    Mixed$_\text{none}$ & n/a & 1024 & 0.4\\
+    Transfer$_\text{GB, ea-lstm}$ & d  & 1024 & 0.4 \\
+    Transfer$_\text{GB, lstm}$ & d  & 4096 & 0.4\\
+    Transfer$_\text{GB, none}$ & n/a & 1024 & 0.4 \\
+    Transfer$_\text{US, ea-lstm}$ & d & 4096 & 0.4 \\
+    Transfer$_\text{US, lstm}$  & d & 4096 & 0.4 \\ 
+    Transfer$_\text{US, none}$  & n/a & 4096 & 0.4 \\
+    Transfer$_\text{US, ea-lstm 2}$ & e & 2048 & 0.4 \\
 
 \end{tabular}
