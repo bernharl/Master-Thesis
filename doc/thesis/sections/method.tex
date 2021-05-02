@@ -102,7 +102,12 @@ because of the nature of training and validating on different datasets.
 
 Table \ref{all models} shows all trained models from which results are presented in this 
 thesis. The largest differences between these models are often which basin attributes 
-are included in the training process. One should be able to reproduce the results 
+are included in the training process. Other relevant hyperparameters are set equal 
+to the model configuration in \citet{lstm_second_paper}. For CAMELS-GB the dates included 
+in the training process are time daily time steps from October 10th 1971 to September 
+30th 2015.
+For CAMELS the dates used are January 1st 1980 to December 31st 2008.
+One should be able to reproduce the results 
 of this work using CamelsML Table \ref{attribute transfer}, \ref{all models} and \ref{attribute table}. 
 Doing exhaustive validation to decide which subset of attributes to use is not 
 feasible with the amount of attributes present in the data of interest. What we instead 

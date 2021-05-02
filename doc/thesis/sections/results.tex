@@ -1,14 +1,29 @@
-In this chapter we present our results in chronological order. Many of the results 
-ARE Found based on earlier results, so we find it natural to include some amount 
-of discussion of the results as they are presented to be able to argue for why we 
-approach the problem the way we do further down.
+In this chapter we present the results relevant to our discussed topics in the 
+next chapter. To keep this chapter structured in a way that makes it easy to 
+look up we divide our results into four main sections presenting model importance 
+and feature importance for four cases:
+\begin{enumerate}
+    \item Models trained on CAMELS-GB \citep{CAMELS_GB}.
+    \item Models trained on CAMELS \citep{CAMELS_US} in additiion to traditional 
+        models provided by \citationneeded.
+    \item Models trained on a dataset comprised of both CAMELS and CAMELS-GB.
+    \item Models trained on CAMELS and validated on CAMELS-GB and vice-versa.
+\end{enumerate}
 
-\begin{table}
-    \caption{Hyperparameters chosen for each model in Table \ref{all models}.}
-\end{table}
-\section{CAMELS-GB}
+\section{Models trained on CAMELS-GB}
 In this sections we present the results related to model selection and feature 
 importance when training and predicting on CAMELS-GB \citep{CAMELS_GB}.
+
+\begin{figure}
+    \includegraphics{{results_section/camels_gb/cheat/overfit_performance}.pdf}
+\caption{Performance of model trained on CAMELS-GB with access to attributes 
+    derived from the outcome.}
+    \label{cheat model}
+\end{figure}
+We begin by presenting the performance of a model which has access to features 
+derived from streamflow. The rationale for this is described in Chapter \ref{Feature selection}.
+Figure \ref{cheat model} shows the performance of a model using all time series and 
+all numerical static attributes of CAMELS-GB.
 \subsection{Performance}
 \begin{figure}
     \centering
@@ -17,10 +32,7 @@ importance when training and predicting on CAMELS-GB \citep{CAMELS_GB}.
     \label{CAMELS-GB CDF validation}
 \end{figure}
 \subsection{Importance}
-\begin{figure}
-\caption{Model trained with access to attributes derived from the outcome.}
-\end{figure}
-\section{CAMELS}
+\section{Models trained CAMELS}
 \subsection{Performance}
 \begin{figure}
     \centering
@@ -29,7 +41,7 @@ importance when training and predicting on CAMELS-GB \citep{CAMELS_GB}.
     \label{CAMELS-US CDF validation}
 \end{figure}
 \subsection{Importance}
-\section{Mixed model}
+\section{Models trained on CAMELS and CAMELS-GB}
 \subsection{Performance}
 \begin{figure}
     \centering
@@ -38,7 +50,7 @@ importance when training and predicting on CAMELS-GB \citep{CAMELS_GB}.
     \label{mixed CDF validation}
 \end{figure}
 \subsection{Importance}
-\section{Transfer learning}
+\section{Models trained for transfer learning between CAMELS and CAMELS-GB}
 \subsection{Performance}
 \begin{figure}
     \centering
