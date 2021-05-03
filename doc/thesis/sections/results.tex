@@ -12,18 +12,12 @@ and feature importance for four cases:
 
 \section{Models trained on CAMELS-GB}
 In this sections we present the results related to model selection and feature 
-importance when training and predicting on CAMELS-GB \citep{CAMELS_GB}.
+importance when training and predicting on CAMELS-GB \citep{CAMELS_GB}. To act 
+as a proof of concept of the feature importance method described in Chapter 
+\ref{Feature selection} we also include the performance and feature importance of 
+a model trained using dataset a (see Table \ref{attribute table}) in addition to
+static attributes directly derived from the observed outcome.
 
-\begin{figure}
-    \includegraphics{{results_section/camels_gb/cheat/overfit_performance}.pdf}
-\caption{Performance of model trained on CAMELS-GB with access to attributes 
-    derived from the outcome.}
-    \label{cheat model}
-\end{figure}
-We begin by presenting the performance of a model which has access to features 
-derived from streamflow. The rationale for this is described in Chapter \ref{Feature selection}.
-Figure \ref{cheat model} shows the performance of a model using all time series and 
-all numerical static attributes of CAMELS-GB.
 \subsection{Performance}
 \begin{figure}
     \centering
