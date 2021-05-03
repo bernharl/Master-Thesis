@@ -22,16 +22,29 @@ static attributes directly derived from the observed outcome.
 \begin{figure}
     \centering
     \includegraphics{{results_section/camels_gb/cdf_val}.pdf}
-    \caption{hi}
+    \caption{Cumulative distribution function of the NSE score of LSTM models trained 
+    on CAMELS-GB \citep{CAMELS_GB}. "Overfit model" is a model deliberately trained 
+    using static basin attributes derived from the runoff time series of the basins. 
+    The other models are described in Table \ref{all models}.}
     \label{CAMELS-GB CDF validation}
 \end{figure}
+
 \subsection{Importance}
 \section{Models trained CAMELS}
 \subsection{Performance}
 \begin{figure}
     \centering
     \includegraphics{{results_section/camels_us/cdf_val}.pdf}
-    \caption{hi}
+    \caption{Cumulative distribution function of the NSE score of models trained 
+    on CAMELS \citep{CAMELS_US}. "VIC" is the Variable Infiltration Capacity model 
+    calibrated on CAMELS. "SAC-SMA" is the SACramento Soil Moisture Accounting 
+    model calibrated on CAMELS. 
+    These benchmarks are provided by \citet{CAMELS_hydroshare} and are originally 
+    created by \citet{VICbench} and are trained per-basin as opposed to the other 
+    models.
+    The other models are described in Table \ref{all models} and are based on the 
+    models originally trained by \citet{lstm_third_paper} but retrained for better 
+    comparison with the other LSTM models in this thesis.}
     \label{CAMELS-US CDF validation}
 \end{figure}
 \subsection{Importance}
@@ -40,7 +53,11 @@ static attributes directly derived from the observed outcome.
 \begin{figure}
     \centering
     \includegraphics{{results_section/mixed/cdf_val}.pdf}
-    \caption{hi}
+    \caption{Cumulative distribution function of the NSE score of LSTM models trained 
+    on a dataset consisting of both CAMELS \citet{CAMELS_US} and CAMELS-GB \citep{CAMELS_GB}. 
+    The models are described in Table \ref{all models}. The top figure shows the 
+    performance of the models on CAMELS-GB and the bottom figure shows the performance 
+    on CAMELS.}
     \label{mixed CDF validation}
 \end{figure}
 \subsection{Importance}
@@ -49,7 +66,11 @@ static attributes directly derived from the observed outcome.
 \begin{figure}
     \centering
     \includegraphics{{results_section/transfer/cdf_val}.pdf}
-    \caption{hi}
+    \caption{Cumulative distribution function of the NSE score of LSTM models trained 
+    on CAMELS \citep{CAMELS_US} and validated on a validation part of CAMELS as well as 
+    the entirety of CAMELS-GB \citep{CAMELS_GB}. The top figure shows the 
+    performance of the models on CAMELS-GB and the bottom figure shows the performance 
+    on CAMELS.}
     \label{transfer CDF validation}
 \end{figure}
 \subsection{Importance}
