@@ -1,6 +1,6 @@
 In this chapter we present the results relevant to our discussed topics in the 
 next chapter. To keep this chapter structured in a way that makes it easy to 
-look up we divide our results into four main sections presenting model importance 
+look up we divide our results into five main sections presenting model importance 
 and feature importance for four cases:
 \begin{enumerate}
     \item Models trained on CAMELS-GB \citep{CAMELS_GB}.
@@ -8,10 +8,12 @@ and feature importance for four cases:
         models provided by \citationneeded.
     \item Models trained on a dataset comprised of both CAMELS and CAMELS-GB.
     \item Models trained on CAMELS and validated on CAMELS-GB and vice-versa.
+    \item Models refit on the full train set and valiated on the test set not 
+        touched in sections 1 - 4.
 \end{enumerate}
 
 \section{Models trained on CAMELS-GB}
-In this sections we present the results related to model selection and feature 
+In this section we present the results related to model selection and feature 
 importance when training and predicting on CAMELS-GB \citep{CAMELS_GB}. To act 
 as a proof of concept of the feature importance method described in Chapter 
 \ref{Feature selection} we also include the performance and feature importance of 
@@ -31,6 +33,7 @@ static attributes directly derived from the observed outcome.
 
 \subsection{Importance}
 \section{Models trained CAMELS}
+In this section we present 
 \subsection{Performance}
 \begin{figure}
     \centering
@@ -42,6 +45,10 @@ static attributes directly derived from the observed outcome.
     These benchmarks are provided by \citet{CAMELS_hydroshare} and are originally 
     created by \citet{VICbench} and are trained per-basin as opposed to the other 
     models.
+    "NWM" is a benchmark of the National Water Model run on CAMELS. (CHECK IF PER-BASIN, 
+    I THINK ITS UNGAUGED!!!). This benchmark is available without any licensing at 
+    \citet{NWMbench} and we use an already preprocessed version provided by 
+    \citet{lstm_third_paper}.
     The other models are described in Table \ref{all models} and are based on the 
     models originally trained by \citet{lstm_third_paper} but retrained for better 
     comparison with the other LSTM models in this thesis.}
