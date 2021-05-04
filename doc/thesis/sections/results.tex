@@ -30,10 +30,27 @@ static attributes directly derived from the observed outcome.
     The other models are described in Table \ref{all models}.}
     \label{CAMELS-GB CDF validation}
 \end{figure}
+Figure \ref{CAMELS-GB CDF validation} shows the performance of several LSTM models 
+trained on CAMELS-GB \citep{CAMELS_GB}. The overfit model is trained on dataset a 
+in Table \ref{attribute table} in addition to attributes directly derived from the 
+observed outcome.
+The overfit model significantly outperforms all other models.
+ Of the other models there seems to be generally two levels of 
+performance. The models using attribute subsets a and b perform similarly while 
+the models trained with no attributes in general perform worse, with or 
+without dropout.
+There seems to be little overall difference in performance between EA-LSTM and 
+ordinary LSTM models.
+ All ungauged  models perform with a negative NSE value for 
+approximately 10\% of the basins.
 
 \subsection{Importance}
-\section{Models trained CAMELS}
-In this section we present 
+\section{Models trained on CAMELS}
+In this section we present the results related to model selection and feature 
+importance when training and predicting on CAMELS \citep{CAMELS_US}. This section 
+is meant to show whether we are able to produce results similar to the those of 
+\citet{lstm_third_paper} in a way that is comparable to the rest of our experiments.
+In addition we present apparent feature importance of these trained models.
 \subsection{Performance}
 \begin{figure}
     \centering
