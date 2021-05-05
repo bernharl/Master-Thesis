@@ -37,8 +37,8 @@ observed outcome.
 The overfit model significantly outperforms all other models.
  Of the other models there seems to be generally two levels of 
 performance. The models using attribute subsets a and b perform similarly while 
-the models trained with no attributes in general perform worse, with or 
-without dropout.
+the models trained with no attributes in general perform worse. Enabling dropout 
+slightly decreases performance.
 There seems to be little overall difference in performance between EA-LSTM and 
 ordinary LSTM models.
  All ungauged  models perform with a negative NSE value for 
@@ -71,8 +71,21 @@ In addition we present apparent feature importance of these trained models.
     comparison with the other LSTM models in this thesis.}
     \label{CAMELS-US CDF validation}
 \end{figure}
+Figure \ref{CAMELS-US CDF validation} shows the performance of our reimplementation 
+of the model created by \citet{lstm_third_paper} along with three traditional 
+hydrological models. The results here indicate that the process-driven models 
+VIC and NWM perform similarly, SAC-SMA and an LSTM without basin attributes perform 
+similarly and better than the process-driven model and that there is a clear difference 
+in performance in favour of US$_\text{Kratzert}$. The LSTM models both perform 
+with an NSE value below zero for approximately five percent of the basins used 
+for validation. 
 \subsection{Importance}
 \section{Models trained on CAMELS and CAMELS-GB}
+In this section we present results related to model selection and feature importance 
+when training and validating using both CAMELS and CAMELS-GB as a combined dataset.
+This section is meant to show whether we can obtain satisfactory performance on 
+ungauged basins from both datasets with the same model. 
+
 \subsection{Performance}
 \begin{figure}
     \centering
@@ -81,11 +94,23 @@ In addition we present apparent feature importance of these trained models.
     on a dataset consisting of both CAMELS \citet{CAMELS_US} and CAMELS-GB \citep{CAMELS_GB}. 
     The models are described in Table \ref{all models}. The top figure shows the 
     performance of the models on CAMELS-GB and the bottom figure shows the performance 
-    on CAMELS.}
+    on CAMELS. The top figure is the cross validated perforamnce on CAMELS-GB, the 
+    bottom figure on CAMELS.}
     \label{mixed CDF validation}
 \end{figure}
+Figure \ref{mixed CDF validation} shows the cross validated performance of three 
+LSTM models trained on a dataset consisting of both CAMELS and CAMELS-GB. 
+On CAMELS-GB the models with basin attributes perform significantly better than 
+the model trained without them. This also applies to the performance on CAMELS, 
+but here the difference is smaller. The EA-LSTM and LSTM models with basin attributes 
+perform similarly, having a median NSE of $~0.77$ on CAMELS-GB and $~0.65$ on CAMELS.
+
 \subsection{Importance}
 \section{Models trained for transfer learning between CAMELS and CAMELS-GB}
+In this section we present results related to model selection and feature importance 
+when training on CAMELS-GB and validating on CAMELS and vice-versa. This section 
+is meant to show whether we can use information in one dataset to be able to 
+satisfyingly make predictions on the other.
 \subsection{Performance}
 \begin{figure}
     \centering
@@ -97,10 +122,17 @@ In addition we present apparent feature importance of these trained models.
     on CAMELS.}
     \label{transfer CDF validation}
 \end{figure}
+Figure \ref{transfer CDF validation} shows ....
 \subsection{Importance}
 \section{Test performance of best models}
-Note that when doing model selection we do not look at test set performance, only 
-performance on the cross validated train set.
+\begin{figure}
+\centering
+\includegraphics{{results_section/camels_gb/cdf_test}.pdf}
+\caption{Something something test results}
+\label{test gb}
+\end{figure}
+In this section we present test results from the models we choose from Section 1 - 4 
+in this chapter and compare to the validation performance.
 %\begin{table}
 %    \begin{adjustbox}{width=\textwidth}
 %    \input{tables/linreg_no_static.tex}
