@@ -104,7 +104,8 @@ On CAMELS-GB the models with basin attributes perform significantly better than
 the model trained without them. This also applies to the performance on CAMELS, 
 but here the difference is smaller. The EA-LSTM and LSTM models with basin attributes 
 perform similarly, having a median NSE of $~0.77$ on CAMELS-GB and $~0.65$ on CAMELS.
-
+Compared to the best performing models in Figure \ref{CAMELS-GB CDF validation} and \ref{CAMELS-US CDF validation} 
+the performance of the mixed model is comparable, although lower.
 \subsection{Importance}
 \section{Models trained for transfer learning between CAMELS and CAMELS-GB}
 In this section we present results related to model selection and feature importance 
@@ -122,7 +123,18 @@ satisfyingly make predictions on the other.
     on CAMELS.}
     \label{transfer CDF validation}
 \end{figure}
-Figure \ref{transfer CDF validation} shows ....
+Figure \ref{transfer CDF validation} shows models trained on CAMELS and validated on 
+CAMELS-GB and vice-versa. No models trained on CAMELS-GB perform at a satisfactory level 
+on basins from CAMELS. The models trained on CAMELS all perform at a lower level 
+on CAMELS-GB than models that are trained on CAMELS-GB and the best performing 
+transfer model is Transfer$_\text{US, none}$. This model has no access to static 
+basin attributes. The transfer models also perform worse on the validation part of 
+the dataset they are trained on as the chosen epoch is based on the performance 
+on both datasets. This is illustrated in Figure \ref{training progress transfer}, 
+which shows the performance per epoch of transfer$_\text{us, none}$ and transfer$_\text{gb, none}$ 
+per training epoch on both CAMELS and CAMELS-GB. We observe that the transferred 
+performance decreases after number epochs while still improving on the validation 
+part of the trained dataset.  
 \subsection{Importance}
 \section{Test performance of best models}
 \begin{figure}
