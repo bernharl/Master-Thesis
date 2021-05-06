@@ -36,12 +36,14 @@ in Table \ref{attribute table} in addition to attributes directly derived from t
 observed outcome.
 The overfit model significantly outperforms all other models.
  Of the other models there seems to be generally two levels of 
-performance. The models using attribute subsets a and b perform similarly while 
+performance. The models using attribute subsets a and b perform similarly, although 
+in the favour of dataset a, while 
 the models trained with no attributes in general perform worse. Enabling dropout 
 slightly decreases performance.
 There seems to be little overall difference in performance between EA-LSTM and 
-ordinary LSTM models.
- All ungauged  models perform with a negative NSE value for 
+LSTM models, apart from $GB_{lstm, all}$ which performs with a negative NSE value 
+for a smaller fraction of the basins.
+ All other ungauged  models perform with a negative NSE value for 
 approximately 10\% of the basins.
 
 \subsection{Importance}
@@ -123,6 +125,13 @@ satisfyingly make predictions on the other.
     on CAMELS.}
     \label{transfer CDF validation}
 \end{figure}
+\begin{figure}
+\includegraphics{{results_section/transfer/training_progress}.pdf}
+\caption{Training performance per epoch of Transfer$_\text{US, none}$ and Transfer$_\text{GB, none}$ 
+on CAMELS-GB (top) and CAMELS (bottom). The orange line indicates the median NSE, 
+the green line indicates the mean NSE.}
+\label{training progress transfer}
+\end{figure}
 Figure \ref{transfer CDF validation} shows models trained on CAMELS and validated on 
 CAMELS-GB and vice-versa. No models trained on CAMELS-GB perform at a satisfactory level 
 on basins from CAMELS. The models trained on CAMELS all perform at a lower level 
@@ -131,10 +140,15 @@ transfer model is Transfer$_\text{US, none}$. This model has no access to static
 basin attributes. The transfer models also perform worse on the validation part of 
 the dataset they are trained on as the chosen epoch is based on the performance 
 on both datasets. This is illustrated in Figure \ref{training progress transfer}, 
-which shows the performance per epoch of transfer$_\text{us, none}$ and transfer$_\text{gb, none}$ 
-per training epoch on both CAMELS and CAMELS-GB. We observe that the transferred 
-performance decreases after number epochs while still improving on the validation 
-part of the trained dataset.  
+which shows boxplots of the performance per epoch of Transfer$_\text{US, none}$ and Transfer$_\text{GB, none}$ 
+per training epoch on both CAMELS-GB (top) and CAMELS (bottom). We observe that 
+the performance of Transfer$_\text{US, none}$ increases on CAMELS-GB up until 
+epoch 5 and then gradually decreases while it increases steadily and converges 
+on CAMELS around epoch 10. The epoch optimized for both datasets which is shown in 
+Figure \ref{transfer CDF validation} is epoch 9. For Transfer$_\text{GB, none}$ 
+this is more apparent. Epoch 1 is the best epoch for the performance on CAMELS, 
+while the performance on CAMELS-GB seems to increase for every epoch. The optimized 
+epoch found for this model is epoch 24.
 \subsection{Importance}
 \section{Test performance of best models}
 \begin{figure}
