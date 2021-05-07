@@ -3,7 +3,7 @@ axes.titlesize : 12
 xtick.labelsize : 10
 ytick.labelsize : 10
 
-legend.fontsize : 10
+legend.fontsize : 8
 
 font.size : 10
 font.family        : serif
@@ -15,4 +15,11 @@ font.monospace     : Computer Modern Typewriter
 figure.figsize : 4.7747, 2.9509
 figure.dpi : 300
 
-text.usetex        : true
+lines.linewidth: 0.7
+patch.linewidth: 0.7
+boxplot.showmeans: True
+boxplot.meanline: True
+boxplot.flierprops.markersize: 2
+
+text.usetex         : true
+text.latex.preamble : \usepackage{amsmath}
