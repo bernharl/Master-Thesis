@@ -47,6 +47,14 @@ for a smaller fraction of the basins.
 approximately 10\% of the basins.
 
 \subsection{Importance}
+\begin{table}
+    \centering
+    \caption{Top and bottom four (ranked by median) attributes of the overfit model described earlier 
+    in this section according to the permutation test. The columns are percentiles.}
+    \input{{tables/results_section/overfit_importance}.tex}
+    \label{overfit table}
+\end{table}
+Table \ref{overfit table} shows 5th, 25th, 50th, 75th and 95th percentiles of the importances of the top and bottom four basin attributes of the overfit model according to the permutation test described in Chapter \ref{Feature selection}. We observe stuff and things (need to rerun test lol).
 \section{Models trained on CAMELS}
 In this section we present the results related to model selection and feature 
 importance when training and predicting on CAMELS \citep{CAMELS_US}. This section 
