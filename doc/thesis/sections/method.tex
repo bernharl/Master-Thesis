@@ -261,7 +261,9 @@ according to the current model. It is then important to remember that this is no
 the true importance of the feature, only the importance the model thinks the feature 
 has. The scoring method $s$ can be any model scoring statistic, often the $R^2$. 
 score for regression.
-In our case we employ (\ref{NSE}) as the scoring metric.
+In our case we employ (\ref{NSE}) as the scoring metric and we only consider basins 
+with an NSE of at least 0.5, as an NSE / R$^2$ score indicates that a model's 
+prediction is at least as good as always predicting the average outcome.
 
 A major problem for this method is that (\ref{Permutation equation}) could give 
 unrealistically low significance to features that are highly correlated to other 

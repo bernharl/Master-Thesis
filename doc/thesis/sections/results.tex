@@ -49,12 +49,36 @@ approximately 10\% of the basins.
 \subsection{Importance}
 \begin{table}
     \centering
-    \caption{Top and bottom four (ranked by median) attributes of the overfit model described earlier 
+    \caption{Top 20 (ranked by median importance) attributes of the overfit model described earlier 
     in this section according to the permutation test. The columns are percentiles.}
     \input{{tables/results_section/overfit_importance}.tex}
     \label{overfit table}
 \end{table}
-Table \ref{overfit table} shows 5th, 25th, 50th, 75th and 95th percentiles of the importances of the top and bottom four basin attributes of the overfit model according to the permutation test described in Chapter \ref{Feature selection}. We observe stuff and things (need to rerun test lol).
+Table \ref{overfit table} shows 5th, 25th, 50th, 75th and 95th percentiles of the 
+importances of the top 20 basin attributes of the overfit model according to the 
+permutation test described in Chapter \ref{Feature selection}. We observe that the 
+attribute with the highest importance in all quantiles is Q95, which is the 
+95th percentile runoff derived from the observed runoff time series. Q95 has an 
+importance of at least 0.05 for 75\% of the basins in the training set. At the 
+second spot we have baseflow\_index\_ceh. This attribute has median and 25th percentile 
+importances similar to those of Q95, but is significantly less important for 25\% 
+of the basins in the training set.
+\begin{table}
+    \centering
+    \caption{Top 20 (ranked by median importance) attributes of GB$_\text{lstm, all}$ 
+    according to the permutation test. The columns are percentiles.}
+    \input{{tables/results_section/all_features_concat_seq_len_importance}.tex}
+    \label{all concat table}
+\end{table}
+
+The top 20 importances decided by US$_\text{lstm, all}$ (cross validated) using the permutation test 
+are shown in Table \ref{all concat table}. The top two features are low\_prec\_dur 
+and low\_prec\_freq, these have significantly higher 75th percentile and upward 
+importances than all other attributes. The third most important attribute is 
+tawc and has a 75th percentile importance that is roughly half of the above ranked 
+attribute. The highest ranked attribute has an importance of 0.09 for 25\% of the 
+basins in the training set.
+
 \section{Models trained on CAMELS}
 In this section we present the results related to model selection and feature 
 importance when training and predicting on CAMELS \citep{CAMELS_US}. This section 
@@ -65,7 +89,7 @@ In addition we present apparent feature importance of these trained models.
 \begin{figure}
     \centering
     \includegraphics{{results_section/camels_us/cdf_val}.pdf}
-    \caption{Cumulative distribution function of the NSE score of models trained 
+    \caption[lol]{Cumulative distribution function of the NSE score of models trained 
     on CAMELS \citep{CAMELS_US}. "VIC" is the Variable Infiltration Capacity model 
     calibrated on CAMELS. "SAC-SMA" is the SACramento Soil Moisture Accounting 
     model calibrated on CAMELS. 
