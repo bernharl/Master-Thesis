@@ -71,13 +71,21 @@ of the basins in the training set.
     \label{all concat table}
 \end{table}
 
-The top 20 importances decided by US$_\text{lstm, all}$ (cross validated) using the permutation test 
+The top 20 importances found by US$_\text{lstm, all}$ (cross validated) using the permutation test 
 are shown in Table \ref{all concat table}. The top two features are low\_prec\_dur 
 and low\_prec\_freq, these have significantly higher 75th percentile and upward 
 importances than all other attributes. The third most important attribute is 
 tawc and has a 75th percentile importance that is roughly half of the above ranked 
 attribute. The highest ranked attribute has an importance of 0.09 for 25\% of the 
-basins in the training set.
+basins in the training set. Of these 20 attributes seven (low\_prec\_dur, low\_prec\_frec, 
+high\_prec\_frec, p\_seasonality, frac\_snow, p\_mean, high\_prec\_dur) are climatic indices 
+derived from the time series the model is trained on. Aridity is also a climatic indice, 
+but is not based on any time series accessed by the model. Three attributes (grass\_perc, 
+crop\_perc, inwater\_perc) are land cover attributes. Three attribtues (tawc, 
+root\_depth, conductivity\_hypres) are soil attributes. Four attributes (elev\_90,
+elev\_10, elev\_50, area) are topographic. Two attributs (no\_gw\_perc and 
+inter\_mod\_perc) are hydrogeologic attributes. Details of these attributes 
+can be found in Table 2 in \citet{CAMELS_GB} and sources therein.
 
 \section{Models trained on CAMELS}
 In this section we present the results related to model selection and feature 
@@ -191,3 +199,9 @@ epoch found for this model on both datasets is epoch 24.
 \end{figure}
 In this section we present test results from the models we choose from Section 1 - 4 
 in this chapter and compare to the validation performance.
+\begin{figure}
+    \centering
+    \includegraphics{{results_section/camels_us/cdf_test}.pdf}
+    \caption{lol}
+    \label{test us}
+\end{figure}
