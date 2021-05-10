@@ -46,6 +46,16 @@ for a smaller fraction of the basins.
  All other ungauged  models perform with a negative NSE value for 
 approximately 10\% of the basins.
 
+\begin{figure}
+    \centering
+    \includegraphics{results_section/camels_gb/prediction_best_all_concat_seq_len_cv.pdf}
+    \caption{Highest scoring prediction on the validation set  made using 
+    GB$_\text{lstm, all}$ compared to the observed outcome. "Obs" is observed runoff, 
+    "Sim" is predicted runoff. The basin data is taken from CAMELS-GB \citep{CAMELS_GB}.}
+    \label{best prediction all concat seq len}
+\end{figure}
+The highest scoring validation set prediction made using GB$_\text{lstm, all}$ is 
+shown in Figure \ref{best prediction all concat seq len}. It has an NSE score of $\approx 0.96$.
 \subsection{Importance}
 \begin{table}
     \centering
@@ -121,7 +131,29 @@ similarly and better than the process-driven model and that there is a clear dif
 in performance in favour of US$_\text{Kratzert}$. The LSTM models both perform 
 with an NSE value below zero for approximately five percent of the basins used 
 for validation. 
+\begin{figure}
+    \centering
+    \includegraphics{results_section/camels_us/prediction_best_kratzert.pdf}
+    \caption{Highest scoring prediction on the validation set  made using 
+    US$_\text{Kratzert}$ compared to the observed outcome. "Obs" is observed runoff, 
+    "Sim" is predicted runoff. The basin data is taken from CAMELS \citep{CAMELS_US}.}
+    \label{best prediction kratzert}
+\end{figure}
+
+The highest scoring validation set prediction made using US$_\text{Kratzert}$ is 
+shown in Figure \ref{best prediction kratzert}. It has an NSE score of $\approx 0.92$.
 \subsection{Importance}
+\begin{table}
+    \centering
+    \caption{Permutation importance of all static basin attributes used by 
+    US$_\text{Kratzert}$ (same model configuration as in \citet{lstm_third_paper} 
+    refit to the cross validation split used in this thesis), ranked by median 
+    importance. ADD MORE INFO ONCE RUN IS DONE!!!}
+    \input{{tables/results_section/kratzert_features_importance}.tex}
+    \label{kratzert importance}
+\end{table}
+The permutation importances of the static basin attributes used by US$_\text{Kratzert}$ 
+ranked by median importance are shown in Table \ref{kratzert importance}.
 \section{Models trained on CAMELS and CAMELS-GB}
 In this section we present results related to model selection and feature importance 
 when training and validating using both CAMELS and CAMELS-GB as a combined dataset.
@@ -191,17 +223,29 @@ while the performance on CAMELS-GB seems to increase for every epoch. The optimi
 epoch found for this model on both datasets is epoch 24.
 \subsection{Importance}
 \section{Test performance of best models}
+In this section we present test results from the models we choose from Section 1 - 4 
+in this chapter and compare with the cross validation performance. The test 
+performance is meant to measure real world performance and not to compare performance 
+of models to do model selection.
 \begin{figure}
 \centering
 \includegraphics{{results_section/camels_gb/cdf_test}.pdf}
-\caption{Something something test results}
+    \caption{GB$_\text{lstm, all}$ refit on the full dataset and validated on the 
+    test set compared with the cross validated performance on the train set.}
 \label{test gb}
 \end{figure}
-In this section we present test results from the models we choose from Section 1 - 4 
-in this chapter and compare to the validation performance.
 \begin{figure}
     \centering
     \includegraphics{{results_section/camels_us/cdf_test}.pdf}
-    \caption{lol}
+    \caption{US$_\text{Kratzert}$ refit on the full dataset and validated on the 
+    test set compared with the cross validated performance on the train set.}
     \label{test us}
 \end{figure}
+Figure \ref{test gb} shows GB$_\text{lstm, all}$ refit on the full training set, 
+trained for the optimal amount of epochs found via cross validation and validated 
+on the test set. This is compared to the cross validated performance of the same 
+model. We observe that cross validated and testing performance are similar.
+
+Figure \ref{test us} shows US$_\text{Kratzert}$ refit on the full training set 
+compared to the cross validated performance. The performance is similar, although 
+notably lower between the 40th and 70th percentile performant basins.
