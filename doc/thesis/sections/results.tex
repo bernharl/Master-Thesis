@@ -55,7 +55,8 @@ approximately 10\% of the basins.
     \label{best prediction all concat seq len}
 \end{figure}
 The highest scoring validation set prediction made using GB$_\text{lstm, all}$ is 
-shown in Figure \ref{best prediction all concat seq len}. It has an NSE score of $\approx 0.96$.
+shown in Figure \ref{best prediction all concat seq len}. It has an NSE score of $\approx 0.96$. 
+Most of the peaks are undervalued by the prediction made by the model.
 \subsection{Importance}
 \begin{table}
     \centering
@@ -141,19 +142,23 @@ for validation.
 \end{figure}
 
 The highest scoring validation set prediction made using US$_\text{Kratzert}$ is 
-shown in Figure \ref{best prediction kratzert}. It has an NSE score of $\approx 0.92$.
+shown in Figure \ref{best prediction kratzert}. It has an NSE score of $\approx 0.92$. 
+As in the previous section we observe that the peak discharges are often either over 
+or undervalued.
 \subsection{Importance}
 \begin{table}
     \centering
     \caption{Permutation importance of all static basin attributes used by 
     US$_\text{Kratzert}$ (same model configuration as in \citet{lstm_third_paper} 
     refit to the cross validation split used in this thesis), ranked by median 
-    importance. ADD MORE INFO ONCE RUN IS DONE!!!}
+    importance.}
     \input{{tables/results_section/kratzert_features_importance}.tex}
     \label{kratzert importance}
 \end{table}
 The permutation importances of the static basin attributes used by US$_\text{Kratzert}$ 
-ranked by median importance are shown in Table \ref{kratzert importance}.
+ranked by median importance are shown in Table \ref{kratzert importance}. Three 
+out of the four top ranked features are also ranked in the top four by \cite{lstm_second_paper} 
+using the same feature subset but a different ranking method.
 \section{Models trained on CAMELS and CAMELS-GB}
 In this section we present results related to model selection and feature importance 
 when training and validating using both CAMELS and CAMELS-GB as a combined dataset.
@@ -180,7 +185,29 @@ but here the difference is smaller. The EA-LSTM and LSTM models with basin attri
 perform similarly, having a median NSE of $~0.77$ on CAMELS-GB and $~0.65$ on CAMELS.
 Compared to the best performing models in Figure \ref{CAMELS-GB CDF validation} and \ref{CAMELS-US CDF validation} 
 the performance of the mixed model is comparable, although lower.
+\begin{figure}
+    \centering
+    \includegraphics{{results_section/mixed/prediction_best_mixed_concat}.pdf}
+    \caption{Best predictions by Mixed$_\text{lstm}$ on CAMELS-GB (top) \citep{CAMELS_GB} 
+    and CAMELS (bot) \citep{CAMELS_US} including catchment IDs and NSE.}
+    \label{best prediction mixed concat}
+\end{figure}
+
+Figure \ref{best prediction mixed concat} shows the best predictions made by 
+Mixed$_\text{lstm}$ on CAMELS-GB and CAMELS. The best performing basin by US$_\text{Kratzert}$ 
+is the same as for Mixed$_\text{lstm}$. For CAMELS-GB we also include a prediction 
+made on basin 50001 as that is the best performing basin for GB$_\text{lstm, all}$.
+For CAMELS the best prediction of the combined model performs with an NSE 0.01 higher 
+than that of the model trained on CAMELS. For CAMELS-GB it performs 0.02 lower.
 \subsection{Importance}
+\begin{table}
+    \centering
+    \caption{Attribute importance ranked by median as found using the permutation 
+    test on Mixed$_\text{lstm}$. SPLIT GB AND US MAYBE??? DO IT WITHIN TABLE THOUGH!!!}
+    \label{importance mixed}
+\end{table}
+Table \ref{importance mixed} shows the attributes used by Mixed$_\text{importance mixed}$ 
+ranked by median importance as found using the permutation test.
 \section{Models trained for transfer learning between CAMELS and CAMELS-GB}
 In this section we present results related to model selection and feature importance 
 when training on CAMELS-GB and validating on CAMELS and vice-versa. This section 
@@ -221,7 +248,9 @@ Figure \ref{transfer CDF validation} is epoch 9. For Transfer$_\text{GB, none}$
 this is more apparent. Epoch 1 is the best epoch for the performance on CAMELS, 
 while the performance on CAMELS-GB seems to increase for every epoch. The optimized 
 epoch found for this model on both datasets is epoch 24.
-\subsection{Importance}
+
+As both cases show that the transfer learning works better without static attributes 
+we do not include an analysis of the importance in transfer learning case.
 \section{Test performance of best models}
 In this section we present test results from the models we choose from Section 1 - 4 
 in this chapter and compare with the cross validation performance. The test 
