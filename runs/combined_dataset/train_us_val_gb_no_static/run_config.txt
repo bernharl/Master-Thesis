@@ -2,6 +2,8 @@ train_start: 01101971
 train_end: 30092015
 val_start: 01101971
 val_end: 30092015
+test_start: 01101971
+test_end: 30092015
 epochs: 30
 learning_rate: 1e-3
 seq_length: 270

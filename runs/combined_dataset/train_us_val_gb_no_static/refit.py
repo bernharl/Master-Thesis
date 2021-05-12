@@ -3,7 +3,7 @@ from pathlib import Path
 from camelsml import load_config, evaluate, train
 from camelsml.utils import get_basin_list
 
-cfg = load_config(cfg_file="run_config.txt", device="cuda:0", num_workers=30)
+cfg = load_config(cfg_file="run_config.txt", device="cuda:0", num_workers=60)
 
 cfg["test_basin_file"] = (
     Path("..")
@@ -33,3 +33,4 @@ evaluate(cfg, split="test", epoch=cfg["epochs"], save_dir=cfg["run_dir"] / "gb")
 cfg["test_basin_file"] = (
     Path("..") / "train_us_val_gb" / "refit_splits" / "basins_test.txt"
 )
+evaluate(cfg, split="test", epoch=cfg["epochs"], save_dir=cfg["run_dir"] / "us")
