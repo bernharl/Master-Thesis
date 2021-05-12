@@ -15,7 +15,7 @@ clip_norm: True
 clip_value: 1
 dropout: 0.4
 seed: 19970204
-cache_data: True
+cache_data: False
 no_static: True
 concat_static: False
 # If evaluating:
@@ -23,6 +23,6 @@ evaluate_on_epoch: True
 early_stopping: False
 early_stopping_steps: 5
 attribute_dataset: camels_gb
-camels_us_root: /work/bernharl/camels_us
-camels_gb_root: /work/bernharl/camels_gb
+camels_us_root: /home/bernhard/git/datasets_masters/camels_us
+camels_gb_root: /home/bernhard/git/datasets_masters/camels_gb
 dataset: camels_us, camels_gb

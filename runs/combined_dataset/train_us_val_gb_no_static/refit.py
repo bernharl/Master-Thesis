@@ -14,14 +14,16 @@ cfg["test_basin_file"] = (
 )
 
 
-cfg["train_basin_file"] = Path("..") / "refit_splits" / "basins_train.txt"
+cfg["train_basin_file"] = (
+    Path("../train_us_val_gb") / "refit_splits" / "basins_train_us.txt"
+)
 cfg["evaluate_on_epoch"] = False
 
 cfg["run_dir"] = Path() / "refit"
 
 cfg["epochs"] = 9
 
-# train(cfg)
+train(cfg)
 finished_run = list(Path(cfg["run_dir"]).glob("*"))
 # if len(finished_run) != 1:
 #    raise RuntimeError(
@@ -31,6 +33,6 @@ finished_run = list(Path(cfg["run_dir"]).glob("*"))
 
 evaluate(cfg, split="test", epoch=cfg["epochs"], save_dir=cfg["run_dir"] / "gb")
 cfg["test_basin_file"] = (
-    Path("..") / "train_us_val_gb" / "refit_splits" / "basins_test.txt"
+    Path("..") / "train_us_val_gb" / "refit_splits" / "basins_test_us.txt"
 )
 evaluate(cfg, split="test", epoch=cfg["epochs"], save_dir=cfg["run_dir"] / "us")
