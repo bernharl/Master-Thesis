@@ -10,3 +10,6 @@ python setup_cv.py
 cd ../mixed
 echo setting up mixed training
 python setup_cv.py
+cd ..
+echo setting up US-GB refit 
+python setup_refit.py
