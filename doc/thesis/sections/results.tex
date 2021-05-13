@@ -203,7 +203,9 @@ than that of the model trained on CAMELS. For CAMELS-GB it performs 0.02 lower.
 \begin{table}
     \centering
     \caption{Attribute importance ranked by median as found using the permutation 
-    test on Mixed$_\text{lstm}$. SPLIT GB AND US MAYBE??? DO IT WITHIN TABLE THOUGH!!!}
+    test on Mixed$_\text{lstm}$.}
+    \resizebox{\textwidth}{!}{%
+        \input{{tables/results_section/mixed_concat_importance}.tex}}
     \label{importance mixed}
 \end{table}
 Table \ref{importance mixed} shows the attributes used by Mixed$_\text{importance mixed}$ 
@@ -256,6 +258,7 @@ In this section we present test results from the models we choose from Section 1
 in this chapter and compare with the cross validation performance. The test 
 performance is meant to measure real world performance and not to compare performance 
 of models to do model selection.
+\begin{comment}
 \begin{figure}
 \centering
 \includegraphics{{results_section/camels_gb/cdf_test}.pdf}
@@ -270,11 +273,23 @@ of models to do model selection.
     test set compared with the cross validated performance on the train set.}
     \label{test us}
 \end{figure}
-Figure \ref{test gb} shows GB$_\text{lstm, all}$ refit on the full training set, 
+\end{comment}
+\begin{figure}
+    \centering
+    \includegraphics{{results_section/test/test_cdf}.pdf}
+    \caption{From the top top: GB$_\text{lstm, all}$, US$_\text{Kratzert}$, Mixed$_\text{lstm}$ 
+    and Transfer$_\text{US, lstm, none}$ refit on their respective full train datasets
+    and validated on their test sets compared with the cross validated performance
+    on their train sets.}
+    \label{test cdf}
+\end{figure}
+The top plot in Figure \ref{test cdf} shows GB$_\text{lstm, all}$ refit on the full training set, 
 trained for the optimal amount of epochs found via cross validation and validated 
 on the test set. This is compared to the cross validated performance of the same 
 model. We observe that cross validated and testing performance are similar.
 
-Figure \ref{test us} shows US$_\text{Kratzert}$ refit on the full training set 
+Second from the top in Figure \ref{test cdf} shows US$_\text{Kratzert}$ refit on the full training set 
 compared to the cross validated performance. The performance is similar, although 
 notably lower between the 40th and 70th percentile performant basins.
+
+Third from the top in Figure \ref{test cdf} we see 
