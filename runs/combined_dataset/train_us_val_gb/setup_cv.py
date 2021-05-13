@@ -16,7 +16,7 @@ cross_validation_split(
 split_basins(
     camels_root=cfg["camels_root"],
     basin_list="/home/bernhard/git/Master-Thesis/basin_lists/basin_list_gb_specified.txt",
-    split=[0, 0.65, 0.25],
+    split=[0, 0.75, 0.25],
     dataset=cfg["dataset"],
     timeseries=cfg["timeseries"],
     seed=19970204,
