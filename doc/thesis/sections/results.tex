@@ -202,8 +202,10 @@ than that of the model trained on CAMELS. For CAMELS-GB it performs 0.02 lower.
 \subsection{Importance}
 \begin{table}
     \centering
-    \caption{Attribute importance ranked by median as found using the permutation 
-    test on Mixed$_\text{lstm}$.}
+    \caption{Attribute importance ranked by median importance on CAMELS-GB \citep{CAMELS_GB} 
+    as found using the permutation 
+    test on Mixed$_\text{lstm}$. Each percentile column is split into two subcolumns, 
+    one for CAMELS \citep{CAMELS_US} and one for CAMELS-GB. }
     \resizebox{\textwidth}{!}{%
         \input{{tables/results_section/mixed_concat_importance}.tex}}
     \label{importance mixed}
@@ -245,13 +247,25 @@ which shows boxplots of the performance per epoch of Transfer$_\text{US, none}$ 
 per training epoch on both CAMELS-GB (top) and CAMELS (bottom). We observe that 
 the performance of Transfer$_\text{US, none}$ increases on CAMELS-GB up until 
 epoch 5 and then gradually decreases while it increases steadily and converges 
-on CAMELS around epoch 10. The epoch optimized for both datasets which is shown in 
-Figure \ref{transfer CDF validation} is epoch 9. For Transfer$_\text{GB, none}$ 
+on CAMELS around epoch ??. The epoch optimized for both datasets which is shown in 
+Figure \ref{transfer CDF validation} is epoch ??. For Transfer$_\text{GB, none}$ 
 this is more apparent. Epoch 1 is the best epoch for the performance on CAMELS, 
 while the performance on CAMELS-GB seems to increase for every epoch. The optimized 
-epoch found for this model on both datasets is epoch 24.
+epoch found for this model on both datasets is epoch ??.
+\begin{figure}
+\includegraphics{{results_section/transfer/predictions_best_train_us_no_static}.pdf}
+\caption{Best predictions by Transfer$_\text{US, lstm, none}$ on CAMELS-GB (top) 
+    \citep{CAMELS_GB} and CAMELS (bot) \citep{CAMELS_US} including catchment IDs and NSE.}
+\label{predictions transfer}
+\end{figure}
 
-As both cases show that the transfer learning works better without static attributes 
+The best predictions made by Transfer$_\text{US, lstm, none}$ on CAMELS and CAMELS-GB 
+are shown in Figure \ref{predictions transfer}. In addition predictions on basins 
+50001 from CAMELS-GB and 14301000 from CAMELS are included in the figure to 
+compare with the performance of GB$_\text{lstm, all}$ shown in Figure \ref{best prediction all concat seq len} 
+and US$_\text{Kratzert}$ shown in Figure \ref{best prediction kratzert}.
+
+As both cases (GB $\rightarrow$ US and US $\rightarrow$ GB)  show that the transfer learning works better without static attributes 
 we do not include an analysis of the importance in transfer learning case.
 \section{Test performance of best models}
 In this section we present test results from the models we choose from Section 1 - 4 
@@ -288,8 +302,16 @@ trained for the optimal amount of epochs found via cross validation and validate
 on the test set. This is compared to the cross validated performance of the same 
 model. We observe that cross validated and testing performance are similar.
 
-Second from the top in Figure \ref{test cdf} shows US$_\text{Kratzert}$ refit on the full training set 
+Second from the top in Figure shows US$_\text{Kratzert}$ refit on the full training set 
 compared to the cross validated performance. The performance is similar, although 
 notably lower between the 40th and 70th percentile performant basins.
 
-Third from the top in Figure \ref{test cdf} we see 
+Third from the top we see the test set performance of Mixed$_\text{lstm}$ refit on 
+the full training set and validated on the test set. The graphs overlap almost 
+perfectly. 
+
+The bottom plot is the test set performance of Transfer$_\text{US, lstm, none}$ 
+refit on the full CAMELS training set. This is compared to the cross validated 
+performance on CAMELS merged with the ensemble performance on CAMELS-GB. The 
+graphs are similar in shape although a notably higher amount of basin predictions 
+have a negative NSE value.
