@@ -1,4 +1,4 @@
-\documentclass[10pt,a4paper,english]{report}
+\documentclass[10pt,a4paper,english, twoside]{report}
 \usepackage[utf8]{inputenc}
 \usepackage{subfiles}
 \usepackage{babel,duomasterforside}
@@ -65,6 +65,7 @@
   hyperindex   = true,
   linktocpage   = true
 }
+\pagestyle{headings}
 \begin{document}
 \duoforside[
     dept={Department of Physics},
@@ -83,9 +84,9 @@
 
 \setcounter{page}{1}
 \tableofcontents
-\listoflistings
 \listoffigures
 \listoftables
+\listoflistings
 
 \chapter{Introduction}
 \subfile{introduction}
