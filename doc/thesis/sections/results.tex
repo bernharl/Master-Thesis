@@ -24,7 +24,7 @@ static attributes directly derived from the observed outcome.
 \begin{figure}
     \centering
     \includegraphics{{results_section/camels_gb/cdf_val}.pdf}
-    \caption{Cumulative distribution function of the NSE score of LSTM models trained 
+    \caption[CDF plot of CAMELS-GB models.]{Cumulative distribution function of the NSE score of LSTM models trained 
     on CAMELS-GB \citep{CAMELS_GB}. "Overfit model" is a model deliberately trained 
     using static basin attributes derived from the runoff time series of the basins. 
     The other models are described in Table \ref{all models}.}
@@ -49,7 +49,7 @@ approximately 10\% of the basins.
 \begin{figure}
     \centering
     \includegraphics{results_section/camels_gb/prediction_best_all_concat_seq_len_cv.pdf}
-    \caption{Highest scoring prediction on the validation set  made using 
+    \caption[Highest scoring CAMELS-GB prediction.]{Highest scoring prediction on the validation set  made using 
     GB$_\text{lstm, all}$ compared to the observed outcome. "Obs" is observed runoff, 
     "Sim" is predicted runoff. The basin data is taken from CAMELS-GB \citep{CAMELS_GB}.}
     \label{best prediction all concat seq len}
@@ -60,7 +60,7 @@ Most of the peaks are undervalued by the prediction made by the model.
 \subsection{Importance}
 \begin{table}
     \centering
-    \caption{Top 20 (ranked by median importance) attributes of the overfit model described earlier 
+    \caption[Top 20 overfit CAMELS-GB attributes.]{Top 20 (ranked by median importance) attributes of the overfit model described earlier 
     in this section according to the permutation test. The columns are percentiles.}
     \input{{tables/results_section/overfit_importance}.tex}
     \label{overfit table}
@@ -76,7 +76,7 @@ importances similar to those of Q95, but is significantly less important for 25\
 of the basins in the training set.
 \begin{table}
     \centering
-    \caption{Top 20 (ranked by median importance) attributes of GB$_\text{lstm, all}$ 
+    \caption[Top 20 CAMELS-GB attributes.]{Top 20 (ranked by median importance) attributes of GB$_\text{lstm, all}$ 
     according to the permutation test. The columns are percentiles.}
     \input{{tables/results_section/all_features_concat_seq_len_importance}.tex}
     \label{all concat table}
@@ -108,20 +108,19 @@ In addition we present apparent feature importance of these trained models.
 \begin{figure}
     \centering
     \includegraphics{{results_section/camels_us/cdf_val}.pdf}
-    \caption[lol]{Cumulative distribution function of the NSE score of models trained 
+    \caption[CDF plot of CAMELS models.]{Cumulative distribution function of the NSE score of models trained 
     on CAMELS \citep{CAMELS_US}. "VIC" is the Variable Infiltration Capacity model 
     calibrated on CAMELS. "SAC-SMA" is the SACramento Soil Moisture Accounting 
     model calibrated on CAMELS. 
     These benchmarks are provided by \citet{CAMELS_hydroshare} and are originally 
     created by \citet{VICbench} and are trained per-basin as opposed to the other 
     models.
-    "NWM" is a benchmark of the National Water Model run on CAMELS. (CHECK IF PER-BASIN, 
-    I THINK ITS UNGAUGED!!!). This benchmark is available without any licensing at 
+    "NWM" is a benchmark of the National Water Model run on CAMELS. 
+    This benchmark is available without any licensing at 
     \citet{NWMbench} and we use an already preprocessed version provided by 
     \citet{lstm_third_paper}.
     The other models are described in Table \ref{all models} and are based on the 
-    models originally trained by \citet{lstm_third_paper} but retrained for better 
-    comparison with the other LSTM models in this thesis.}
+    models originally trained by \citet{lstm_third_paper}.}
     \label{CAMELS-US CDF validation}
 \end{figure}
 Figure \ref{CAMELS-US CDF validation} shows the performance of our reimplementation 
@@ -135,7 +134,7 @@ for validation.
 \begin{figure}
     \centering
     \includegraphics{results_section/camels_us/prediction_best_kratzert.pdf}
-    \caption{Highest scoring prediction on the validation set  made using 
+    \caption[Highest scoring CAMELS prediction.]{Highest scoring prediction on the validation set  made using 
     US$_\text{Kratzert}$ compared to the observed outcome. "Obs" is observed runoff, 
     "Sim" is predicted runoff. The basin data is taken from CAMELS \citep{CAMELS_US}.}
     \label{best prediction kratzert}
@@ -144,11 +143,11 @@ for validation.
 The highest scoring validation set prediction made using US$_\text{Kratzert}$ is 
 shown in Figure \ref{best prediction kratzert}. It has an NSE score of $\approx 0.92$. 
 As in the previous section we observe that the peak discharges are often either over 
-or undervalued.
+or underestimated.
 \subsection{Importance}
 \begin{table}
     \centering
-    \caption{Permutation importance of all static basin attributes used by 
+    \caption[Ranking CAMELS attributes.]{Permutation importance of all static basin attributes used by 
     US$_\text{Kratzert}$ (same model configuration as in \citet{lstm_third_paper} 
     refit to the cross validation split used in this thesis), ranked by median 
     importance.}
@@ -169,7 +168,7 @@ ungauged basins from both datasets with the same model.
 \begin{figure}
     \centering
     \includegraphics{{results_section/mixed/cdf_val}.pdf}
-    \caption{Cumulative distribution function of the NSE score of LSTM models trained 
+    \caption[CDF plot of mixed models.]{Cumulative distribution function of the NSE score of LSTM models trained 
     on a dataset consisting of both CAMELS \citet{CAMELS_US} and CAMELS-GB \citep{CAMELS_GB}. 
     The models are described in Table \ref{all models}. The top figure shows the 
     performance of the models on CAMELS-GB and the bottom figure shows the performance 
@@ -188,7 +187,7 @@ the performance of the mixed model is comparable, although lower.
 \begin{figure}
     \centering
     \includegraphics{{results_section/mixed/prediction_best_mixed_concat}.pdf}
-    \caption{Best predictions by Mixed$_\text{lstm}$ on CAMELS-GB (top) \citep{CAMELS_GB} 
+    \caption[Highest scoring mixed prediction.]{Best predictions by Mixed$_\text{lstm}$ on CAMELS-GB (top) \citep{CAMELS_GB} 
     and CAMELS (bot) \citep{CAMELS_US} including catchment IDs and NSE.}
     \label{best prediction mixed concat}
 \end{figure}
@@ -202,7 +201,7 @@ than that of the model trained on CAMELS. For CAMELS-GB it performs 0.02 lower.
 \subsection{Importance}
 \begin{table}
     \centering
-    \caption{Attribute importance ranked by median importance on CAMELS-GB \citep{CAMELS_GB} 
+    \caption[Common CAMELS and CAMELS-GB attributes ranked.]{Attribute importance ranked by median importance on CAMELS-GB \citep{CAMELS_GB} 
     as found using the permutation 
     test on Mixed$_\text{lstm}$. Each percentile column is split into two subcolumns, 
     one for CAMELS \citep{CAMELS_US} and one for CAMELS-GB. }
@@ -221,7 +220,7 @@ satisfyingly make predictions on the other.
 \begin{figure}
     \centering
     \includegraphics{{results_section/transfer/cdf_val}.pdf}
-    \caption{Cumulative distribution function of the NSE score of LSTM models trained 
+    \caption[CDF of transfer models.]{Cumulative distribution function of the NSE score of LSTM models trained 
     on CAMELS \citep{CAMELS_US} and validated on a validation part of CAMELS as well as 
     the entirety of CAMELS-GB \citep{CAMELS_GB}. The top figure shows the 
     performance of the models on CAMELS-GB and the bottom figure shows the performance 
@@ -230,7 +229,7 @@ satisfyingly make predictions on the other.
 \end{figure}
 \begin{figure}
 \includegraphics{{results_section/transfer/training_progress}.pdf}
-\caption{Training performance per epoch of Transfer$_\text{US, none}$ and Transfer$_\text{GB, none}$ 
+    \caption[Training progress Transfer$_\text{US, lstm, none}$]{Training performance per epoch of Transfer$_\text{US, none}$ and Transfer$_\text{GB, none}$ 
 on CAMELS-GB (top) and CAMELS (bottom). The orange line indicates the median NSE, 
 the green line indicates the mean NSE.}
 \label{training progress transfer}
@@ -254,7 +253,7 @@ while the performance on CAMELS-GB seems to increase for every epoch. The optimi
 epoch found for this model on both datasets is epoch ??.
 \begin{figure}
 \includegraphics{{results_section/transfer/predictions_best_train_us_no_static}.pdf}
-\caption{Best predictions by Transfer$_\text{US, lstm, none}$ on CAMELS-GB (top) 
+    \caption[Highest scoring transfer learning predictions.]{Best predictions by Transfer$_\text{US, lstm, none}$ on CAMELS-GB (top) 
     \citep{CAMELS_GB} and CAMELS (bot) \citep{CAMELS_US} including catchment IDs and NSE.}
 \label{predictions transfer}
 \end{figure}
@@ -291,7 +290,7 @@ of models to do model selection.
 \begin{figure}
     \centering
     \includegraphics{{results_section/test/test_cdf}.pdf}
-    \caption{From the top top: GB$_\text{lstm, all}$, US$_\text{Kratzert}$, Mixed$_\text{lstm}$ 
+    \caption[Refit models testing performance.]{From the top top: GB$_\text{lstm, all}$, US$_\text{Kratzert}$, Mixed$_\text{lstm}$ 
     and Transfer$_\text{US, lstm, none}$ refit on their respective full train datasets
     and validated on their test sets compared with the cross validated performance
     on their train sets.}

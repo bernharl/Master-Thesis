@@ -277,7 +277,7 @@ This concept also generalizes to other types of modelling than machine learning.
 \begin{figure}
 	\centering
 	\includegraphics{{examples}/bias_variance_runoff.pdf}
-	\caption{Illustration of the bias-variance tradeoff. The analogy to physics-
+    \caption[The bias-variance tradeoff.]{Illustration of the bias-variance tradeoff. The analogy to physics-
 	constrained runoff models is included in the figure to give context for as to 
 	why this is important for the problem in this thesis work. The concept and 
 	function form is in part inspired by Figure 2.11 in \citet{elemstatlearn}. For 
@@ -379,7 +379,7 @@ will therefore stick to describing that. The concept of the neural network was
 first described in \citet{rosenblatt1958perceptron}. 
 \begin{figure}
     \input{figures/tikz/neural_network.tex}
-    \caption{A multilayer perceptron model as described in \citet{rosenblatt1958perceptron}. Figure taken and modified from \citet{neuralnetfig}.}
+    \caption[A neural network.]{A multilayer perceptron model as described in \citet{rosenblatt1958perceptron}. Figure taken and modified from \citet{neuralnetfig}.}
     \label{Neural network figure}
 \end{figure}
 Mathematically, a neural network can be written in this form:
@@ -446,7 +446,7 @@ otherwise. \citationneeded
 \label{RNN Theory}
 \begin{figure}
     \input{figures/tikz/rnn.tex}
-    \caption{Illustration of an RNN cell. The squared Tanh indicated a neural 
+    \caption[An RNN cell.]{Illustration of an RNN cell. The squared Tanh indicated a neural 
     network layer with tanh as the activation function. Lines meeting indicate 
     concatenation while lines splitting means copying.}
 	\label{RNN figure}
@@ -543,7 +543,7 @@ This means that the LSTM has two clear advantages:
 \begin{figure}
 \centering
     \input{figures/tikz/lstm.tex}
-\caption{A single basic LSTM cell as proposed in \citet{hochreiter1997long}. Visually we see the point of the Cell State $C$ here is to not retain more information 
+    \caption[An LSTM cell.]{A single basic LSTM cell as proposed in \citet{hochreiter1997long}. Visually we see the point of the Cell State $C$ here is to not retain more information 
 by being affected less over time than the hidden state $h$. This is how the LSTM 
 avoids the gradient issues regarding long term dependencies that the RNN suffers 
 from.
@@ -657,7 +657,7 @@ there are fewer features.
 
 \begin{figure}
 	\includegraphics{{examples}/cluster_example.pdf}
-    \caption{Example of a hierarchical plot created. The ticks on the x-axis 
+    \caption[]{Example of a hierarchical plot created. The ticks on the x-axis 
     represent $f(x)$ for $x \in \left[0,100\right]$}
     \label{wald example}
 \end{figure}

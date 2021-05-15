@@ -22,7 +22,7 @@ from camelsml import load_config, train
 cfg = load_config(cfg_file="run_config.txt", device="cpu", num_workers=24)
 train(cfg)
 \end{pythoncode}
-    \caption{Minimal running example of CamelsML}
+    \caption[Minimal running example CamelsML.]{Minimal running example of CamelsML}
 \end{listing}
 As seen here, the CamelsML package needs a variable called "cfg", which is a dictionary 
 containing the model configuration, how the train-validation-test split is defined, 
@@ -55,7 +55,7 @@ train_basin_file: <path> # Plain text list of basins to use for training
 val_basin_file:  <path> # Plain text list of basins to use for validation
 test_basin_file: <path> # Plain text list of basins to use for testing
 \end{cfgcode}
-\caption{Example configuration file of an LSTM model trained on CAMELS-GB without using static features.}
+    \caption[Example configuration file CamelsML.]{Example configuration file of an LSTM model trained on CAMELS-GB without using static features.}
 \end{listing}
 For more examples, all the models trained in this thesis along with scripts for 
 setting up train-test splits and cross validation are contained in the "runs" directory at the 

@@ -22,7 +22,7 @@ package as well as a minimal running example.
 \begin{figure}
 \centering
 \input{figures/tikz/mini_batch_training.tex}
-\caption{A mini batch. $\bm{x}_{i,t}$ represents the input parameters $\bm{x}$ at time step $t$ for time series $i \in [0, b]$ where $b$ is the batch size. A mini batch consists of $b \times t$ FP32 numbers.}
+    \caption[A mini batch.]{A mini batch. $\bm{x}_{i,t}$ represents the input parameters $\bm{x}$ at time step $t$ for time series $i \in [0, b]$ where $b$ is the batch size. A mini batch consists of $b \times t$ FP32 numbers.}
 \label{mini batch}
 \end{figure}
 The training algorithm excluding mathematical details shown in Chapter \ref{LSTM Theory} 
@@ -83,7 +83,7 @@ because of the nature of training and validating on different datasets.
 %\end{figure}
 \begin{table}
     \centering
-    \caption{Table containing all models trained in this thesis along with their 
+    \caption[All LSTM models trained.]{Table containing all models trained in this thesis along with their 
     given labels and configuration. All models are trained with a sequence length of 
     270 (THREE MODELS HAVE 365 BEWARE!!!) days and are initiated with the seed 19970204. 
     The attribute subsets a-e are shown in Table \ref{attribute table}.}
@@ -93,7 +93,7 @@ because of the nature of training and validating on different datasets.
 \begin{landscape}
 \begin{table}
     \centering
-    \caption{Table containing all basin attribute dataset subsets. Set e is equal 
+    \caption[All basin attribute subsets.]{Table containing all basin attribute dataset subsets. Set e is equal 
     to set d but without organic\_perc and gvf\_max.}
     \input{tables/attribute_selection.tex}
     \label{attribute table}
@@ -174,7 +174,7 @@ in a different way, but this code is not used here.
 \begin{table}
     %\begin{adjustbox}{width=\textwidth}
     \centering
-    \caption{Timeseries and attributes in CAMELS and CAMELS-GB that we treat as 
+        \caption[Common attributes and timeseries CAMELS and CAMELS-GB.]{Timeseries and attributes in CAMELS and CAMELS-GB that we treat as 
     equivalent. The names are taken directly from \citet{CAMELS_US} and \citet{CAMELS_GB}.}
     \input{tables/common_features_us_gb.tex}
     %\end{adjustbox}
@@ -220,7 +220,7 @@ Table \ref{attribute transfer}.
 \begin{figure}
     \centering
     \includegraphics{feature_comparison_mixed/big_boxplot_mixed_validation.pdf}
-    \caption{Boxplots of the basin attributes in CAMELS and CAMELS-GB compared. 
+    \caption[Attribute boxplots CAMELS and CAMELS-GB.]{Boxplots of the basin attributes in CAMELS and CAMELS-GB compared. 
     In each subplot CAMELS-GB is on the left, CAMELS is on the right. The basins included in this 
     figure are the basins contained in the full training set used by all models 
     in this analysis. The orange line indicated the median, the green dashed line indicates the average. }
