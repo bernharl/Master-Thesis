@@ -210,7 +210,25 @@ than that of the model trained on CAMELS. For CAMELS-GB it performs 0.02 lower.
     \label{importance mixed}
 \end{table}
 Table \ref{importance mixed} shows the attributes used by Mixed$_\text{importance mixed}$ 
-ranked by median importance as found using the permutation test.
+ranked by median importance as found using the permutation test. Sorted by median 
+importance on basins from CAMELS-GB. The highest median importance attribute on 
+basins from CAMELS is pet\_mean, the highest on CAMELS-GB is aridity. 
+
+\begin{figure}
+    \centering
+    \includegraphics{{results_section/runoff_ratio}.pdf}
+    \caption{Rainfall-runoff ratio scatter plotted against NSE values per basin. 
+    Pearson (P) and Spearman (S) correlation coefficients as well as their respective 
+    p-values are shown in the figure.}
+    \label{runoff ratio}
+\end{figure}
+As a summary of our importance analysis we include the performances of GB$_\text{lstm, all}$,
+ US$_\text{Kratzert}$, SAC-SMA trained basin-wise, VIC trained basin-wise, NWM and 
+ Mixed$_\text{lstm}$ plotted against runoff-ratio in an effort to analyze whether 
+ our LSTM models interact differently with low rainfall-runoff ratio basins. 
+Figure \ref{runoff ratio} shows that all models have Spearman correlations $\in (0.33,0.53)$ with 
+ significant p-values. For Pearson correlation only the traditional models show 
+ linear correlation. 
 \section{Models trained for transfer learning between CAMELS and CAMELS-GB}
 In this section we present results related to model selection and feature importance 
 when training on CAMELS-GB and validating on CAMELS and vice-versa. This section 
