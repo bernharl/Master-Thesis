@@ -16,6 +16,7 @@ figure.figsize : 4.7747, 2.9509
 figure.dpi : 300
 
 lines.linewidth: 0.7
+lines.markersize: 0.7
 patch.linewidth: 0.7
 boxplot.showmeans: True
 boxplot.meanline: True
