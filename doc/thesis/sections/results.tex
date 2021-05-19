@@ -19,7 +19,9 @@ importance when training and predicting on CAMELS-GB \citep{CAMELS_GB}. To act
 as a proof of concept of the feature importance method described in Chapter 
 \ref{Feature selection}, we also include results from an additional model which
 is trained on a superset of attribute subset \textbf{\textit{a}} which includes 
-attributes directly derived from the observed outcome. We label this model "Overfit model".
+attributes directly derived from the observed outcome. We label this model "Overfit model". 
+By "attributes", we are referring to the static attributes included in CAMELS and 
+CAMELS-GB.
 
 \subsection{Performance}
 \begin{figure}
@@ -99,7 +101,7 @@ but is not based on any time series accessed by the model. Three attributes (\te
 \texttt{root\_depth}, \texttt{conductivity\_hypres}) are soil attributes. Four attributes (\texttt{elev\_90},
 \texttt{elev\_10}, \texttt{elev\_50}, \texttt{area}) are topographic. Two attributes (\texttt{no\_gw\_perc} and 
 \texttt{inter\_mod\_perc}) are hydrogeologic attributes. Details of these attributes 
-can be found in Table 2 in \citet{CAMELS_GB} and sources therein.
+can be found in Table 2 in \citet{CAMELS_GB} and references therein.
 
 \section{Models trained on CAMELS}
 In this section we present the results related to model selection and feature 
@@ -234,7 +236,9 @@ As a summary of our importance analysis we include the performances of GB$_\text
  and runoff.) in an effort to analyze whether 
  our LSTM models interact differently with low rainfall-runoff ratio basins. 
 Figure \ref{runoff ratio} shows that all models have Spearman correlations $\in (0.33,0.53)$ with 
- significant p-values. Only the traditional models show linear correlation. 
+ significant p-values. Only the traditional models show linear correlation, implying 
+ a less direct relationship between the rainfall-runoff ratio and expected performance 
+ for LSTM models.
 \section{Models trained for transfer learning between CAMELS and CAMELS-GB}
 \label{Transfer learning section}
 In this section we present results related to model selection and feature importance 
