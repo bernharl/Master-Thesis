@@ -85,16 +85,16 @@ because of the nature of training and validating on different datasets.
     \centering
     \caption[All LSTM models trained.]{Table containing all models trained in this thesis along with their 
     given labels and configuration. All models are trained with a sequence length of 
-    270 (THREE MODELS HAVE 365 BEWARE!!!) days and are initiated with the seed 19970204. 
-    The attribute subsets a-e are shown in Table \ref{attribute table}.}
+    270 days and are initiated with the seed 19970204. 
+    The attribute subsets \textbf{\textit{a}}-\textbf{\textit{e}} are shown in Table \ref{attribute table}.}
     \input{tables/all_model_configs.tex}
     \label{all models}
 \end{table}
 \begin{landscape}
 \begin{table}
     \centering
-    \caption[All basin attribute subsets.]{Table containing all basin attribute dataset subsets. Set e is equal 
-    to set d but without organic\_perc and gvf\_max.}
+    \caption[All basin attribute subsets.]{Table containing all basin attribute subsets. Subset \textbf{\textit{e}} is equal 
+    to subset \textbf{\textit{d}} but without organic\_perc and gvf\_max.}
     \input{tables/attribute_selection.tex}
     \label{attribute table}
 \end{table}
@@ -116,11 +116,11 @@ knowledge and validation: First we manually check which attributes to include ba
 on perceived importance in accordance to known physical processes related to rainfall-runoff 
 modelling. After training a model on a subset, we evaluate it using cross validation 
 as mentioned earlier in this chapter. To give further context for the chosen subsets 
-a-e we present this short summary:
+\textbf{\textit{a}}-\textbf{\textit{e}} we present this short summary:
 \begin{itemize}
-    \item a: This is a subset using all numerical static attributes in CAMELS-GB 
+    \item \textbf{\textit{a}}: This is a subset using all numerical static attributes in CAMELS-GB 
         \citep{CAMELS_GB} that are not derived from the outcome (runoff). 
-    \item b: This is a smaller subset of the static attributes contained in CAMELS-GB. 
+    \item \textbf{\textit{b}}: This is a smaller subset of the static attributes contained in CAMELS-GB. 
         This subset was created with emphasis on perceived importance with respect 
         to known physical processes. As many process-driven models (see Section \ref{VIC} and \ref{NWM}) have a high 
         emphasis on radiation (from vegetation), soil types and land cover we have 
@@ -134,18 +134,18 @@ a-e we present this short summary:
         theory be information already given in the precipitation time series, but 
         our models do not have access to the entire precipitation time series while 
         training because of the limited sequence length. 
-    \item c: This attribute selection is taken from \cite{lstm_third_paper} and 
+    \item \textbf{\textit{c}}: This attribute selection is taken from \cite{lstm_third_paper} and 
         is used to reproduce the results of said paper with a different cross validation 
         setup to better fit with the rest of our analysis. \cite{lstm_third_paper} 
         used 12-fold cross validation while we use the more commonly employed 
         5-fold cross validation. 
-    \item d: This is an attribute selection used for training models on both 
+    \item \textbf{\textit{d}}: This is an attribute selection used for training models on both 
         CAMELS and CAMELS-GB at the same time in addition to transfer learning. 
         The attribute names stated in Table \ref{attribute table} are based on the 
         attribute names in CAMELS-GB. CAMELS and CAMELS-GB have different attributes 
         and different names for the same attributes. Which attributes we deem to 
         be equivalent are shown in Table \ref{attribute transfer}.
-    \item e: The attributes organic\_perc and gvf\_max are excluded in this subset, 
+    \item \textbf{\textit{e}}: The attributes organic\_perc and gvf\_max are excluded in this subset, 
         otherwise it is identical to subset e. We exclude these two features because 
         of uncertainty of whether our synthetic attribute creation works.
 \end{itemize}
@@ -227,7 +227,7 @@ Table \ref{attribute transfer}.
     \label{attribute comparison}
 \end{figure}
 Figure \ref{attribute comparison} shows boxplots of the training data of all attributes 
-in dataset d (see Table 
+in attribute subset \textbf{\textit{d}} (see Table 
 \ref{attribute table}) for both CAMELS and CAMELS-GB. In each subplot CAMELS-GB is 
 on the left and CAMELS is on the right. We see that most attributes have higher 
 variance in CAMELS than in CAMELS-GB. Exceptions to this are organic\_perc and gvf\_max. 
@@ -271,7 +271,7 @@ features. In this case the feature may very well be important, but the informati
 contained in it is also contained in one or more other correlated features, meaning 
 the model doesn't lose as much information as one may think. Essentially the rule 
 of thumb is that the feature importance is the feature's importance as learned by 
-the model, not the actual importance in the real world. 
+the model, not the actual real world importance. 
 
 To validate that this method is implemented correctly and gives meaningful results 
 in our case we train a model on CAMELS-GB that in addition to the attributes in 

@@ -7,17 +7,19 @@ and feature importance for four cases:
     \item Models trained on CAMELS \citep{CAMELS_US} in addition to traditional 
         models provided by \citet{CAMELS_hydroshare} and \citet{NWMbench}.
     \item Models trained on a dataset comprised of both CAMELS and CAMELS-GB.
-    \item Models trained on CAMELS and validated on CAMELS-GB and vice-versa.
+    \item Models trained on CAMELS and validated on CAMELS-GB (notated as US$\rightarrow$GB) 
+        and vice-versa.
     \item Models refit on the full train set and validated on the previously excluded 
         test set.
 \end{enumerate}
 \section{Models trained on CAMELS-GB}
+\label{CAMELS-GB results}
 In this section we present the results related to model selection and feature 
 importance when training and predicting on CAMELS-GB \citep{CAMELS_GB}. To act 
 as a proof of concept of the feature importance method described in Chapter 
-\ref{Feature selection} we also include the performance and feature importance of 
-a model trained using attribute subset \textbf{\textit{a}} (see Table \ref{attribute table}) in addition to
-static attributes directly derived from the observed outcome.
+\ref{Feature selection}, we also include results from an additional model which
+is trained on a superset of attribute subset \textbf{\textit{a}} which includes 
+attributes directly derived from the observed outcome. We label this model "Overfit model".
 
 \subsection{Performance}
 \begin{figure}
@@ -29,16 +31,18 @@ static attributes directly derived from the observed outcome.
     The other models are described in Table \ref{all models}.}
     \label{CAMELS-GB CDF validation}
 \end{figure}
-Figure \ref{CAMELS-GB CDF validation} shows the performance of several LSTM models 
-trained on CAMELS-GB \citep{CAMELS_GB}. The overfit model is trained on attribute subset \textbf{\textit{a}} 
-in Table \ref{attribute table} in addition to attributes directly derived from the 
-observed outcome.
+Figure \ref{CAMELS-GB CDF validation} shows the performance of GB$_\text{lstm, all}$, 
+GB$_\text{ea-lstm, all}$, GB$_\text{lstm, chosen}$, GB$_\text{ea-lstm, chosen}$ and 
+GB$_\text{lstm, none}$ 
+trained on CAMELS-GB \citep{CAMELS_GB}. For an overview of these 
+LSTM models, see Table \ref{all models}. The overfit model is trained on 
+attribute subset \textbf{\textit{a}} in Table \ref{attribute table} in addition 
+to attributes directly derived from the observed outcome.
 The overfit model significantly outperforms all other models.
  Of the other models there seems to be generally two levels of 
-performance. The models using attribute subsets \textbf{\textit{a}} and b perform similarly, although 
-in the favour of attribute subset \textbf{\textit{a}}, while 
-the models trained with no attributes in general perform worse. Enabling dropout 
-slightly decreases performance.
+performance. The models using attribute subsets \textbf{\textit{a}} and \textbf{\textit{b}} 
+perform similarly, although in the favour of attribute subset \textbf{\textit{a}}, while 
+the models trained with no attributes in general perform worse. 
 There seems to be little overall difference in performance between EA-LSTM and 
 LSTM models, apart from $GB_{lstm, all}$ which performs with a negative NSE value 
 for a smaller fraction of the basins.
@@ -67,11 +71,11 @@ Most of the peaks are undervalued by the prediction made by the model.
 Table \ref{overfit table} shows 5th, 25th, 50th, 75th and 95th percentiles of the 
 importances of the top 20 basin attributes of the overfit model according to the 
 permutation test described in Chapter \ref{Feature selection}. We observe that the 
-attribute with the highest importance in all quantiles is Q95, which is the 
-95th percentile runoff derived from the observed runoff time series. Q95 has an 
+attribute with the highest importance in all quantiles is \texttt{Q95}, which is the 
+95th percentile runoff derived from the observed runoff time series. \texttt{Q95} has an 
 importance of at least 0.05 for 75\% of the basins in the training set. At the 
-second spot we have baseflow\_index\_ceh. This attribute has median and 25th percentile 
-importances similar to those of Q95, but is significantly less important for 25\% 
+second spot we have \texttt{baseflow\_index\_ceh}. This attribute has median and 25th percentile 
+importances similar to those of \texttt{Q95}, but is significantly less important for 25\% 
 of the basins in the training set.
 \begin{table}
     \centering
@@ -82,25 +86,25 @@ of the basins in the training set.
 \end{table}
 
 The top 20 importances found by US$_\text{lstm, all}$ (cross validated) using the permutation test 
-are shown in Table \ref{all concat table}. The top two features are low\_prec\_dur 
-and low\_prec\_freq, these have significantly higher 75th percentile and upward 
+are shown in Table \ref{all concat table}. The top two attributes are \texttt{low\_prec\_dur} 
+and \texttt{low\_prec\_freq}. These have significantly higher 75th percentile and upward 
 importances than all other attributes. The third most important attribute is 
-tawc and has a 75th percentile importance that is roughly half of the above ranked 
+\texttt{tawc} and has a 75th percentile importance that is roughly half of the above ranked 
 attribute. The highest ranked attribute has an importance of 0.09 for 25\% of the 
-basins in the training set. Of these 20 attributes seven (low\_prec\_dur, low\_prec\_frec, 
-high\_prec\_frec, p\_seasonality, frac\_snow, p\_mean, high\_prec\_dur) are climatic indices 
-derived from the time series the model is trained on. Aridity is also a climatic indice, 
-but is not based on any time series accessed by the model. Three attributes (grass\_perc, 
-crop\_perc, inwater\_perc) are land cover attributes. Three attributes (tawc, 
-root\_depth, conductivity\_hypres) are soil attributes. Four attributes (elev\_90,
-elev\_10, elev\_50, area) are topographic. Two attributes (no\_gw\_perc and 
-inter\_mod\_perc) are hydrogeologic attributes. Details of these attributes 
+basins in the training set. Of these 20 attributes seven (\texttt{low\_prec\_dur}, \texttt{low\_prec\_frec}, 
+\texttt{high\_prec\_frec}, \texttt{p\_seasonality}, \texttt{frac\_snow}, \texttt{p\_mean}, \texttt{high\_prec\_dur}) are climatic indices 
+derived from the time series the model is trained on. The attribute \texttt{aridity} is also a climatic indice, 
+but is not based on any time series accessed by the model. Three attributes (\texttt{grass\_perc}, 
+\texttt{crop\_perc, inwater\_perc}) are land cover attributes. Three attributes (\texttt{tawc}, 
+\texttt{root\_depth}, \texttt{conductivity\_hypres}) are soil attributes. Four attributes (\texttt{elev\_90},
+\texttt{elev\_10}, \texttt{elev\_50}, \texttt{area}) are topographic. Two attributes (\texttt{no\_gw\_perc} and 
+\texttt{inter\_mod\_perc}) are hydrogeologic attributes. Details of these attributes 
 can be found in Table 2 in \citet{CAMELS_GB} and sources therein.
 
 \section{Models trained on CAMELS}
 In this section we present the results related to model selection and feature 
 importance when training and predicting on CAMELS \citep{CAMELS_US}. This section 
-is meant to show whether we are able to produce results similar to the those of 
+is meant to show whether we are able to produce results similar to those of 
 \citet{lstm_third_paper} in a way that is comparable to the rest of our experiments.
 In addition, we present apparent feature importance of these trained models.
 \subsection{Performance}
@@ -108,28 +112,31 @@ In addition, we present apparent feature importance of these trained models.
     \centering
     \includegraphics{{results_section/camels_us/cdf_val}.pdf}
     \caption[CDF plot of CAMELS models.]{Cumulative distribution function of the NSE score of models trained 
-    on CAMELS \citep{CAMELS_US}. "VIC" is the Variable Infiltration Capacity model 
-    calibrated on CAMELS. "SAC-SMA" is the SACramento Soil Moisture Accounting 
-    model calibrated on CAMELS. 
-    These benchmarks are provided by \citet{CAMELS_hydroshare} and are originally 
-    created by \citet{VICbench} and are trained per-basin as opposed to the other 
-    models.
-    "NWM" is a benchmark of the National Water Model run on CAMELS. 
-    This benchmark is available without any licensing at 
-    \citet{NWMbench} and we use an already preprocessed version provided by 
-    \citet{lstm_third_paper}.
-    The other models are described in Table \ref{all models} and are based on the 
-    models originally trained by \citet{lstm_third_paper}.}
+    on CAMELS \citep{CAMELS_US}. The LSTM models US$_\text{Kratzert}$ and US$_\text{None}$ 
+    are described in Table \ref{all models} and are based on the models originally 
+    trained by \citet{lstm_third_paper}. The SAC-SMA and VIC benchmarks are provided 
+    by \citet{CAMELS_hydroshare}, NWM by \citet{NWMbench,lstm_third_paper}.} 
     \label{CAMELS-US CDF validation}
 \end{figure}
 Figure \ref{CAMELS-US CDF validation} shows the performance of our reimplementation 
-of the model created by \citet{lstm_third_paper} along with three traditional 
-hydrological models. The results here indicate that the process-driven models 
-VIC and NWM perform similarly, SAC-SMA and an LSTM without basin attributes perform 
-similarly and better than the process-driven model and that there is a clear difference 
-in performance in favour of US$_\text{Kratzert}$. The LSTM models both perform 
-with an NSE value below zero for approximately five percent of the basins used 
-for validation. 
+of the  LSTM models created by \citet{lstm_third_paper} along with three traditional 
+hydrological models. Table \ref{all models} contains more details on the LSTM models. 
+"VIC" is the Variable Infiltration Capacity model 
+calibrated on CAMELS. "SAC-SMA" is the SACramento Soil Moisture Accounting 
+model calibrated on CAMELS. 
+These benchmarks are provided by \citet{CAMELS_hydroshare} and are originally 
+created by \citet{VICbench} and are trained per-basin as opposed to the other 
+models.
+"NWM" is a benchmark of the National Water Model run on CAMELS. 
+This benchmark is available without any licensing at 
+\citet{NWMbench} and we use an already preprocessed version provided by 
+\citet{lstm_third_paper}.
+The results here indicate that the process-driven models 
+VIC and NWM perform similarly, SAC-SMA and US$_\text{none}$ perform 
+similarly and better than the process-driven models and that there is a clear performance 
+gap in favour of US$_\text{Kratzert}$. The LSTM models (US$_\text{Kratzert}$ and 
+US$_\text{none}$) both perform with NSE values below zero for approximately five 
+percent of the basins during cross validation.
 \begin{figure}
     \centering
     \includegraphics{results_section/camels_us/prediction_best_kratzert.pdf}
@@ -141,7 +148,7 @@ for validation.
 
 The highest scoring validation set prediction made using US$_\text{Kratzert}$ is 
 shown in Figure \ref{best prediction kratzert}. It has an NSE score of $\approx 0.92$. 
-As in the previous section we observe that the peak discharges are often either over 
+As in the previous section we observe that the peak discharges are often either overestimated 
 or underestimated.
 \subsection{Importance}
 \begin{table}
@@ -155,8 +162,8 @@ or underestimated.
 \end{table}
 The permutation importances of the static basin attributes used by US$_\text{Kratzert}$ 
 ranked by median importance are shown in Table \ref{kratzert importance}. Three 
-out of the four top ranked features are also ranked in the top four by \cite{lstm_second_paper} 
-using the same feature subset but a different ranking method.
+out of the four top ranked attributes are also ranked in the top four by \cite{lstm_second_paper} 
+using the same attribute subset but a different ranking method. 
 \section{Models trained on CAMELS and CAMELS-GB}
 In this section we present results related to model selection and feature importance 
 when training and validating using both CAMELS and CAMELS-GB as a combined dataset.
@@ -175,8 +182,7 @@ ungauged basins from both datasets with the same model.
     bottom figure on CAMELS.}
     \label{mixed CDF validation}
 \end{figure}
-Figure \ref{mixed CDF validation} shows the cross validated performance of three 
-LSTM models trained on a dataset consisting of both CAMELS and CAMELS-GB. 
+Figure \ref{mixed CDF validation} shows the cross validated performance of Mixed$_\text{lstm}$, Mixed$_\text{ea-lstm}$ and Mixed$_\text{none}$ trained on a dataset consisting of both CAMELS and CAMELS-GB. See Table \ref{all models} for information on these LSTM models.
 On CAMELS-GB the models with basin attributes perform significantly better than 
 the model trained without them. This also applies to the performance on CAMELS, 
 but here the difference is smaller. The EA-LSTM and LSTM models with basin attributes 
@@ -208,10 +214,10 @@ than that of the model trained on CAMELS. For CAMELS-GB it performs 0.02 lower.
         \input{{tables/results_section/mixed_concat_importance}.tex}}
     \label{importance mixed}
 \end{table}
-Table \ref{importance mixed} shows the attributes used by Mixed$_\text{importance mixed}$ 
+Table \ref{importance mixed} shows the attributes used by Mixed$_\text{lstm}$ 
 ranked by median importance as found using the permutation test. Sorted by median 
 importance on basins from CAMELS-GB. The highest median importance attribute on 
-basins from CAMELS is pet\_mean, the highest on CAMELS-GB is aridity. 
+basins from CAMELS is \texttt{pet\_mean}, the highest on CAMELS-GB is \texttt{aridity}. 
 
 \begin{figure}
     \centering
@@ -223,16 +229,18 @@ basins from CAMELS is pet\_mean, the highest on CAMELS-GB is aridity.
 \end{figure}
 As a summary of our importance analysis we include the performances of GB$_\text{lstm, all}$,
  US$_\text{Kratzert}$, SAC-SMA trained basin-wise, VIC trained basin-wise, NWM and 
- Mixed$_\text{lstm}$ plotted against runoff-ratio in an effort to analyze whether 
+ Mixed$_\text{lstm}$ plotted against \texttt{runoff-ratio} (An attribute not used 
+ by any of the models. It is the full time series averaged ratio between precipitation 
+ and runoff.) in an effort to analyze whether 
  our LSTM models interact differently with low rainfall-runoff ratio basins. 
 Figure \ref{runoff ratio} shows that all models have Spearman correlations $\in (0.33,0.53)$ with 
- significant p-values. For Pearson correlation only the traditional models show 
- linear correlation. 
+ significant p-values. Only the traditional models show linear correlation. 
 \section{Models trained for transfer learning between CAMELS and CAMELS-GB}
+\label{Transfer learning section}
 In this section we present results related to model selection and feature importance 
-when training on CAMELS-GB and validating on CAMELS and vice-versa. This section 
-is meant to show whether we can use information in one dataset to be able to 
-satisfyingly make predictions on the other.
+when training on CAMELS-GB and validating on CAMELS (GB$\rightarrow$US) and vice-versa. 
+This section is meant to show whether we can use information in one dataset to be 
+able to satisfyingly make predictions on the other.
 \subsection{Performance}
 \begin{figure}
     \centering
@@ -247,16 +255,21 @@ satisfyingly make predictions on the other.
 \begin{figure}
 \includegraphics{{results_section/transfer/training_progress}.pdf}
     \caption[Training progress Transfer$_\text{US, lstm, none}$]{Training performance per epoch of Transfer$_\text{US, none}$ and Transfer$_\text{GB, none}$ 
-on CAMELS-GB (top) and CAMELS (bottom). The orange line indicates the median NSE, 
-the green line indicates the mean NSE.}
+on CAMELS-GB (top) and CAMELS (bottom). The orange lines indicate the median NSEs, 
+while the green lines indicate the mean NSEs.}
 \label{training progress transfer}
 \end{figure}
-Figure \ref{transfer CDF validation} shows models trained on CAMELS and validated on 
-CAMELS-GB and vice-versa. No models trained on CAMELS-GB perform at a satisfactory level 
+Figure \ref{transfer CDF validation} shows the cross validated performance of  
+Transfer$_\text{US, ea-lstm}$, Transfer$_\text{US, lstm}$, Transfer$_\text{US, none}$, 
+Transfer$_\text{GB, ea-lstm}$, Transfer$_\text{GB, lstm}$ and Transfer$_\text{GB, none}$ 
+trained on CAMELS and validated on CAMELS-GB and vice-versa. 
+For more information on the models, see Table \ref{all models}.
+No models trained on CAMELS-GB perform at a satisfactory level 
 on basins from CAMELS. The models trained on CAMELS all perform at a lower level 
-on CAMELS-GB than models that are trained on CAMELS-GB and the best performing 
-transfer model is Transfer$_\text{US, none}$. This model has no access to static 
-basin attributes. The transfer models also perform worse on the validation part of 
+on CAMELS-GB than models that are trained on CAMELS-GB. The best performing 
+transfer model is Transfer$_\text{US, none}$, it has a median NSE of 0.52 on CAMELS-GB.
+Compared to Transfer$_\text{GB, lstm}$, which has a median NSE of 0.77, this performance 
+is significantly lower.  The transfer models also perform worse than expected on 
 the dataset they are trained on as the chosen epoch is based on the performance 
 on both datasets. This is illustrated in Figure \ref{training progress transfer}, 
 which shows boxplots of the performance per epoch of Transfer$_\text{US, none}$ and Transfer$_\text{GB, none}$ 
@@ -279,15 +292,19 @@ The best predictions made by Transfer$_\text{US, lstm, none}$ on CAMELS and CAME
 are shown in Figure \ref{predictions transfer}. In addition predictions on basins 
 50001 from CAMELS-GB and 14301000 from CAMELS are included in the figure to 
 compare with the performance of GB$_\text{lstm, all}$ shown in Figure \ref{best prediction all concat seq len} 
-and US$_\text{Kratzert}$ shown in Figure \ref{best prediction kratzert}. The model performs worse on CAMELS than $US_\text{Kratzert}$, worse on CAMELS and CAMELS-GB than Mixed$_\text{lstm}$ and worse on CAMELS-GB than $GB_\text{lstm, all}$.
+and US$_\text{Kratzert}$ shown in Figure \ref{best prediction kratzert}. The model 
+performs worse on CAMELS than US$_\text{Kratzert}$, worse on CAMELS and CAMELS-GB 
+than Mixed$_\text{lstm}$ and worse on CAMELS-GB than GB$_\text{lstm, all}$.
 
-As both cases (GB $\rightarrow$ US and US $\rightarrow$ GB)  show that the transfer learning works better without static attributes 
-we do not include an analysis of the importance in transfer learning case.
+As both cases (GB $\rightarrow$ US and US $\rightarrow$ GB)  show that the transfer 
+learning works better without static attributes, we do not include an analysis 
+of the importance in the transfer learning case.
 \section{Test performance and summary.}
-In this section we present test results from the models we choose from Section 1 - 4 
-in this chapter and compare with the cross validation performance. The test 
-performance is meant to measure real world performance and not to compare performance 
-of models to do model selection.
+In this section we present test results from the models we choose from Section \ref{CAMELS-GB results}-\ref{Transfer learning section} 
+in this chapter and compare with the cross validation performance. We use the test 
+set performance to get an expected level of real world performance, in contrast to 
+cross validation, which is used to compare models and optimize hyperparameters. 
+
 \begin{comment}
 \begin{figure}
 \centering
@@ -307,7 +324,7 @@ of models to do model selection.
 \begin{figure}
     \centering
     \includegraphics{{results_section/test/test_cdf}.pdf}
-    \caption[Refit models testing performance.]{From the top top: GB$_\text{lstm, all}$, US$_\text{Kratzert}$, Mixed$_\text{lstm}$ 
+    \caption[Refit models testing performance.]{From the top: GB$_\text{lstm, all}$, US$_\text{Kratzert}$, Mixed$_\text{lstm}$ 
     and Transfer$_\text{US, lstm, none}$ refit on their respective full train datasets
     and validated on their test sets compared with the cross validated performance
     on their train sets.}
@@ -334,13 +351,13 @@ have a negative NSE value.
 \begin{table}
     \centering
     \caption{Summary table showing median validation and test NSE values of the 
-    best models chosen from Section 1-4 as well as the epoch optimized on the 
-    validation set.}
+    best models chosen from Section \ref{CAMELS-GB results}-\ref{Transfer learning section} 
+    as well as the epoch optimized using cross validation.}
     \input{{tables/results_section/summary_results}.tex}
     \label{results summary table}
 \end{table}
 Finally, the validation and test performances as well as optimized epochs of the 
-best models from Section 1-4 are shown in Table \ref{results summary table}. For 
+best models from Section \ref{CAMELS-GB results}-\ref{Transfer learning section}  are shown in Table \ref{results summary table}. For 
 the models validated and tested on Both CAMELS and CAMELS-GB the median NSE values 
 are shown separately. The optimized epochs are also shown. For more details on 
 the models in question see Table \ref{all models}.
