@@ -5,19 +5,18 @@ and feature importance for four cases:
 \begin{enumerate}
     \item Models trained on CAMELS-GB \citep{CAMELS_GB}.
     \item Models trained on CAMELS \citep{CAMELS_US} in addition to traditional 
-        models provided by \citationneeded.
+        models provided by \citet{CAMELS_hydroshare} and \citet{NWMbench}.
     \item Models trained on a dataset comprised of both CAMELS and CAMELS-GB.
     \item Models trained on CAMELS and validated on CAMELS-GB and vice-versa.
-    \item Models refit on the full train set and valiated on the test set not 
-        touched in sections 1 - 4.
+    \item Models refit on the full train set and validated on the previously excluded 
+        test set.
 \end{enumerate}
-
 \section{Models trained on CAMELS-GB}
 In this section we present the results related to model selection and feature 
 importance when training and predicting on CAMELS-GB \citep{CAMELS_GB}. To act 
 as a proof of concept of the feature importance method described in Chapter 
 \ref{Feature selection} we also include the performance and feature importance of 
-a model trained using dataset a (see Table \ref{attribute table}) in addition to
+a model trained using attribute subset \textbf{\textit{a}} (see Table \ref{attribute table}) in addition to
 static attributes directly derived from the observed outcome.
 
 \subsection{Performance}
@@ -31,13 +30,13 @@ static attributes directly derived from the observed outcome.
     \label{CAMELS-GB CDF validation}
 \end{figure}
 Figure \ref{CAMELS-GB CDF validation} shows the performance of several LSTM models 
-trained on CAMELS-GB \citep{CAMELS_GB}. The overfit model is trained on dataset a 
+trained on CAMELS-GB \citep{CAMELS_GB}. The overfit model is trained on attribute subset \textbf{\textit{a}} 
 in Table \ref{attribute table} in addition to attributes directly derived from the 
 observed outcome.
 The overfit model significantly outperforms all other models.
  Of the other models there seems to be generally two levels of 
-performance. The models using attribute subsets a and b perform similarly, although 
-in the favour of dataset a, while 
+performance. The models using attribute subsets \textbf{\textit{a}} and b perform similarly, although 
+in the favour of attribute subset \textbf{\textit{a}}, while 
 the models trained with no attributes in general perform worse. Enabling dropout 
 slightly decreases performance.
 There seems to be little overall difference in performance between EA-LSTM and 
@@ -92,9 +91,9 @@ basins in the training set. Of these 20 attributes seven (low\_prec\_dur, low\_p
 high\_prec\_frec, p\_seasonality, frac\_snow, p\_mean, high\_prec\_dur) are climatic indices 
 derived from the time series the model is trained on. Aridity is also a climatic indice, 
 but is not based on any time series accessed by the model. Three attributes (grass\_perc, 
-crop\_perc, inwater\_perc) are land cover attributes. Three attribtues (tawc, 
+crop\_perc, inwater\_perc) are land cover attributes. Three attributes (tawc, 
 root\_depth, conductivity\_hypres) are soil attributes. Four attributes (elev\_90,
-elev\_10, elev\_50, area) are topographic. Two attributs (no\_gw\_perc and 
+elev\_10, elev\_50, area) are topographic. Two attributes (no\_gw\_perc and 
 inter\_mod\_perc) are hydrogeologic attributes. Details of these attributes 
 can be found in Table 2 in \citet{CAMELS_GB} and sources therein.
 
@@ -172,7 +171,7 @@ ungauged basins from both datasets with the same model.
     on a dataset consisting of both CAMELS \citet{CAMELS_US} and CAMELS-GB \citep{CAMELS_GB}. 
     The models are described in Table \ref{all models}. The top figure shows the 
     performance of the models on CAMELS-GB and the bottom figure shows the performance 
-    on CAMELS. The top figure is the cross validated perforamnce on CAMELS-GB, the 
+    on CAMELS. The top figure is the cross validated performance on CAMELS-GB, the 
     bottom figure on CAMELS.}
     \label{mixed CDF validation}
 \end{figure}

@@ -2,23 +2,22 @@
     \toprule
     Label & attribute subset & batch size & dropout \\
     \midrule
-    GB$_\text{ea-lstm, all}$ & a &  1152 (?)  & 0\\
-    GB$_\text{lstm, all}$ & a & 1024 (?) & 0  \\
-    GB$_\text{ea-lstm, chosen}$ & b & 1536 & 0 \\
-    GB$_\text{lstm, chosen}$ & b & 1280 & 0\\
-    GB$_\text{none}$ & n/a & 1280 (?) & $0.4^*$\\
-    US$_\text{Kratzert}$  & c & 1024 & 0.4 \\
-    US$_\text{none}$  & n/a & 2048 & 0.4\\
-    Mixed$_\text{ea-lstm}$ & d & 1024 & 0.4\\
-    Mixed$_\text{lstm}$ & d & 1024 & 0.4\\
-    Mixed$_\text{none}$ & n/a & 1024 & 0.4\\
-    Transfer$_\text{GB, ea-lstm}$ & d  & 1024 & 0.4 \\
-    Transfer$_\text{GB, lstm}$ & d  & 4096 & 0.4\\
-    Transfer$_\text{GB, none}$ & n/a & 1024 & 0.4 \\
-    Transfer$_\text{US, ea-lstm}$ & d & 4096 & 0.4 \\
-    Transfer$_\text{US, lstm}$  & d & 4096 & 0.4 \\ 
-    Transfer$_\text{US, none}$  & n/a & 4096 & 0.4 \\
-    Transfer$_\text{US, ea-lstm 2}$ & e & 2048 & 0.4 \\
-    & & & $*$ Both 0.4 and 0 \\
+    GB$_\text{ea-lstm, all}$ & \textbf{\textit{a}} &  1152 (?)  & 0\\
+    GB$_\text{lstm, all}$ & \textbf{\textit{a}} & 1024 (?) & 0  \\
+    GB$_\text{ea-lstm, chosen}$ & \textbf{\textit{b}} & 1536 & 0 \\
+    GB$_\text{lstm, chosen}$ & \textbf{\textit{b}} & 1280 & 0\\
+    GB$_\text{none}$ & - & 1280 (?) & 0\\
+    US$_\text{Kratzert}$  & \textbf{\textit{c}} & 1024 & 0.4 \\
+    US$_\text{none}$  & - & 2048 & 0.4\\
+    Mixed$_\text{ea-lstm}$ & \textbf{\textit{d}} & 1024 & 0.4\\
+    Mixed$_\text{lstm}$ & \textbf{\textit{d}} & 1024 & 0.4\\
+    Mixed$_\text{none}$ & - & 1024 & 0.4\\
+    Transfer$_\text{GB, ea-lstm}$ & \textbf{\textit{d}}  & 1024 & 0.4 \\
+    Transfer$_\text{GB, lstm}$ & \textbf{\textit{d}}  & 4096 & 0.4 \\
+    Transfer$_\text{GB, none}$ & - & 1024 & 0.4 \\
+    Transfer$_\text{US, ea-lstm}$ & \textbf{\textit{d}} & 4096 & 0.4 \\
+    Transfer$_\text{US, lstm}$  & \textbf{\textit{d}} & 4096 & 0.4 \\ 
+    Transfer$_\text{US, none}$  & - & 4096 & 0.4 \\
+    Transfer$_\text{US, ea-lstm 2}$ & \textbf{\textit{e}} & 2048 & 0.4 \\
 \bottomrule
 \end{tabular}
