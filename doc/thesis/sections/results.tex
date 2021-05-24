@@ -104,6 +104,7 @@ but is not based on any time series accessed by the model. Three attributes (\te
 can be found in Table 2 in \citet{CAMELS_GB} and references therein.
 
 \section{Models trained on CAMELS}
+\label{CAMELS results}
 In this section we present the results related to model selection and feature 
 importance when training and predicting on CAMELS \citep{CAMELS_US}. This section 
 is meant to show whether we are able to produce results similar to those of 
@@ -167,6 +168,7 @@ ranked by median importance are shown in Table \ref{kratzert importance}. Three
 out of the four top ranked attributes are also ranked in the top four by \cite{lstm_second_paper} 
 using the same attribute subset but a different ranking method. 
 \section{Models trained on CAMELS and CAMELS-GB}
+\label{Mixed results}
 In this section we present results related to model selection and feature importance 
 when training and validating using both CAMELS and CAMELS-GB as a combined dataset.
 This section is meant to show whether we can obtain satisfactory performance on 
@@ -258,7 +260,7 @@ able to satisfyingly make predictions on the other.
 \end{figure}
 \begin{figure}
 \includegraphics{{results_section/transfer/training_progress}.pdf}
-    \caption[Training progress Transfer$_\text{US, lstm, none}$]{Training performance per epoch of Transfer$_\text{US, none}$ and Transfer$_\text{GB, none}$ 
+    \caption[Training progress Transfer$_\text{US, lstm, none}$]{Cross validated performance per epoch of Transfer$_\text{US, none}$ and Transfer$_\text{GB, none}$ 
 on CAMELS-GB (top) and CAMELS (bottom). The orange lines indicate the median NSEs, 
 while the green lines indicate the mean NSEs.}
 \label{training progress transfer}

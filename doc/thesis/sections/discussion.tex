@@ -1,2 +1,80 @@
+In this chapter we discuss the performance of our models and compare to similar 
+works. The chapter is split into two main sections: In the first section we 
+discuss the performance of our machine learning models, compare to other similar 
+experiments discuss ways to improve the machine learning aspects of this thesis.
+In the second section we discuss the physical implications we believe the success 
+of these machine learning models could have. We also discuss possible implications 
+of our attribute importance rankings. 
 \section{Machine Learning}
+In this section we discuss the machine learning aspects of the results in this thesis.
+We analyze the pure performance of our models and discuss whether we believe it 
+is possible to improve said performance.
+\subsection{Model Selection}
+\label{discuss model selection}
+Section \ref{CAMELS-GB results}-\ref{Mixed results} 
+all agree that performance is increased when introducing static attributes. In 
+addition to this, we see that the ordinary LSTM models that treat the static 
+attributes as time series are the highest performing models. We find it likely that 
+this is due  to the decrease in model complexity in an EA-LSTM compared to an LSTM. 
+For example, Mixed$_\text{ea-lstm}$ has 205057 trainable parameters (weights and 
+biases), Mixed$_\text{lstm}$ has 285953 and Mixed$_\text{none}$ has 266497. The 
+EA-LSTM is actually a less complex model than an ordinary LSTM trained without 
+static attributes. The EA-LSTM's ability to come close to the performance of an 
+LSTM using $~72\%$ of the trainable parameters is notable, however. 
+\subsection{Overfitting}
+There are no clear signs of overfitting in our selected models. Table 
+\ref{results summary table} indicate 
+similar performance between the cross validated models and the refit models 
+validated on the test set. There are some discrepancies in the CDF plot of 
+the performance of the models trained on CAMELS 
+shown in Figure \ref{test cdf} (second from top), leading to a median NSE of 
+0.65 on the test set as opposed to 0.68 in the cross validated case. This small 
+deviation could perhaps be explained by the findings of \citet{lstm_second_paper},
+ which found that an ensemble of LSTM models performs better than a singular LSTM 
+ because of nontrivial differences in performance caused by randomness in the 
+ training process. For computational reasons we have chosen not to use model 
+ ensembles anywhere in this thesis.
+
+ What we can view as overfitting is the case of transfer learning. Figure 
+ \ref{training progress transfer} indicates that Transfer$_\text{GB, lstm, none}$ 
+ and Transfer$_\text{US, lstm, none}$ start overfitting on their respective training 
+ datasets. This overfitting isn't apparent when validating on basins from the 
+ same dataset as they are trained on, but very quickly manifests when validating 
+ on the other dataset. We view it as likely that if CAMELS-GB and CAMELS were to 
+ have a perfectly overlapping supply of input data, it would show that this is 
+ still the case for this case as well. This could indicate that training LSTM models 
+ for transfer learning between different datasets either needs improved pre-processing, 
+ or the introduction of some kind of regularization. 
+\subsection{Hyperparameter Tuning}
+We do not spend significant time in this thesis tuning hyperparameters. Instead, 
+we chose to use the hyperparameters derived by \citet{lstm_second_paper}. The one 
+exception to this is in the case shown in Section \ref{CAMELS-GB results}. We found 
+that using dropout in this case at best makes no difference and at worst slightly 
+decreases performance. In some cases we also tested whether increasing the 
+sequence length from 270 days to 365 days increases performance, but our results 
+indicate that this leads to no performance difference. The lower sequence length, 
+the lower memory requirement per batch size, so we decided to keep using 270 days. 
+
+We acknowledge that it may be possible to further increase the performance on 
+CAMELS-GB by doing a thorough hyperparameter tuning experiment, this is 
+something that definitely should be done in the future. 
 \section{Physical Aspects}
+In this section we discuss the physical implications of our results and what could 
+possibly be used in future process-driven models and potential hybrid process-driven 
+and machine learning models.
+\subsection{Static Attribute Analysis}
+\label{discuss static attributes}
+As the results presented in Section \ref{CAMELS-GB results} and \ref{CAMELS results} 
+indicate that the most important attributes are merely attributes derived from the 
+input time series, it is likely that we cannot extract much new information from 
+the attribute rankings. Other ways to rank attributes should also be attempted 
+in the future, however. \citet{lstm_second_paper} used a robustness test which 
+involves gradually adding Gaussian noise to a feature and checking how much it 
+affects model performance (DOUBLE CHECK THIS!!!). \citet{OrigCAMELSRanking} 
+uses a different method involving blah blah. These two methods should also be 
+attempted on CAMELS-GB in addition to the permutation test employed in this 
+thesis.
+
+\subsection{On the feasibility of transfer learning}
+\subsection{Comparison to other works}
+
