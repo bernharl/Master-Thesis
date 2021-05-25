@@ -64,6 +64,17 @@ possibly be used in future process-driven models and potential hybrid process-dr
 and machine learning models.
 \subsection{Static Attribute Analysis}
 \label{discuss static attributes}
+Table \ref{overfit table} shows among others \textbf{\texttt{Q95}} as the most 
+important attribute for the overfit "proof of concept" model. This attribute is the 
+95th percentile runoff value for the full runoff time series for a given basin, 
+information directly derived from the expected outcome. 
+Because of this, we believe it is 
+safe to assume two things: 1: An LSTM model can learn which static attributes are 
+the most important, at least in the most obvious case. 2: The permutation test 
+succeeds at deciding the most important static attribute in this case. These 
+assumptions are therefore used to strengthen our confidence in the results from 
+our other, non-overfit models. 
+
 As the results presented in Section \ref{CAMELS-GB results} and \ref{CAMELS results} 
 indicate that the most important attributes are merely attributes derived from the 
 input time series, it is likely that we cannot extract much new information from 
@@ -74,6 +85,8 @@ affects model performance (DOUBLE CHECK THIS!!!). \citet{OrigCAMELSRanking}
 uses a different method involving blah blah. These two methods should also be 
 attempted on CAMELS-GB in addition to the permutation test employed in this 
 thesis.
+
+
 
 \subsection{On the feasibility of transfer learning}
 The results in Section \ref{Transfer learning section} show that the models trained 
@@ -87,11 +100,21 @@ room for improvement in how we preprocess both the attributes and the time serie
 As seen in Table \ref{transfer table} we assume that the temperature time series 
 of CAMELS behave like symmetrical periodic functions, therefore leading to 
 \begin{equation}
-T_\text{average} \approx  \frac{T_\text{min}+T_\text{max}}{2}.
+T_\text{average} \approx  \frac{T_\text{min}+T_\text{max}}{2}. \label{dumb assumption}
 \end{equation}
 Ideally, we need to have temperature as a time series for a given model to be able 
 to properly model snow and frozen soil accumulation, which is very important for 
-hydrologic models \citationneeded. 
+hydrologic models \citationneeded. The fact that models trained on both datasets 
+still perform comparably to models trained on only one dataset seems to suggest 
+that (\ref{dumb assumption}) isn't entirely destructive, however.
+
+It seems to us that there are several angles to further tackle the issue of transfer 
+learning. The first we stated above: Find maximum and minimum time series for 
+CAMELS-GB. The second is to improve the preprocessing of static attributes to 
+the point where one would hopefully see better performance with attributes than 
+without. A third option is to try introducing a third dataset. If one were to 
+train on two datasets and validate on a third it could perhaps lead to better 
+generalization. 
 \subsection{Comparison to traditional models}
 Confirming the results of \citet{lstm_second_paper,lstm_third_paper}, our models 
 trained on CAMELS performs significantly better than traditional models. In this 
@@ -99,10 +122,16 @@ thesis we compare to two process-driven models: VIC and NWM, and one conceptual
 model: SAC-SMA. 
 
 What is new in this thesis is that models trained on both CAMELS and CAMELS-GB 
-also perform better on CAMELS than the addressed traditional models. Our hypothesis 
+also perform better on CAMELS than the addressed traditional models. This could 
+be because the models are complex enough to "recognize" which dataset a given 
+basin is from based on underlying signatures in either the time series or the 
+static attributes. Perhaps this differentiation could stem from differences in 
+data collection practice. 
+
+A hypothesis for why LSTM models perform better on CAMELS in general
 (CHECK IF OTHERS ALSO CLAIM THIS) \citationneeded is that this is due to the LSTM 
 models being better at modelling basins with special conditions leading to 
 a rainfall-runoff ratio different from 1. When the rainfall-runoff ratio is lower 
 than one it usually implies that the rainfall is either stored as snow or frozen 
 soil, or that it is vaporized through photosynthesis in local vegetation \citationneeded ??. 
-
+These processes are difficult to model compared to direct runoff \citationneeded.
