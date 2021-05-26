@@ -18,12 +18,13 @@ attributes as time series are the highest performing models. We find it likely t
 this is due  to the decrease in model complexity in an EA-LSTM compared to an LSTM. 
 For example, Mixed$_\text{ea-lstm}$ has 205057 trainable parameters (weights and 
 biases), Mixed$_\text{lstm}$ has 285953 and Mixed$_\text{none}$ has 266497. The 
-EA-LSTM is actually a less complex model than an ordinary LSTM trained without 
+EA-LSTM is a less complex model than an ordinary LSTM trained without 
 static attributes. The EA-LSTM's ability to come close to the performance of an 
 LSTM using $~72\%$ of the trainable parameters is notable, however. 
 \subsection{Overfitting}
-There are no clear signs of overfitting in our selected models. Table 
-\ref{results summary table} indicate 
+We find no clear signs of overfitting in our selected models when comparing 
+cross validated performance to test performance. Table 
+\ref{results summary table} indicates 
 similar performance between the cross validated models and the refit models 
 validated on the test set. There are some discrepancies in the CDF plot of 
 the performance of the models trained on CAMELS 
@@ -34,6 +35,8 @@ deviation could perhaps be explained by the findings of \citet{lstm_second_paper
  because of nontrivial differences in performance caused by randomness in the 
  training process. For computational reasons we have chosen not to use model 
  ensembles anywhere in this thesis.
+
+WRITE ABOUT "PHYSICAL CONSTRAINTS" HERE!!!
 
  What we can view as overfitting is the case of transfer learning. Figure 
  \ref{training progress transfer} indicates that Transfer$_\text{GB, lstm, none}$ 
@@ -76,9 +79,15 @@ assumptions are therefore used to strengthen our confidence in the results from
 our other, non-overfit models. 
 
 As the results presented in Section \ref{CAMELS-GB results} and \ref{CAMELS results} 
-indicate that the most important attributes are merely attributes derived from the 
+indicate that the many of the important attributes are derived directly from the 
 input time series, it is likely that we cannot extract much new information from 
-the attribute rankings. Other ways to rank attributes should also be attempted 
+these as this information should be available in the time series already used by 
+most models. The reason for this is being the case is likely connected to the 
+nature of the LSTM training process and the sequence length. Looking into ways 
+to further improve the long-term memory of an LSTM should be further explored 
+in the future.
+
+We believe other ways to rank attributes should also attempted 
 in the future, however. \citet{lstm_second_paper} used a robustness test which 
 involves gradually adding Gaussian noise to a feature and checking how much it 
 affects model performance (DOUBLE CHECK THIS!!!). \citet{OrigCAMELSRanking} 
@@ -88,7 +97,7 @@ thesis.
 
 
 
-\subsection{On the feasibility of transfer learning}
+\subsection{Feasibility of transfer learning}
 The results in Section \ref{Transfer learning section} show that the models trained 
 for transfer learning do not benefit from adding static attributes. We also see 
 that the case of US$\rightarrow$GB significantly improves the opposite. This makes 
@@ -128,10 +137,11 @@ basin is from based on underlying signatures in either the time series or the
 static attributes. Perhaps this differentiation could stem from differences in 
 data collection practice. 
 
-A hypothesis for why LSTM models perform better on CAMELS in general
+A hypothesis for why LSTM models perform better than traditional models on CAMELS in general
 (CHECK IF OTHERS ALSO CLAIM THIS) \citationneeded is that this is due to the LSTM 
 models being better at modelling basins with special conditions leading to 
 a rainfall-runoff ratio different from 1. When the rainfall-runoff ratio is lower 
 than one it usually implies that the rainfall is either stored as snow or frozen 
 soil, or that it is vaporized through photosynthesis in local vegetation \citationneeded ??. 
-These processes are difficult to model compared to direct runoff \citationneeded.
+These processes are difficult to model compared to runoff directly caused by 
+rainfall \citationneeded.
