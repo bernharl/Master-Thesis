@@ -22,7 +22,7 @@ EA-LSTM is a less complex model than an ordinary LSTM trained without
 static attributes. The EA-LSTM's ability to come close to the performance of an 
 LSTM using $~72\%$ of the trainable parameters is notable, however. 
 \subsection{Overfitting}
-We find no clear signs of overfitting in our selected models when comparing 
+We find few clear signs of overfitting in our selected models when comparing 
 cross validated performance to test performance. Table 
 \ref{results summary table} indicates 
 similar performance between the cross validated models and the refit models 
@@ -36,7 +36,35 @@ deviation could perhaps be explained by the findings of \citet{lstm_second_paper
  training process. For computational reasons we have chosen not to use model 
  ensembles anywhere in this thesis.
 
-WRITE ABOUT "PHYSICAL CONSTRAINTS" HERE!!!
+Aside from dropout, we employ no regularization methods on our models. \citet{lstm_third_paper} 
+argues that there is evidence that adding so called "physical constraints" to 
+models used on CAMELS could be helpful. This is argued because the LSTM models 
+underperform compared to SAC-SMA on some basins. Here the paper compares SAC-SMA 
+to an LSTM trained on all basins, training and validation split time series-wise 
+and not basin-wise. SAC-SMA is a conceptual model and is therefore not usually seen 
+as a "physical" model, so we do not think this argument is enough to support said 
+notion. The fact that all our best models significantly underperform on 
+several basins could be an indication that we need to implement more regularization. 
+This regularization might as well be based on physical principles, in our opinion. 
+The benefit of physical constraints are many, some of which are:
+\begin{itemize}
+\item Interpretability: Physical constraints could improve the physical interpretability 
+of the LSTM.
+\item Improved generalization: The goal of most machine learning regularization is 
+to improve regularization by increasing bias and decreasing variance (see Figure 
+\ref{Bias Variance rainfall}). Increasing bias using physical laws would fit well 
+into the narrative of \citet{BiasVarianceVIC} and \citet{VICbench}, although from 
+the opposite angle. These papers argue that process-driven models are often too 
+statistically constrained, due to them being driven almost entirely by interpretable 
+physical processes. \citet{VICbench} showed that VIC performs at a higher level 
+when tuning more parameters than usual, as these parameters are often set to based 
+on physical a-priori knowledge. This is analogous to the bias-variance trade-off 
+in machine learning. An LSTM is much less constrained and therefore performs better, 
+agreeing with the results of the aforementioned papers. By making LSTM models 
+slightly more constrained (as worded by \citet{BiasVarianceVIC}) could then make 
+them generalize successfully to more basins while still being powerful enough to 
+learn all necessary relationships between input variables.
+\end{itemize}
 
  What we can view as overfitting is the case of transfer learning. Figure 
  \ref{training progress transfer} indicates that Transfer$_\text{GB, lstm, none}$ 
