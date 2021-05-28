@@ -491,14 +491,13 @@ Here the variables are as follows:
     \item $\bm{b}_y$: A bias term used when calculating the next time step $y_t$.
 \end{itemize}
 
-In Figure \ref{RNN figure} we see that the output is represented as equal to the 
-hidden state. While not illustrated in the figure, usually the way to get the output 
-on the form we are interested involved feeding the hidden state through a neural 
-network layer. This is what is done in (\ref{RNN output}).
+In Figure \ref{RNN figure} we see that the output at time step $t$ is represented 
+as equal to the hidden state fed through a neural network layer with no activation 
+function. This is what is done in (\ref{RNN output}).
 
 The backpropagation algorithm for an RNN is quite a bit different although the 
 underlying concept is the same. We argue it is not necessary to include the algorithm 
-in this thesis but if the reader is interested they should read this source \citet{BPTT}.
+in this thesis, but if the reader is interested they should read this source: \citet{BPTT}.
 The important takeaway from the backpropagation algorithm used for RNNs (called 
 Backpropagation Through Time), is that it uses high amounts of memory because 
 it needs to store values for every time step to be able to get proper gradients 

@@ -65,6 +65,14 @@
   hyperindex   = true,
   linktocpage   = true
 }
+\usepackage[acronyms,nonumberlist]{glossaries}
+
+\glstoctrue
+\makeglossaries
+
+\subfile{acronyms}
+
+\glsaddall
 \pagestyle{headings}
 \begin{document}
 \duoforside[
@@ -84,6 +92,8 @@
 
 \setcounter{page}{1}
 \tableofcontents
+%\addcontentsline{toc}{chapter}{Acronyms}
+\printglossaries
 \listoffigures
 \listoftables
 \listoflistings
