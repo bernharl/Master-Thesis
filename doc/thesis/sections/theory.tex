@@ -446,9 +446,10 @@ otherwise. \citationneeded
 \label{RNN Theory}
 \begin{figure}
     \input{figures/tikz/rnn.tex}
-    \caption[An RNN cell.]{Illustration of an RNN cell. The squared Tanh indicated a neural 
+    \caption[An RNN cell.]{Illustration of an RNN cell. The squared tanh indicates a neural 
     network layer with tanh as the activation function. Lines meeting indicate 
     concatenation while lines splitting means copying. 
+	The squared $f(x)=x$ is a neural network layer with no activation function.
 The Tikz code for creating this figure is released under the permissive Beerware license 
     and is a modified version of the figure in \citet{tikzlstm}.}
 	\label{RNN figure}
@@ -466,7 +467,7 @@ parameters for all future time-steps. In simple terms the algorithm goes like th
 \begin{enumerate}
     \item The model takes an input $\bm{x_t}$
     \item Using trained parameters it updates a hidden state vector $\bm{h_t}$
-    \item The models gives an output based on the parameters and the hidden state $\bm{y_t}$.
+    \item The model gives an output based on the parameters and the hidden state $\bm{y_t}$.
 \end{enumerate}
 For an ordinary RNN the state updates and outputs are defined as: 
 \footnote{Note that this describes only a single RNN cell. When dealing with RNNs 
@@ -548,7 +549,9 @@ This means that the LSTM has two clear advantages:
     \caption[An LSTM cell.]{A single basic LSTM cell as proposed in \citet{hochreiter1997long}. Visually we see the point of the Cell State $C$ here is to not retain more information 
 by being affected less over time than the hidden state $h$. This is how the LSTM 
 avoids the gradient issues regarding long term dependencies that the RNN suffers 
-from.
+from.The squared tanh indicates a neural 
+    network layer with tanh as the activation function, $sigma$ indicated a sigmoid 
+	activation function and$f(x)=x$ indicates no activation function.
 The Tikz code for creating this figure is released under the permissive Beerware license 
 and is a modified version of the figure in \citet{tikzlstm}.
 }
