@@ -74,7 +74,20 @@ $\bm{y}_\text{frost}$ and $\bm{y}_\text{radiation}$. These represent runoff,
 frost/snow and radiated water respectively. Only $\bm{y}_\text{discharge}$ would 
 be treated as the actual input when calculating the original cost function 
 (\ref{NSE loss}). The other parts would be used for regularization by enforcing 
-the fact that. We then introduce a long term frost storage variable $W$ 
+the fact that. We then introduce a long term frost storage variable $\bm{W}_\text{frost}$.
+For each time step this storage variable is updated by adding $\bm{y}_\text{frost}$.
+When calculating the loss function, we now add a new term to (\ref{NSE loss}):
+\begin{equation}
+    L = \text{NSE}^* + \gamma \left|(\bm{y_\text{discharge}} - \bm{x}_\text{precipitation} 
+    - \bm{y}_\text{radiation} - (\bm{y}_\text{frost} - \bm{W}_\text{frost}))\right|
+    \label{physical constraint}.
+\end{equation}
+Here $\gamma$ is a hyperparameter that needs to be separately tuned. Our reasoning 
+behind (\ref{physical constraint}) is that this cost function penalizes models for 
+making predictions where there is more runoff than available precipitation, 
+snow and frost. Our hypothesis is that this penalty should lead to less complex 
+models that are less likely to predict wildly unphysical behaviors, leading to 
+fewer NSE scores below zero. 
 
  What we can view as overfitting is the case of transfer learning. Figure 
  \ref{training progress transfer} indicates that Transfer$_\text{GB, lstm, none}$ 
