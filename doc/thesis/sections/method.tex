@@ -47,8 +47,7 @@ is shown here:
     \end{enumerate}
 \end{enumerate}
 We evaluate models using the Nash–Sutcliffe model efficiency coefficient (NSE) \citep{NSE}.
-This metric is similar to the $R^2$ score, but it is specialized for usage 
-on hydrological time series.
+This metric is essentially a hydrological interpretation of the well known $R^2$ score.
 It is defined as 
 \begin{equation}
     \text{NSE} = 1 - \frac{\sum_{t=0}^T\left( y^t - \hat{y}^t\right)}{\sum_{t=0}^T\left(y^t - \bar{\hat{y}}\right)} \label{NSE}
@@ -56,6 +55,19 @@ It is defined as
 
 Here $T$ is the amount of time steps in a time series, $y^t$ is the observed runoff 
 used as the ground truth at time step $t\in[0,T]$, $\tilde{y}^t$ is the predicted runoff at time step $t\in[0,T]$ and $\hat{\tilde{y}}$ is the average predicted runoff.
+
+\citet{lstm_second_paper} argues that using MSE as the cost function is not ideal
+for generalized hydrological modelling, as errors on basins with higher absolute 
+runoff will contribute more to the total MSE than those with lower runoff. To circumvent 
+this they use what they dub the NSE loss function. It is defined as 
+\begin{equation}
+NSE^*_\text{basin} = \frac{\left| \bm{y}_\text{basin} - \bm{\hat{y}}_\text{basin} 
+\right|^2}{\left( \sigma_\text{basin} + \varepsilon \right)^2} \label{NSE loss},
+\end{equation}
+where $\bm{y}_\text{basin}$ is the observed runoff of a given basin, 
+$\bm{\hat{y}}_\text{basin}$ is the predicted runoff of a given basin 
+and $\sigma_\text{basin}$ is the standard deviation of a given basin's observed 
+runoff. $\varepsilon$ is a very small number included for numerical stability.
 
 As we employ cross validation, we  end up with 5 different models 
 for each training run. These models do not necessarily converge to the same model parameters 

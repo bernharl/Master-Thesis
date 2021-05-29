@@ -63,9 +63,18 @@ in machine learning. An LSTM is much less constrained and therefore performs bet
 agreeing with the results of the aforementioned papers. By making LSTM models 
 slightly more constrained (as worded by \citet{BiasVarianceVIC}) could then make 
 them generalize successfully to more basins while still being powerful enough to 
-learn all necessary relationships between input variables.
+learn necessary relationships between input variables.
 \end{itemize}
-We propose a simple physical constraint: 
+We propose a simple physical constraint:
+\begin{equation}
+\bm{\hat{y}} = \text{LSTM}(\bm{x}),
+\end{equation}
+where $\bm{\hat{y}}$ now consists of three outputs: $\bm{y}_\text{discharge}$, 
+$\bm{y}_\text{frost}$ and $\bm{y}_\text{radiation}$. These represent runoff, 
+frost/snow and radiated water respectively. Only $\bm{y}_\text{discharge}$ would 
+be treated as the actual input when calculating the original cost function 
+(\ref{NSE loss}). The other parts would be used for regularization by enforcing 
+the fact that. We then introduce a long term frost storage variable $W$ 
 
  What we can view as overfitting is the case of transfer learning. Figure 
  \ref{training progress transfer} indicates that Transfer$_\text{GB, lstm, none}$ 
