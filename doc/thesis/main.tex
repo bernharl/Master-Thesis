@@ -72,6 +72,8 @@
 
 \subfile{acronyms}
 
+\usepackage[nottoc]{tocbibind}
+
 \glsaddall
 \pagestyle{headings}
 \begin{document}
@@ -93,15 +95,12 @@
 \setcounter{page}{1}
 \tableofcontents
 %\addcontentsline{toc}{chapter}{Acronyms}
-\printglossaries
- \clearpage
- \addcontentsline{toc}{chapter}{\listfigurename}
+\printglossaries 
+%\addcontentsline{toc}{chapter}{\listfigurename}\clearpage
 \listoffigures
- \clearpage
-  \addcontentsline{toc}{chapter}{\listtablename}
+%\addcontentsline{toc}{chapter}{\listtablename}\clearpage
 \listoftables
- \clearpage
-  \addcontentsline{toc}{chapter}{List of Listings}
+\addcontentsline{toc}{chapter}{List of Listings}\clearpage
 \listoflistings
 
 \chapter{Introduction}

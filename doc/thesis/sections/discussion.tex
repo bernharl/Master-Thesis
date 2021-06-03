@@ -29,7 +29,7 @@ similar performance between the cross validated models and the refit models
 validated on the test set. There are some discrepancies in the CDF plot of 
 the performance of the models trained on CAMELS 
 shown in Figure \ref{test cdf} (second from top), leading to a median NSE of 
-0.65 on the test set as opposed to 0.68 in the cross validated case. This small 
+0.65 on the test set as opposed to $0.68$ in the cross validated case. This small 
 deviation could perhaps be explained by the findings of \citet{lstm_second_paper},
  which found that an ensemble of LSTM models performs better than a singular LSTM 
  because of nontrivial differences in performance caused by randomness in the 
@@ -73,9 +73,12 @@ where $\bm{\hat{y}}$ now consists of three outputs: $\bm{y}_\text{discharge}$,
 $\bm{y}_\text{frost}$ and $\bm{y}_\text{radiation}$. These represent runoff, 
 frost/snow and radiated water respectively. Only $\bm{y}_\text{discharge}$ would 
 be treated as the actual input when calculating the original cost function 
-(\ref{NSE loss}). The other parts would be used for regularization by enforcing 
-the fact that. We then introduce a long term frost storage variable $\bm{W}_\text{frost}$.
-For each time step this storage variable is updated by adding $\bm{y}_\text{frost}$.
+(\ref{NSE loss}). We then introduce a long term frost storage variable $\bm{W}_\text{frost}$.
+For each time step this storage variable is updated by 
+\begin{equation}
+    \bm{W}_\text{frost}^{t+1} = \bm{W}_\text{frost}^t + \bm{y}_\text{frost},
+\end{equation}
+where $t$ is the current time step.
 When calculating the loss function, we now add a new term to (\ref{NSE loss}):
 \begin{equation}
     L = \text{NSE}^* + \gamma \left|(\bm{y_\text{discharge}} - \bm{x}_\text{precipitation} 
@@ -86,7 +89,7 @@ Here $\gamma$ is a hyperparameter that needs to be separately tuned. Our reasoni
 behind (\ref{physical constraint}) is that this cost function penalizes models for 
 making predictions where there is more runoff than available precipitation, 
 snow and frost. Our hypothesis is that this penalty should lead to less complex 
-models that are less likely to predict wildly unphysical behaviors, leading to 
+models that are less likely to predict unphysical behaviors, leading to 
 fewer NSE scores below zero. 
 
  What we can view as overfitting is the case of transfer learning. Figure 
@@ -124,7 +127,7 @@ important attribute for the overfit "proof of concept" model. This attribute is 
 information directly derived from the expected outcome. 
 Because of this, we believe it is 
 safe to assume two things: 1: An LSTM model can learn which static attributes are 
-the most important, at least in the most obvious case. 2: The permutation test 
+the most important in CAMELS-GB, at least in the most obvious case. 2: The permutation test 
 succeeds at deciding the most important static attribute in this case. These 
 assumptions are therefore used to strengthen our confidence in the results from 
 our other, non-overfit models. 
