@@ -20,7 +20,9 @@ For example, Mixed$_\text{ea-lstm}$ has 205057 trainable parameters (weights and
 biases), Mixed$_\text{lstm}$ has 285953 and Mixed$_\text{none}$ has 266497. The 
 EA-LSTM is a less complex model than an ordinary LSTM trained without 
 static attributes. The EA-LSTM's ability to come close to the performance of an 
-LSTM using $~72\%$ of the trainable parameters is notable, however. 
+LSTM using $~72\%$ of the trainable parameters is notable, however. It could imply 
+that in most cases even a less complex model benefits from the additional information 
+contained in the attributes.
 \subsection{Overfitting}
 We find few clear signs of overfitting in our selected models when comparing 
 cross validated performance to test performance. Table 
@@ -93,8 +95,8 @@ models that are less likely to predict unphysical behaviors, leading to
 fewer NSE scores below zero. 
 
  What we can view as overfitting is the case of transfer learning. Figure 
- \ref{training progress transfer} indicates that Transfer$_\text{GB, lstm, none}$ 
- and Transfer$_\text{US, lstm, none}$ start overfitting on their respective training 
+ \ref{training progress transfer} indicates that Transfer$_\text{GB, none}$ 
+ and Transfer$_\text{US, none}$ start overfitting on their respective training 
  datasets. This overfitting isn't apparent when validating on basins from the 
  same dataset as they are trained on, but very quickly manifests when validating 
  on the other dataset. We view it as likely that if CAMELS-GB and CAMELS were to 
