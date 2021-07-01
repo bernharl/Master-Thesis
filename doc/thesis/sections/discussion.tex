@@ -94,6 +94,19 @@ snow and frost. Our hypothesis is that this penalty should lead to less complex
 models that are less likely to predict unphysical behaviors, leading to 
 fewer NSE scores below zero. 
 
+\begin{figure}
+\centering
+\input{{figures/tikz/simple_hybrid}.tex}
+    \caption[Potential simple hybrid model.]{Sketch of how a simple hybrid model could be implemented. The traditional model and the LSTM model are completely separate, making it unnecessary to calculate gradients for the traditional model. The idea here would be for the LSTM model to learn the phenomena lacking in traditional models.}
+\label{figure simple hybrid}
+\end{figure}
+Sticking to the topic of increased generalizability and interpretability, we 
+believe it to be of interest to implement a hybrid model. 
+By "hybrid model" we refer to a machine learning model implemented along side a 
+traditional model. The machine learning model either replaces parts of or supplements 
+the predictions of a traditional model. A very simple implementation of this is shown 
+in Figure \ref{figure simple hybrid}
+
  What we can view as overfitting is the case of transfer learning. Figure 
  \ref{training progress transfer} indicates that Transfer$_\text{GB, none}$ 
  and Transfer$_\text{US, none}$ start overfitting on their respective training 
@@ -103,7 +116,7 @@ fewer NSE scores below zero.
  have a perfectly overlapping supply of input data, it would show that this is 
  still the case for this case as well. This could indicate that training LSTM models 
  for transfer learning between different datasets either needs improved pre-processing, 
- or the introduction of some kind of regularization. 
+ or the introduction of further regularisation. It could also be that more data is needed.
 \subsection{Hyperparameter Tuning}
 We do not spend significant time in this thesis tuning hyperparameters. Instead, 
 we chose to use the hyperparameters derived by \citet{lstm_second_paper}. The one 
