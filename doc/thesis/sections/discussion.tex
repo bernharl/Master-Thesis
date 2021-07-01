@@ -105,7 +105,12 @@ believe it to be of interest to implement a hybrid model.
 By "hybrid model" we refer to a machine learning model implemented along side a 
 traditional model. The machine learning model either replaces parts of or supplements 
 the predictions of a traditional model. A very simple implementation of this is shown 
-in Figure \ref{figure simple hybrid}
+in Figure \ref{figure simple hybrid}. This model would take the same inputs as 
+the models trained in this thesis, but the cost function would be calculated on 
+the sum of the output of a traditional model and the machine learning model. 
+What this essentially means is that the machine learning model learns to correct 
+the errors of a given traditional model instead of doing all the prediction by 
+itself.
 
  What we can view as overfitting is the case of transfer learning. Figure 
  \ref{training progress transfer} indicates that Transfer$_\text{GB, none}$ 
