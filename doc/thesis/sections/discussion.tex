@@ -122,6 +122,17 @@ itself.
  still the case for this case as well. This could indicate that training LSTM models 
  for transfer learning between different datasets either needs improved pre-processing, 
  or the introduction of further regularisation. It could also be that more data is needed.
+
+ This and earlier research done by \citet{lstm_first_paper,lstm_second_paper,lstm_third_paper} 
+ are all limited to simple LSTM models. LSTM models are, due to their recurrent nature, 
+notoriously slow. Graphics cards and similar highly parallel computational devices 
+are much more efficient for calculating less recurrent models. A relatively 
+simple way to surpass this could be to implement a one dimensional 
+Convolutional Neural Network (CNN) layer as the first layer of our model. This 
+layer could then be used to reduce the time resolution of the data, still retaining 
+information. The usage of CNNs for time series prediction is becoming increasingly
+wide spread \citationneeded. 
+
 \subsection{Hyperparameter Tuning}
 We do not spend significant time in this thesis tuning hyperparameters. Instead, 
 we chose to use the hyperparameters derived by \citet{lstm_second_paper}. The one 
@@ -223,15 +234,14 @@ One of many reasons why LSTM models perform better than traditional models on CA
 models are better at modelling basins with special conditions leading to 
 a rainfall-runoff ratio different from 1. When the rainfall-runoff ratio is lower 
 than one it usually implies that the rainfall is either stored as snow or frozen 
-soil, or that it is vaporized through photosynthesis in local vegetation \citationneeded ??. 
+soil, or that it is vaporized through photosynthesis in local vegetation \citationneeded. 
 These processes are difficult to model compared to runoff directly caused by 
 rainfall \citationneeded.
-
 Our results may indicate that this could be the case.
-Figure \ref{rainfall-runoff ratio} shows that only the traditional models have 
+Figure \ref{runoff ratio} shows that only the traditional models have 
 a statistically significant linear relationship between performance and 
 rainfall-runoff ratio. The relationships are generally weak, with a Pearson 
-correlation $\in \left[ 0.24, 0.33 \right]$, but they are more apparent then 
+correlation $\in \left[ 0.24, 0.33 \right]$, but they are more apparent than 
 for the LSTM models, where there exists no such linear relationship. The impact 
 of this discovery is quite uncertain, however, as there is significant 
 Spearman correlation (nonlinear correlation) for all the models, ranging 
