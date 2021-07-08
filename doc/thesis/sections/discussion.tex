@@ -21,7 +21,7 @@ biases), Mixed$_\text{lstm}$ has 285953 and Mixed$_\text{none}$ has 266497. The
 EA-LSTM is a less complex model than an ordinary LSTM trained without 
 static attributes. The EA-LSTM's ability to come close to the performance of an 
 LSTM using $~72\%$ of the trainable parameters is notable, however. It could imply 
-that in most cases even a less complex model benefits from the additional information 
+that even a less complex model benefits from the additional information 
 contained in the attributes.
 \subsection{Overfitting}
 We find few clear signs of overfitting in our selected models when comparing 
@@ -132,6 +132,26 @@ Convolutional Neural Network (CNN) layer as the first layer of our model. This
 layer could then be used to reduce the time resolution of the data, still retaining 
 information. The usage of CNNs for time series prediction is becoming increasingly
 wide spread \citationneeded. 
+
+On the topic of transfer learning, it is important to note that there exist several 
+other, similar datasets to the two used for this study. The easiest way to improve 
+any machine learning model is often to provide more data for training. A Chilean 
+dataset consisting of 515 catchments by the name CAMELS-CL \citep{CAMELS_CL} 
+was studied early in this thesis work, but the quality 
+of the data was deemed worse than that of CAMELS and CAMELS-GB. With some initial 
+preprocessing it could be of interest to see whether it is feasible to use this 
+dataset.
+In addition we know of two other datasets. One goes by the name CAMELS-BR, and is 
+a Brazilian dataset consisting of 897 catchments \citep{CAMELS_BR}.
+The other is CAMELS-AU, and is an Australian dataset consisting of 222 catchments
+ \citep{CAMELS_AU}. Especially CAMELS-BR seems to be of interest due to the 
+amount of catchments. Combining datasets is nontrivial, time consuming task, which 
+we expect will become increasingly hard the more datasets one tries to combine. 
+It is not unlikely that one has to discard almost all static attributes to make 
+the datasets compatible. We therefore expect that some effort to gather new data 
+would also be nessecary. It is of course also of interest to see how well machine 
+learning models perform on one or more of these datasets in isolation, though. 
+We see this as a possible candidate for the start of a new master thesis.
 
 \subsection{Hyperparameter Tuning}
 We do not spend significant time in this thesis tuning hyperparameters. Instead, 
