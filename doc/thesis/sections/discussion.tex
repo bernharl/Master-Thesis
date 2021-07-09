@@ -1,15 +1,8 @@
-In this chapter we discuss the performance of our models and compare to similar 
-works. The chapter is split into two main sections: In the first section we 
-discuss the performance of our machine learning models, compare to other similar 
-experiments discuss ways to improve the machine learning aspects of this thesis.
-In the second section we discuss the physical implications we believe the success 
-of these machine learning models could have. We also discuss possible implications 
-of our attribute importance rankings. 
-\section{Machine Learning}
-In this section we discuss the machine learning aspects of the results in this thesis.
-We analyze the pure performance of our models and discuss whether we believe it 
-is possible to improve said performance.
-\subsection{Model Selection}
+In this chapter we discuss the performance of our models. We discuss the implications 
+our results and the results of similar works may have on the physical understanding 
+of rainfall-runoff modelling. In addition we discuss ways to improve machine 
+learning for this problem, both performance-wise and for increased interpretability.
+\section{Model Selection}
 \label{discuss model selection}
 Section \ref{CAMELS-GB results}-\ref{Mixed results} 
 all agree that performance is increased when introducing static attributes. In 
@@ -22,8 +15,26 @@ EA-LSTM is a less complex model than an ordinary LSTM trained without
 static attributes. The EA-LSTM's ability to come close to the performance of an 
 LSTM using $~72\%$ of the trainable parameters is notable, however. It could imply 
 that even a less complex model benefits from the additional information 
-contained in the attributes.
-\subsection{Overfitting}
+contained in the attributes. 
+
+We do not spend significant time in this thesis tuning hyperparameters. Instead, 
+we chose to use the hyperparameters derived by \citet{lstm_second_paper}. The one 
+exception to this is in the case shown in Section \ref{CAMELS-GB results}. We found 
+that using dropout in this case at best makes no difference and at worst slightly 
+decreases performance. In some cases we also tested whether increasing the 
+sequence length from 270 days to 365 days increases performance, but our results 
+indicate that this leads to no performance difference. To save memory and decrease 
+training time we therefore kept the lower sequence length of 270 days.
+
+We acknowledge that it may be possible to further increase the performance by doing 
+a thorough hyperparameter tuning experiment. The tuning done by \citet{lstm_second_paper} 
+is a simple grid search with few points, and is not guaranteed to be a good basis. 
+Especially since this tuning was done for gauged basin prediction. A very thorough 
+hyperparameter tuning would be hard to brute force, due to the computationally 
+expensive nature of our models, therefore one would have to implement a more sophisticated 
+method than mere exhaustive grid searching. This is doubly true if one wants to tune 
+using cross validation.
+
 We find few clear signs of overfitting in our selected models when comparing 
 cross validated performance to test performance. Table 
 \ref{results summary table} indicates 
@@ -38,17 +49,20 @@ deviation could perhaps be explained by the findings of \citet{lstm_second_paper
  training process. For computational reasons we have chosen not to use model 
  ensembles anywhere in this thesis.
 
-Aside from dropout, we employ no regularization methods on our models. \citet{lstm_third_paper} 
-argues that there is evidence that adding so called "physical constraints" to 
+Aside from dropout in the final layer, we employ no regularization methods on 
+our models. \citet{lstm_third_paper} 
+argue that there is evidence that adding so called "physical constraints" to 
 models used on CAMELS could be helpful. This is argued because the LSTM models 
 underperform compared to SAC-SMA on some basins. Here the paper compares SAC-SMA 
 to an LSTM trained on all basins, training and validation split time series-wise 
 and not basin-wise. SAC-SMA is a conceptual model and is therefore not usually seen 
-as a "physical" model, so we do not think this argument is enough to support said 
-notion. The fact that all our best models significantly underperform on 
-several basins could be an indication that we need to implement more regularization. 
-This regularization might as well be based on physical principles, in our opinion. 
-The benefit of physical constraints are many, some of which are:
+as a "physical" model, but it is based more on physical arguments than a 
+generalized machine learning method. Still, both SAC-SMA and the LSTM are essentially 
+parameter based models, without clear physical interpretations of most parameters. 
+Because of this, we are unsure whether the argument that this is evidence for physical 
+constraints holds water. More research is needed on the topic. Regularization in 
+the form of physical constraints, if successfully implemented, may yield several 
+benefits. Some of which could be:
 \begin{itemize}
 \item Interpretability: Physical constraints could improve the physical interpretability 
 of the LSTM.
@@ -87,12 +101,13 @@ When calculating the loss function, we now add a new term to (\ref{NSE loss}):
     - \bm{y}_\text{radiation} - (\bm{y}_\text{frost} - \bm{W}_\text{frost}))\right|
     \label{physical constraint}.
 \end{equation}
-Here $\gamma$ is a hyperparameter that needs to be separately tuned. Our reasoning 
+Here $\gamma$ is a hyperparameter that needs to be tuned. Our reasoning 
 behind (\ref{physical constraint}) is that this cost function penalizes models for 
 making predictions where there is more runoff than available precipitation, 
 snow and frost. Our hypothesis is that this penalty should lead to less complex 
 models that are less likely to predict unphysical behaviors, leading to 
-fewer NSE scores below zero. 
+fewer NSE scores below zero. It could also improve interpretability of the model's 
+output. Whether this or a similar constraint behaves as intended remains to be seen.
 
 \begin{figure}
 \centering
@@ -102,26 +117,15 @@ fewer NSE scores below zero.
 \end{figure}
 Sticking to the topic of increased generalizability and interpretability, we 
 believe it to be of interest to implement a hybrid model. 
-By "hybrid model" we refer to a machine learning model implemented along side a 
+By "hybrid model" we refer to a machine learning model implemented alongside or 
+as part of a 
 traditional model. The machine learning model either replaces parts of or supplements 
 the predictions of a traditional model. A very simple implementation of this is shown 
 in Figure \ref{figure simple hybrid}. This model would take the same inputs as 
 the models trained in this thesis, but the cost function would be calculated on 
 the sum of the output of a traditional model and the machine learning model. 
-What this essentially means is that the machine learning model learns to correct 
-the errors of a given traditional model instead of doing all the prediction by 
-itself.
-
- What we can view as overfitting is the case of transfer learning. Figure 
- \ref{training progress transfer} indicates that Transfer$_\text{GB, none}$ 
- and Transfer$_\text{US, none}$ start overfitting on their respective training 
- datasets. This overfitting isn't apparent when validating on basins from the 
- same dataset as they are trained on, but very quickly manifests when validating 
- on the other dataset. We view it as likely that if CAMELS-GB and CAMELS were to 
- have a perfectly overlapping supply of input data, it would show that this is 
- still the case for this case as well. This could indicate that training LSTM models 
- for transfer learning between different datasets either needs improved pre-processing, 
- or the introduction of further regularisation. It could also be that more data is needed.
+This means that the machine learning model learns to correct 
+the errors of a given traditional model instead of doing actual prediction.
 
  This and earlier research done by \citet{lstm_first_paper,lstm_second_paper,lstm_third_paper} 
  are all limited to simple LSTM models. LSTM models are, due to their recurrent nature, 
@@ -131,10 +135,25 @@ simple way to surpass this could be to implement a one dimensional
 Convolutional Neural Network (CNN) layer as the first layer of our model. This 
 layer could then be used to reduce the time resolution of the data, still retaining 
 information. The usage of CNNs for time series prediction is becoming increasingly
-wide spread \citationneeded. 
+wide spread \citationneeded. We still argue that LSTM models fit this type of 
+physical system very well and is logically consistent with the way rainfall-runoff 
+models are typically structured, but using a CNN layer to improve performance 
+should not detract from this.
 
-On the topic of transfer learning, it is important to note that there exist several 
-other, similar datasets to the two used for this study. The easiest way to improve 
+While we state earlier that we see no clear signs of overfitting, this is not 
+the case for transfer learning. Figure 
+\ref{training progress transfer} indicates that Transfer$_\text{GB, none}$ 
+and Transfer$_\text{US, none}$ start overfitting on their respective training 
+datasets. This overfitting is not apparent when validating on basins from the 
+same dataset as they are trained on, but very quickly manifests when validating 
+on the other dataset. While improved pre-processing, regularization and the gathering 
+of more  cross-compatible data could alleviate this problem, it is likely that this is 
+unavoidable using the current datasets. More data, both in quantity and in 
+diversity is likely needed for the model's training process to be able to 
+successfully predict on a dataset not included during training.
+
+There now exist several other, similar datasets to the two used for this study. 
+The easiest way to improve 
 any machine learning model is often to provide more data for training. A Chilean 
 dataset consisting of 515 catchments by the name CAMELS-CL \citep{CAMELS_CL} 
 was studied early in this thesis work, but the quality 
@@ -149,28 +168,11 @@ amount of catchments. Combining datasets is nontrivial, time consuming task, whi
 we expect will become increasingly hard the more datasets one tries to combine. 
 It is not unlikely that one has to discard almost all static attributes to make 
 the datasets compatible. We therefore expect that some effort to gather new data 
-would also be nessecary. It is of course also of interest to see how well machine 
+would also be necessary. It is of course also of interest to see how well machine 
 learning models perform on one or more of these datasets in isolation, though. 
 We see this as a possible candidate for the start of a new master thesis.
 
-\subsection{Hyperparameter Tuning}
-We do not spend significant time in this thesis tuning hyperparameters. Instead, 
-we chose to use the hyperparameters derived by \citet{lstm_second_paper}. The one 
-exception to this is in the case shown in Section \ref{CAMELS-GB results}. We found 
-that using dropout in this case at best makes no difference and at worst slightly 
-decreases performance. In some cases we also tested whether increasing the 
-sequence length from 270 days to 365 days increases performance, but our results 
-indicate that this leads to no performance difference. The lower sequence length, 
-the lower memory requirement per batch size, so we decided to keep using 270 days. 
-
-We acknowledge that it may be possible to further increase the performance on 
-CAMELS-GB by doing a thorough hyperparameter tuning experiment, this is 
-something that definitely should be done in the future. 
-\section{Physical Aspects}
-In this section we discuss the physical implications of our results and what could 
-possibly be used in future process-driven models and potential hybrid process-driven 
-and machine learning models.
-\subsection{Static Attribute Analysis}
+\section{Static Attribute Analysis}
 \label{discuss static attributes}
 Table \ref{overfit table} shows among others \textbf{\texttt{Q95}} as the most 
 important attribute for the overfit "proof of concept" model. This attribute is the 
@@ -183,17 +185,63 @@ succeeds at deciding the most important static attribute in this case. These
 assumptions are therefore used to strengthen our confidence in the results from 
 our other, non-overfit models. 
 
-As the results presented in Section \ref{CAMELS-GB results} and \ref{CAMELS results} 
-indicate that the many of the important attributes are derived directly from the 
+As the results presented in Table \ref{all concat table}
+indicate that the many of the important attributes in CAMELS-GB (as perceived by 
+GB$_\text{lstm, all}$) are derived directly from the 
 input time series, it is likely that we cannot extract much new information from 
-these as this information should be available in the time series already used by 
-most models. The reason for this is being the case is likely connected to the 
-nature of the LSTM training process and the sequence length. Looking into ways 
+these, as this information should be available in the time series already used by 
+the models. The reason for this is being the case is likely connected to the 
+nature of the LSTM training process and the sequence length. Ways 
 to further improve the long-term memory of an LSTM should be further explored 
-in the future.
+in the future. The biggest examples of this type of attribute are the top two ranked 
+features: \textbf{\texttt{low\_prec\_dur}} \textbf{\texttt{low\_prec\_freq}}. 
+These severely outrank all other attributes, especially for the 75th percentile 
+of importances, and they are directly derived from the precipitation time series.
+Other than derived features, the model ranks the other attributes relatively similarly 
+for the upper 75th percentile. These other attributes mostly contain information 
+about land cover and elevation levels, which is information an LSTM cannot access 
+through the time series contained in CAMELS-GB. Process-driven models such as VIC 
+use information such as land coverage and elevation by splitting the catchment 
+into a spatial grid, it is therefore unlikely that any of these attributes can 
+contribute to any major improvements for process-driven models for predicting 
+on CAMELS-GB.
+
+Table \ref{kratzert importance} shows that the permutation test yields different 
+results than the feature ranking done by \citet{lstm_second_paper}. Said paper 
+averaged the normalized sensitivity (derived by what they call the explicit Morris 
+method) of each basin, while we present percentiles and rank based on the median
+\footnote{Also note that we predict on ungauged basins, in contrast to said paper. 
+This could differentiate important attributes.}. 
+Looking our median scores, we see that the majority of basins do not benefit 
+from the inclusion of static attributes. Looking at the upper percentiles, the 
+most important attributes in our case still somewhat agree with those of 
+\citet{lstm_second_paper}. Topological information and climatic indices are important. 
+By far the most important attributes for the 75th percentile are aridity and 
+catchment area. Our results do however favour land coverage types and soil types 
+more than the previous results, and the attribute deemed the most important by 
+\citet{lstm_second_paper}, \textbf{\texttt{p\_mean}}, is only significantly important 
+for the 95th percentile of basins. As expected, \textbf{\texttt{frac\_snow}} is 
+much more important for CAMELS than for CAMELS-GB, as there is more snow 
+in certain regions in the US than in GB. This is also reflected in the fact that 
+said feature is important for a small portion of British basins (the 95th percentile), 
+while it is more important both for the 75th and 95th percentile in the US. 
+
+Our model trained on CAMELS and CAMELS-GB seems to find static attributes more important 
+than the models trained on the datasets individually. Table \ref{importance mixed} 
+shows that the model also ranks the attributes differently. Figure \ref{mixed CDF validation} 
+shows that the addition of static attributes is of significantly higher benefit for 
+prediction on CAMELS-GB than for CAMELS. This is consistent with the importance rankings, as 
+the median importances, and especially the 75th percentile and above importances are 
+significantly higher on CAMELS-GB than those on CAMELS. 
+
+An interesting detail is that the permutation test yields negative importance 
+for some basins. This implies that our LSTM models actually perform worse 
+on some basins because of the inclusion of static attributes. Perhaps due to a 
+lack of training data representing similar basins in the dataset. This is likely 
+alleviated by introducing more data.
 
 We believe other ways to rank attributes should also attempted 
-in the future, however. \citet{lstm_second_paper} used a robustness test which 
+in the future. \citet{lstm_second_paper} used a robustness test which 
 involves gradually adding Gaussian noise to a feature and checking how much it 
 affects model performance (DOUBLE CHECK THIS!!!). \citet{OrigCAMELSRanking} 
 uses a different method involving blah blah. These two methods should also be 
@@ -202,7 +250,7 @@ thesis.
 
 
 
-\subsection{Feasibility of transfer learning}
+\section{Feasibility of transfer learning}
 The results in Section \ref{Transfer learning section} show that the models trained 
 for transfer learning do not benefit from adding static attributes. We also see 
 that the case of US$\rightarrow$GB significantly improves the opposite. This makes 
@@ -236,7 +284,7 @@ the point where one would hopefully see better performance with attributes than
 without. A third option is to try introducing additional datasets. If one were to 
 train on two datasets and validate on a third it could perhaps lead to better 
 generalization. 
-\subsection{Comparison to traditional models}
+\section{Comparison to traditional models}
 We are able to reproduce the results of \citet{lstm_second_paper,lstm_third_paper}, our models 
 trained on CAMELS perform significantly better than traditional models. In this 
 thesis we compare to two process-driven models: VIC and NWM, and one conceptual 
