@@ -16,6 +16,11 @@ static attributes. The EA-LSTM's ability to come close to the performance of an
 LSTM using $~72\%$ of the trainable parameters is notable, however. It could imply 
 that even a less complex model benefits from the additional information 
 contained in the attributes. 
+In all cases but the case of transfer learning, our best performing models are the 
+most complex model with the most amount of static attributes possible. For prediction 
+on CAMELS-GB that means GB$_\text{lstm, all}$, for CAMELS US$_\text{Kratzert}$, 
+for the datasets mixed Mixed$_\text{lstm}$, and for transfer learning: 
+Transfer$_\text{US, none}$.
 
 We do not spend significant time in this thesis tuning hyperparameters. Instead, 
 we chose to use the hyperparameters derived by \citet{lstm_second_paper}. The one 
@@ -67,7 +72,7 @@ benefits. Some of which could be:
 \item Interpretability: Physical constraints could improve the physical interpretability 
 of the LSTM.
 \item Improved generalization: The goal of most machine learning regularization is 
-to improve regularization by increasing bias and decreasing variance (see Figure 
+to improve performance by increasing bias and decreasing variance (see Figure 
 \ref{Bias Variance rainfall}). Increasing bias using physical laws would fit well 
 into the narrative of \citet{BiasVarianceVIC} and \citet{VICbench}, although from 
 the opposite angle. These papers argue that process-driven models are often too 
@@ -127,8 +132,8 @@ the sum of the output of a traditional model and the machine learning model.
 This means that the machine learning model learns to correct 
 the errors of a given traditional model instead of doing actual prediction.
 
- This and earlier research done by \citet{lstm_first_paper,lstm_second_paper,lstm_third_paper} 
- are all limited to simple LSTM models. LSTM models are, due to their recurrent nature, 
+This and earlier research done by \citet{lstm_first_paper,lstm_second_paper,lstm_third_paper} 
+are all limited to simple LSTM models. LSTM models are, due to their recurrent nature, 
 notoriously slow. Graphics cards and similar highly parallel computational devices 
 are much more efficient for calculating less recurrent models. A relatively 
 simple way to surpass this could be to implement a one dimensional 
@@ -139,6 +144,151 @@ wide spread \citationneeded. We still argue that LSTM models fit this type of
 physical system very well and is logically consistent with the way rainfall-runoff 
 models are typically structured, but using a CNN layer to improve performance 
 should not detract from this.
+
+\section{Performance and Importance Analysis}
+\label{discuss static attributes}
+\subsection{CAMELS-GB}
+Table \ref{overfit table} shows among others \textbf{\texttt{Q95}} as the most 
+important attribute for the overfit "proof of concept" model. This attribute is the 
+95th percentile runoff value for the full runoff time series for a given basin, 
+information directly derived from the expected outcome. 
+Figure \ref{CAMELS-GB CDF validation} also shows that the overfit model drastically 
+outperforms all other models.
+Because of this, we believe it is 
+safe to assume two things: 1: An LSTM model can learn which static attributes are 
+the most important in CAMELS-GB, at least in the most obvious case. 2: The permutation test 
+succeeds at deciding the most important static attribute in this case. These 
+assumptions are therefore used to strengthen our confidence in the results from 
+our other, non-overfit models. 
+
+Looking again at Figure \ref{CAMELS-GB CDF validation} along with Table 
+\ref{results summary table}, we see that the median performance of GB$_\text{lstm, all}$ 
+is an NSE value of approximately $0.82$ cross validated, with a test score of $0.80$. 
+This performance is vastly superior to that found by \citet{lstm_third_paper}, and 
+is even better than gauged prediction on CAMELS, such as \citet{lstm_second_paper}. 
+This makes sense when one considers the relatively low variance in climate in GB. 
+As far as we know, there are no published benchmarks using traditional models on 
+CAMELS-GB. Creating such a benchmark would possibly yield interesting results.
+
+In Figure \ref{best prediction all concat seq len}, we see that at least for the 
+best performing prediction, the high NSE score does 
+in fact transfer to a visually impressive performance. Despite some tops not being 
+correctly simulated, the LSTM model manages to replicate the observed runoff in a 
+very acceptable manner.
+
+As the results presented in Table \ref{all concat table}
+indicate that the many of the important attributes in CAMELS-GB (as perceived by 
+GB$_\text{lstm, all}$) are derived directly from the 
+input time series, it is likely that we cannot extract much new information from 
+these, as this information should be available in the time series already used by 
+the models. The reason for this is being the case is likely connected to the 
+nature of the LSTM training process and the sequence length. Ways 
+to further improve the long-term memory of an LSTM should be further explored 
+in the future. The biggest examples of this type of attribute are the top two ranked 
+features: \textbf{\texttt{low\_prec\_dur}} \textbf{\texttt{low\_prec\_freq}}. 
+These severely outrank all other attributes, especially for the 75th percentile 
+of importances, and they are directly derived from the precipitation time series.
+Other than derived features, the model ranks the other attributes relatively similarly 
+for the upper 75th percentile. These other attributes mostly contain information 
+about land cover and elevation levels, which is information an LSTM cannot access 
+through the time series contained in CAMELS-GB. Process-driven models such as VIC 
+use information such as land coverage and elevation by splitting the catchment 
+into a spatial grid, it is therefore unlikely that any of these attributes can 
+contribute to any major improvements for process-driven models for predicting 
+on CAMELS-GB.
+
+\subsection{CAMELS}
+Looking at Figure \ref{CAMELS-US CDF validation} and Table \ref{results summary table}, 
+the performance of US$_\text{Kratzert}$ falls in line with the results of \citet{lstm_third_paper}, 
+which is what we wanted to replicate. The performance is generally lower than that 
+of GB$_\text{lstm, all}$, which makes sense when one considers how much more diverse 
+the US climate is. 
+
+The best prediction made by US$_\text{Kratzert}$ looks accurate and has an NSE of $0.92$. 
+This is lower than for CAMELS-GB, like the performance in general is. Here too we 
+see that the prediction fails to predict the larger spikes of runoff. 
+This is also something commented on by \citet{lstm_first_paper}.
+
+Table \ref{kratzert importance} shows that the permutation test yields different 
+results than the feature ranking done by \citet{lstm_second_paper}. Said paper 
+averaged the normalized sensitivity (derived by what they call the explicit Morris 
+method) of each basin, while we present percentiles and rank based on the median
+\footnote{Also note that we predict on ungauged basins, in contrast to said paper. 
+This could differentiate important attributes.}. 
+Looking our median scores, we see that the majority of basins do not benefit 
+from the inclusion of static attributes. Looking at the upper percentiles, the 
+most important attributes in our case still somewhat agree with those of 
+\citet{lstm_second_paper}. Topological information and climatic indices are important. 
+By far the most important attributes for the 75th percentile are aridity and 
+catchment area. Our results do however favour land coverage types and soil types 
+more than the previous results, and the attribute deemed the most important by 
+\citet{lstm_second_paper}, \textbf{\texttt{p\_mean}}, is only significantly important 
+for the 95th percentile of basins. As expected, \textbf{\texttt{frac\_snow}} is 
+much more important for CAMELS than for CAMELS-GB, as there is more snow 
+in certain regions in the US than in GB. This is also reflected in the fact that 
+said feature is important for a small portion of British basins (the 95th percentile), 
+while it is more important both for the 75th and 95th percentile in the US. 
+
+\subsection{Mixed model}
+Our model trained on CAMELS and CAMELS-GB seems to find static attributes more important 
+than the models trained on the datasets individually. Table \ref{importance mixed} 
+shows that the model also ranks the attributes differently. Figure \ref{mixed CDF validation} 
+shows that the addition of static attributes is of significantly higher benefit for 
+prediction on CAMELS-GB than for CAMELS although the performance per dataset is not 
+very far off the individually trained models (see Figure \ref{results summary table}).
+This could be consistent with the importance rankings, as 
+the median importances, and especially the 75th percentile and above importances are 
+significantly higher on CAMELS-GB than those on CAMELS. There is a chance that this 
+is due to the model learning to use the attributed to differentiate between the 
+two datasets, without actually extracting important information.
+
+An interesting detail is that the permutation test yields negative importance 
+for some basins, this happens for all models mentioned in this section. 
+This implies that our LSTM models actually perform worse 
+on some basins because of the inclusion of static attributes. Perhaps due to a 
+lack of training data representing similar basins in the dataset. This is likely 
+alleviated by introducing more data. We believe other ways to rank attributes 
+should also attempted 
+in the future. \citet{lstm_second_paper} used a robustness test which 
+involves gradually adding Gaussian noise to a feature and checking how much it 
+affects model performance (DOUBLE CHECK THIS!!!). \citet{OrigCAMELSRanking} 
+uses a different method involving altogether, the results of which \cite{lstm_second_paper} 
+agree with. These two methods should also be attempted on CAMELS-GB in addition 
+to the permutation test employed in this thesis, to get further context and comparability.
+
+\subsection{Transfer learning}
+The results in Section \ref{Transfer learning section} show that the models trained 
+for transfer learning do not benefit from adding static attributes. Therefore, we 
+do not include a permutation test for this case, We also see 
+that the case of US$\rightarrow$GB significantly improves when removing attributes. This makes 
+sense as Great Britain has much smaller climatic variance than the United States 
+\citationneeded. We believe these two phenomena could be related. It is likely 
+that the relatively lower performance from using static attributes comes from the 
+fact that the datasets have different climatic conditions. There could also be 
+room for improvement in how we preprocess both the attributes and the time series. 
+As seen in Table \ref{attribute transfer} we assume that the temperature time series 
+of CAMELS behave like symmetrical periodic functions, therefore leading to 
+\begin{equation}
+T_\text{average} \approx  \frac{T_\text{min}+T_\text{max}}{2}. \label{dumb assumption}
+\end{equation}
+Ideally, we need to have temperature as a time series for a given model to be able 
+to properly model snow and frozen soil accumulation, which is very important for 
+hydrologic models \citationneeded. The fact that models trained on both datasets 
+still perform comparably to models trained on only one dataset seems to suggest 
+that (\ref{dumb assumption}) isn't entirely destructive, however.
+In the later stages of this thesis it was discovered that the average temperature 
+is actually present in CAMELS. The older \citationneeded forcing data contains 
+this information stored as duplicates in the maximum and minimum temperature time 
+series. Due to time constraints, we are unable to train models utilizing this. 
+This is likely a good start for those looking to improve transfer learning performance. 
+The best outcome is likely to come from finding maximum and minimum temperatures 
+for CAMELS-GB, however.
+
+It seems to us that there are several angles to further tackle the issue of transfer 
+learning. between these datasets. The first we stated above: Find maximum and minimum time series for 
+CAMELS-GB. The second is to improve the preprocessing of static attributes to 
+the point where one would hopefully see better performance with attributes than 
+without. 
 
 While we state earlier that we see no clear signs of overfitting, this is not 
 the case for transfer learning. Figure 
@@ -171,119 +321,6 @@ the datasets compatible. We therefore expect that some effort to gather new data
 would also be necessary. It is of course also of interest to see how well machine 
 learning models perform on one or more of these datasets in isolation, though. 
 We see this as a possible candidate for the start of a new master thesis.
-
-\section{Static Attribute Analysis}
-\label{discuss static attributes}
-Table \ref{overfit table} shows among others \textbf{\texttt{Q95}} as the most 
-important attribute for the overfit "proof of concept" model. This attribute is the 
-95th percentile runoff value for the full runoff time series for a given basin, 
-information directly derived from the expected outcome. 
-Because of this, we believe it is 
-safe to assume two things: 1: An LSTM model can learn which static attributes are 
-the most important in CAMELS-GB, at least in the most obvious case. 2: The permutation test 
-succeeds at deciding the most important static attribute in this case. These 
-assumptions are therefore used to strengthen our confidence in the results from 
-our other, non-overfit models. 
-
-As the results presented in Table \ref{all concat table}
-indicate that the many of the important attributes in CAMELS-GB (as perceived by 
-GB$_\text{lstm, all}$) are derived directly from the 
-input time series, it is likely that we cannot extract much new information from 
-these, as this information should be available in the time series already used by 
-the models. The reason for this is being the case is likely connected to the 
-nature of the LSTM training process and the sequence length. Ways 
-to further improve the long-term memory of an LSTM should be further explored 
-in the future. The biggest examples of this type of attribute are the top two ranked 
-features: \textbf{\texttt{low\_prec\_dur}} \textbf{\texttt{low\_prec\_freq}}. 
-These severely outrank all other attributes, especially for the 75th percentile 
-of importances, and they are directly derived from the precipitation time series.
-Other than derived features, the model ranks the other attributes relatively similarly 
-for the upper 75th percentile. These other attributes mostly contain information 
-about land cover and elevation levels, which is information an LSTM cannot access 
-through the time series contained in CAMELS-GB. Process-driven models such as VIC 
-use information such as land coverage and elevation by splitting the catchment 
-into a spatial grid, it is therefore unlikely that any of these attributes can 
-contribute to any major improvements for process-driven models for predicting 
-on CAMELS-GB.
-
-Table \ref{kratzert importance} shows that the permutation test yields different 
-results than the feature ranking done by \citet{lstm_second_paper}. Said paper 
-averaged the normalized sensitivity (derived by what they call the explicit Morris 
-method) of each basin, while we present percentiles and rank based on the median
-\footnote{Also note that we predict on ungauged basins, in contrast to said paper. 
-This could differentiate important attributes.}. 
-Looking our median scores, we see that the majority of basins do not benefit 
-from the inclusion of static attributes. Looking at the upper percentiles, the 
-most important attributes in our case still somewhat agree with those of 
-\citet{lstm_second_paper}. Topological information and climatic indices are important. 
-By far the most important attributes for the 75th percentile are aridity and 
-catchment area. Our results do however favour land coverage types and soil types 
-more than the previous results, and the attribute deemed the most important by 
-\citet{lstm_second_paper}, \textbf{\texttt{p\_mean}}, is only significantly important 
-for the 95th percentile of basins. As expected, \textbf{\texttt{frac\_snow}} is 
-much more important for CAMELS than for CAMELS-GB, as there is more snow 
-in certain regions in the US than in GB. This is also reflected in the fact that 
-said feature is important for a small portion of British basins (the 95th percentile), 
-while it is more important both for the 75th and 95th percentile in the US. 
-
-Our model trained on CAMELS and CAMELS-GB seems to find static attributes more important 
-than the models trained on the datasets individually. Table \ref{importance mixed} 
-shows that the model also ranks the attributes differently. Figure \ref{mixed CDF validation} 
-shows that the addition of static attributes is of significantly higher benefit for 
-prediction on CAMELS-GB than for CAMELS. This is consistent with the importance rankings, as 
-the median importances, and especially the 75th percentile and above importances are 
-significantly higher on CAMELS-GB than those on CAMELS. 
-
-An interesting detail is that the permutation test yields negative importance 
-for some basins. This implies that our LSTM models actually perform worse 
-on some basins because of the inclusion of static attributes. Perhaps due to a 
-lack of training data representing similar basins in the dataset. This is likely 
-alleviated by introducing more data.
-
-We believe other ways to rank attributes should also attempted 
-in the future. \citet{lstm_second_paper} used a robustness test which 
-involves gradually adding Gaussian noise to a feature and checking how much it 
-affects model performance (DOUBLE CHECK THIS!!!). \citet{OrigCAMELSRanking} 
-uses a different method involving blah blah. These two methods should also be 
-attempted on CAMELS-GB in addition to the permutation test employed in this 
-thesis.
-
-
-
-\section{Feasibility of transfer learning}
-The results in Section \ref{Transfer learning section} show that the models trained 
-for transfer learning do not benefit from adding static attributes. We also see 
-that the case of US$\rightarrow$GB significantly improves the opposite. This makes 
-sense as Great Britain has much smaller climatic variance than the United States 
-\citationneeded. We believe these two phenomena could be related. It is likely 
-that the relatively lower performance from using static attributes comes from the 
-fact that the datasets have different climatic conditions. There could also be 
-room for improvement in how we preprocess both the attributes and the time series. 
-As seen in Table \ref{transfer table} we assume that the temperature time series 
-of CAMELS behave like symmetrical periodic functions, therefore leading to 
-\begin{equation}
-T_\text{average} \approx  \frac{T_\text{min}+T_\text{max}}{2}. \label{dumb assumption}
-\end{equation}
-Ideally, we need to have temperature as a time series for a given model to be able 
-to properly model snow and frozen soil accumulation, which is very important for 
-hydrologic models \citationneeded. The fact that models trained on both datasets 
-still perform comparably to models trained on only one dataset seems to suggest 
-that (\ref{dumb assumption}) isn't entirely destructive, however.
-In the later stages of this thesis it was discovered that the average temperature 
-is actually present in CAMELS. The older \citationneeded forcing data contains 
-this information stored as duplicates in the maximum and minimum temperature time 
-series. Due to time constraints, we are unable to train models utilizing this. 
-This is likely a good start for those looking to improve transfer learning performance. 
-The best outcome is likely to come from finding maximum and minimum temperatures 
-for CAMELS-GB, however.
-
-It seems to us that there are several angles to further tackle the issue of transfer 
-learning. The first we stated above: Find maximum and minimum time series for 
-CAMELS-GB. The second is to improve the preprocessing of static attributes to 
-the point where one would hopefully see better performance with attributes than 
-without. A third option is to try introducing additional datasets. If one were to 
-train on two datasets and validate on a third it could perhaps lead to better 
-generalization. 
 \section{Comparison to traditional models}
 We are able to reproduce the results of \citet{lstm_second_paper,lstm_third_paper}, our models 
 trained on CAMELS perform significantly better than traditional models. In this 
@@ -314,3 +351,10 @@ for the LSTM models, where there exists no such linear relationship. The impact
 of this discovery is quite uncertain, however, as there is significant 
 Spearman correlation (nonlinear correlation) for all the models, ranging 
 $\in \left[ 0.31, 0.53 \right]$.
+
+The LSTM models are, as briefly mentioned earlier, much less complex spatially. 
+While process-driven models (check SAC-SMA as well though idiot!) need to grid the 
+spatial dimension to properly model the physical system, an LSTM model just finds 
+relationships between input and output data in a one dimensional manner. This could 
+make LSTMs and other machine learning methods valuable models to use when there is not 
+enough data available to properly set up a traditional model such as the NWM.
