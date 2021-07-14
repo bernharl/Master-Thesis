@@ -1,10 +1,11 @@
-In this chapter we discuss the performance of our models. We discuss the implications 
+In this chapter we discuss the performance of our LSTM models. We discuss the implications 
 our results and the results of similar works may have on the physical understanding 
-of rainfall-runoff modelling. In addition we discuss ways to improve machine 
-learning for this problem, both performance-wise and for increased interpretability.
+of rainfall-runoff modelling. In addition we discuss potential ways to improve machine 
+learning models for rainfall-runoff modelling, with focus on performance and 
+interpretability.
 \section{Model Selection}
 \label{discuss model selection}
-Section \ref{CAMELS-GB results}-\ref{Mixed results} 
+The results presented in Section \ref{CAMELS-GB results}-\ref{Mixed results} 
 all agree that performance is increased when introducing static attributes. In 
 addition to this, we see that the ordinary LSTM models that treat the static 
 attributes as time series are the highest performing models. We find it likely that 
@@ -12,33 +13,36 @@ this is due  to the decrease in model complexity in an EA-LSTM compared to an LS
 For example, Mixed$_\text{ea-lstm}$ has 205057 trainable parameters (weights and 
 biases), Mixed$_\text{lstm}$ has 285953 and Mixed$_\text{none}$ has 266497. The 
 EA-LSTM is a less complex model than an ordinary LSTM trained without 
-static attributes. The EA-LSTM's ability to come close to the performance of an 
-LSTM using $~72\%$ of the trainable parameters is notable, however. It could imply 
+static attributes. The EA-LSTM's performance coming close to that of an 
+LSTM, while only using $~72\%$ of the trainable parameters is notable, however. 
+It could imply 
 that even a less complex model benefits from the additional information 
 contained in the attributes. 
 In all cases but the case of transfer learning, our best performing models are the 
-most complex model with the most amount of static attributes possible. For prediction 
-on CAMELS-GB that means GB$_\text{lstm, all}$, for CAMELS US$_\text{Kratzert}$, 
-for the datasets mixed Mixed$_\text{lstm}$, and for transfer learning: 
-Transfer$_\text{US, none}$.
+most complex model with the highest amount of static attributes possible. For 
+prediction on CAMELS-GB that means GB$_\text{lstm, all}$, for CAMELS the best model 
+is US$_\text{Kratzert}$, for the datasets mixed the best model is Mixed$_\text{lstm}$, 
+and for transfer learning: Transfer$_\text{US, none}$.
 
 We do not spend significant time in this thesis tuning hyperparameters. Instead, 
-we chose to use the hyperparameters derived by \citet{lstm_second_paper}. The one 
-exception to this is in the case shown in Section \ref{CAMELS-GB results}. We found 
+we choose to use the hyperparameters derived by \citet{lstm_second_paper}. The one 
+exception to this is for models trained on CAMELS-GB, shown in Section 
+\ref{CAMELS-GB results}. We found 
 that using dropout in this case at best makes no difference and at worst slightly 
 decreases performance. In some cases we also tested whether increasing the 
 sequence length from 270 days to 365 days increases performance, but our results 
 indicate that this leads to no performance difference. To save memory and decrease 
-training time we therefore kept the lower sequence length of 270 days.
+training time we therefore keep the lower sequence length of 270 days.
 
 We acknowledge that it may be possible to further increase the performance by doing 
 a thorough hyperparameter tuning experiment. The tuning done by \citet{lstm_second_paper} 
-is a simple grid search with few points, and is not guaranteed to be a good basis. 
-Especially since this tuning was done for gauged basin prediction. A very thorough 
+is a simple grid search with few points, and is not guaranteed to be a good basis, 
+especially since this tuning was done for gauged basin prediction. Hyperparameters 
+are likely to have different optimal values for our case of ungauged prediction. A very thorough 
 hyperparameter tuning would be hard to brute force, due to the computationally 
 expensive nature of our models, therefore one would have to implement a more sophisticated 
-method than mere exhaustive grid searching. This is doubly true if one wants to tune 
-using cross validation.
+method than mere exhaustive grid searching. This becomes even more computationally 
+expensive if one wants to tune using cross validation.
 
 We find few clear signs of overfitting in our selected models when comparing 
 cross validated performance to test performance. Table 
