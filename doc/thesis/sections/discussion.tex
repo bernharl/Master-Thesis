@@ -44,7 +44,7 @@ expensive nature of our models, therefore one would have to implement a more sop
 method than mere exhaustive grid searching. This becomes even more computationally 
 expensive if one wants to tune using cross validation.
 
-We find few clear signs of overfitting in our selected models when comparing 
+We find no clear signs of overfitting in our selected models when comparing 
 cross validated performance to test performance. Table 
 \ref{results summary table} indicates 
 similar performance between the cross validated models and the refit models 
@@ -60,7 +60,7 @@ deviation could perhaps be explained by the findings of \citet{lstm_second_paper
 
 Aside from dropout in the final layer, we employ no regularization methods on 
 our models. \citet{lstm_third_paper} 
-argue that there is evidence that adding so called "physical constraints" to 
+argue that there is evidence that adding so-called "physical constraints" to 
 models used on CAMELS could be helpful. This is argued because the LSTM models 
 underperform compared to SAC-SMA on some basins. Here the paper compares SAC-SMA 
 to an LSTM trained on all basins, training and validation split time series-wise 
