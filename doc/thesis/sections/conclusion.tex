@@ -3,10 +3,16 @@ We have shown that LSTM models perform well on CAMELS-GB as well as CAMELS, and
 also that a single model can perform well on both datasets at the same time, even 
 with less than optimal preprocessing of the mixed dataset.
 
+Training on CAMELS and validating on CAMELS-GB and vise-versa yielded disappointing, 
+though not surprising results. We deemed this to be because the datasets cover 
+domains that are too different from one another, as well as lacking equivalent 
+attributes.
+
 Our static attribute analysis yielded no obvious ways to improve the performance 
 of process-driven models, as our models preferred static attributes containing 
 information already used by process-driven models. Improving the performance of and 
 physical understanding provided by process-driven models is a difficult task.
+
 \section{Outlook}
 Building from the work in this thesis there are several ways forward. We believe 
 these ways forward can be categorized into two categories:
