@@ -13,56 +13,44 @@ of process-driven models, as our models preferred static attributes containing
 information already used by process-driven models. Improving the performance of and 
 physical understanding provided by process-driven models is a difficult task.
 
+LSTM models seem to have the potential to both outperform and improve traditional 
+models. In the future we hope this leads to both improved physical understanding, 
+as well as model quality, in several fields of the physical sciences. Hydrological 
+systems are highly complex, and the need to use large scale data analysis to 
+obtain a better understanding of the inner physical processes has yet to be 
+fulfilled. 
+
 \section{Outlook}
-Building from the work in this thesis there are several ways forward. 
-    
-As mentioned several times in this thesis the only way to show that a machine 
-learning model performs well in a specific use case is to do extensive empiric 
-research. This means that a similar analysis needs to be performed on similar data 
-from different sources. Going further with this would then mean to find or create 
-a new dataset with different data sources than \citet{CAMELS_GB} or \citet{CAMELS_US}. 
-During the initial research phase of this thesis we discovered that there was an 
-effort in Chile to create a similar dataset \citep{CAMELS_CL}. The dataset did 
-not seem to be of the same quality as what was used in this thesis so we decided 
-it was out of scope to try and manage that as well.
+In the previous chapter we mentioned several ways to improve the results of this 
+thesis. Here we give a brief summary.
 
-The scope of this thesis work was limited to LSTM models only. LSTM models have 
-as mentioned in chapter \ref{LSTM drawbacks} some drawbacks that could lead one 
-into trying a different machine learning model. Lately Convolutional Neural Networks 
-(CNNs), which usually are used for image analysis, have shown promising results 
-on time series data as well. \citationneeded CNNs are much more parallelizable 
-algorithms than RNNs \citationneeded and could prove to be more efficient at doing 
-training and prediction.
+The simplest way to improve the performance of a machine learning model is to give 
+it more, high quality training data. To our knowledge there now exists three 
+additional datasets we have not used in this dataset \citep{CAMELS_CL, CAMELS_AU, CAMELS_BR}.
 
-In addition to CNNs, the field of natural language processing has now shifted some 
-of the focus on LSTMs away in favour of a type of machine learning models known 
-as Transformers \citep{transformers}. This is also to better model long-term 
-dependencies without the computational limitations of recurrent neural networks.
+An LSTM based model with a one-dimensional CNN input layer, intended to reduce 
+the number of time steps needed, thus reducing the computational cost of training 
+the LSTM.
 
-An often overlooked but in fact very important aspect of machine learning models 
-is the tuning of hyperparameters. As mentioned in \ref{Method Drawbacks or something} 
-the approach in this thesis is perhaps not thorough enough. To the author's best 
-knowledge the best way to tune hyperpameters is in fact using a method called nested 
-cross validation \citationneeded. This would take too long to train to be a viable 
-approach for our work, but should be looked into in the future.
+Improve the hyperparameter tuning of our models. This could be especially important 
+for transfer learning, as the reduction of variance is often important for 
+generalization \citep{elemstatlearn}. This could be a more manageable task if 
+the aforementioned CNN layer is implemented to decrease training time.
 
-Reducing the scope of the machine learning model to model a small effect in a 
-classical physics-based hydrological model instead of modelling the entire system 
-could be a way to better analyze a specific effect. Implementing the modelling of 
-melting frozen soil, which is a physical effect currently not very well understood, 
-could for example be a good place to start. The reason this was not tried in this 
-thesis is that it likely requires gradients of a physical model, as this melting 
-effect is used further down in a model. This either significantly slows down training 
-because of a large use of automatic differentiation or requires numerical derivation, 
-which could lead to instability.
+Introduce a physics based penalty term to the cost function. A simple example of 
+this is described in the previous chapter. This could improve the interpretability 
+of an LSTM and also increase the consistency of the output, as put by \citet{hybrid_paper}.
 
-A simpler way of hybrid modelling that we wish we had the time for in this thesis 
-could be to "model the error". This means training a model with a modified cost 
-function where it also takes the input from a physical model. This could give a 
-better indication of what information in the data is the most important and not 
-properly utilized in traditional models. A simple illustration of this concept 
-is shown in Figure \ref{figure simple hybrid}. A good place to start here would 
-be on the CAMELS dataset, as it already contains model outputs from SAC-SMA and 
-other (?) models \citep{CAMELS_US}. To get out of sample predictions one would have 
-to run the traditional models themselves, though, as the dataset only contains 
-predictions on in sample basins split time series-wise.
+Use a hybrid model approach. This could lead to better generalizability and 
+interpretability. There are several ways to do this, the most thorough being to 
+implement an LSTM instead of a given process in a process-driven model. This could 
+then be used to compare to the output of said process in the ordinary model versus 
+the hybrid model. This is likely very computationally expensive, as the process-driven 
+models are more expensive than pure LSTM models. A simpler hybrid model discussed 
+in this thesis is a setup where the LSTM is trained to correct the error of 
+the output of a traditional model. This way one could leverage the already existing 
+model benchmarks on CAMELS \citep{CAMELS_hydroshare}.
+
+One should also look into the possibility of implementing LSTM models in Statkraft's 
+Shyft\citep{Shyft}, making it much easier to employ these models on many datasets, 
+as well as greatly simplifying the process of comparing with other models.
