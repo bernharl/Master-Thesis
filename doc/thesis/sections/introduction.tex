@@ -1,56 +1,63 @@
 %\section{Motivation}
 %\subsection{Value of accurate rainfall-runoff modelling}
 Rainfall-runoff modelling is a very important problem for scientists and 
-companies in the field of hydrology.
-A massive increase of available data has enabled .... Finish tomorrow!
+companies in the field of hydrology. Improving the prediction of runoff/streamflow 
+based on historic data could lead to more accurate prediction of power generation 
+in hydro power plants, flood forecasting and general water resource management.
 
-Results found by \citet{lstm_first_paper} indicate that given a good dataset,
-recurrent neural networks in the form of Long Short-Term Memory cells (LSTMs)
-can give results equal in quality to more classical hydrological models.
-This was an important step towards data driven hydrological modelling. 
+Today there exist several models for this usage, some with less focus on physics: 
+conceptual models, and some with a larger focus on physics: process-driven models. \citationneeded
+A drawback of these models is that they have many parameters that have to be 
+calibrated for each basin individually. 
+This makes leads to the models failing to generalize, as well as leading to the 
+reduction of physical interpetability. Process-driven models with physical interpretations 
+of their parameters have been shown to perform better once one forgoes the expected 
+values of said parameters, and instead callibrate these as well \citep[e.g.][]{VICbench, BiasVarianceVIC}.
+This is mostly due to the fact that the models are are not purely based on the 
+underlying physics in a system, such as for conceptual models, and due to 
+the otherwise excessive need to do on-site data collection for use in more heavily 
+process-driven models. 
 
-Today there exist several well working traditional physical models for this usage. \citationneeded
-A drawback of these models is that they have a lot of parameters that havbe to be 
-calibrated for each basin individually. They lack generalisation because of a lack of 
-physical information in the models. \citationneeded In 2019 Kratzert et. al. showed
-that we can use Long Short-Term Memory (LSTM) models to model several basins with the same model
-given enough static information about the basins \citep{lstm_second_paper}. These 
-static features are easily obtainable through for example observational satelite 
-data \citep{CAMELS_US}. While these LSTM models did not outperform traditional models when calibrated on a single basin at 
-a time, they did outperform traditional models when used for generalisation.
+With the explosive increase of observational data in recent years (mostly from 
+improvement in sensor and satellite techniques) and the increase in computational 
+power, new methods for streamflow forecasting can be explored. The new data could 
+lessen the need to do on-site probing to model the complex physical system that is 
+subsurface flow. Implementing new data in existing mdoels is hard, the most realistic 
+way to implement it is instead to use purely data-driven models. Machine learning 
+models have shown potential for predicting on catchments described in the CAMELS 
+dataset \citep{CAMELS_US}. The potential usage of this dataset in addition to several, 
+newer datasets from other regions of the world to train generalizable 
+machine learning models is higher than ever. Being able to do ungauged prediction 
+(predictions on a basin without callibrating on it) would bring a plethora of benefits.
 
-In addition to the benefits of LSTM models performing well on several basins, 
-one of the most sought after concepts in the field of hydrology right now is the 
-ability to do predictions on basins where no prior streamflow data is available. \citationneeded
-This would grant companies the ability to model older basins without proper sensors
-and would allow companies to model the basins of their competitors to better price 
-their produced electricity as a response to this. There has been made some initial 
-progress on trying LSTM models for this use case showing promising results \citep{lstm_third_paper}. 
-
+The downside of using machine learning models (as well as other purely data-driven 
+models) is that the models are less interpretable. Even conceptual models, being 
+less physically based than process-driven models, are somewhat consistent with 
+how a catchment works in the real world. Despite this, machine learning models 
+can still be used to gain an understanding of which attributes contained in 
+large scale datasets carry the most information, therefore narrowing down the 
+process of using them to improve process-driven models.
 \section{Goals}
-Our main goal of this thesis is to improve the understanding of the underlying 
-physics in rainfall-runoff modelling. While we already know that \citet{lstm_third_paper} 
-shows promising results from using a purely data-driven model, but there are several 
-disadvantages of using so called "black box" models. What we therefore are interested 
-in is to show that such a black box model can be used for analysis of a dataset 
-to give an indication on the best way forward to include the easily obtained 
-static data included in the CAMELS \citep{CAMELS_US} and CAMELS-GB \citep{CAMELS_GB} 
-datasets. 
-While previous work has been focusing on the 
-CAMELS dataset \citep{CAMELS_US}, it is important to see what results one may get 
-also on different datasets. In this thesis we will mainly focus doing prediction on 
-the CAMELS GB dataset \citep{CAMELS_GB}. This way even if our attempts at finding 
-relevant physical information in the static features we will at least have shown 
-that the results of \citet{lstm_third_paper} also seem to apply on a separate dataset 
-gathered from a different place in the world. 
+There are two main goals in this thesis: Analysing static attributes to get a 
+further indication of which (if any) attributes can be used to improving the 
+understanding of the underlying physics in rainfall-runoff modelling, as well 
+as discovering whether existing machine learning models can generalize across 
+more than one dataset spanning several regions. Attribute importance ranking 
+across several datasets is also of interest.
+
 \section{Our contribution}
 We show that our model performs better using the extra information in the static 
-catchment features in the CAMELS-GB dataset than if it were trained only on timeseries.
-We are able to do an analysis on the importance of these features and give a brief 
-indication where to begin using these features for better calibration of physics-
-based traditional models. For further analysis we also provide the main bulk of 
+catchment features in the CAMELS-GB \citep{CAMELS_GB} dataset than if it were trained 
+only on timeseries, as well as being able to perform well on ungauged basins.
+
+We are able to do an analysis on the importance of these attributes and give a brief 
+indication where to begin using these attributes to improve conceptual and process-driven 
+models.
+
+For further analysis we also provide the main bulk of 
 the code used in this thesis as a python package released under the Apache 2.0 
-license. This code is originally based on the code used in \citet{lstm_second_paper}.
+license. This code is originally based on the code released by \citet{lstm_second_paper}.
+
 \section{Thesis structure}
 This thesis is divided into 7 chapters, most chapters also being sub-divided into
 sections. 
@@ -58,15 +65,26 @@ sections.
 \item  The introduction. Here we explain the importance of this work and briefly summarize what has been done by others before us.
 \item Theory. This chapter is divided into two parts:
     \begin{enumerate}
-    \item Rainfall-runoff modelling. This section describes the relevant theory for understanding the physics captured in today's popular rainfall-runoff models. We present a popular traditional model known as SAC-SMA an show parts of it that may be improved using the insight gathered in this thesis work.
-    \item Machine learning. Here we try to give a thorough overview of the concepts needed to understand the machine learning models we employ in this work. We also give physics-based arguments for why the Long Short-Term Memory (LSTM) model is a good fit for this kind of physical system.
+    \item Rainfall-runoff modelling. This section describes the relevant theory 
+        for understanding the physics captured in today's popular rainfall-runoff 
+            models. We present a popular traditional model known as SAC-SMA an show 
+            parts of it that may be improved using the insight gathered in this 
+            thesis work.
+    \item Machine learning. Here we try to give a thorough overview of the concepts 
+        needed to understand the machine learning models we employ in this work. 
+            We also give physics-based arguments for why the Long Short-Term Memory 
+            (LSTM) model is a good fit for this kind of physical system.
     \end{enumerate}
     \item Data. Here we give a brief explanation of how the CAMELS and CAMELS-GB 
     datasets are structured so that the Method and Results chapters is more easily followed.
-    \item Method. Here we describe in detail how we structure our model, what programming frameworks we use and how we analyze our results. An explanation of the code used to derive our results is also included.
+    \item Method. Here we describe in detail how we structure our model, what programming 
+        frameworks we use and how we analyze our results. An explanation of the 
+        code used to derive our results is also included.
     \item Results. Here we present our most interesting results and give initial comments.
-    \item Discussion. This chapter presents analysis of our results. We try to find potential ways to connect our results to the goals of this thesis.
-    \item Conclusion. A short summary of our most interesting findings along with what we feel will be a logical next step for further research.
+    \item Discussion. This chapter presents analysis of our results. We try to 
+        find potential ways to connect our results to the goals of this thesis.
+    \item Conclusion. A short summary of our most interesting findings along with 
+        what we feel will be a logical next step for further research.
 \end{enumerate}
 In addition the thesis includes a couple more details in the appendix, such as 
 minimal running examples of the CamelsML python package along with documentation.
