@@ -67,27 +67,29 @@ sections.
     \begin{enumerate}
     \item Rainfall-runoff modelling. This section describes the relevant theory 
         for understanding the physics captured in today's popular rainfall-runoff 
-            models. We present a popular traditional model known as SAC-SMA an show 
-            parts of it that may be improved using the insight gathered in this 
-            thesis work.
-    \item Machine learning. Here we try to give a thorough overview of the concepts 
-        needed to understand the machine learning models we employ in this work. 
+            models. We give a brief overview of a popular conceptual model known 
+            as SACramento Soil Moisture Accounting (SAC-SMA) and 
+            the process driven models Variable Infiltration Capacity (VIC) and 
+            National Water Model (NWM), as well as drawbacks and limitations 
+            of these models. 
+    \item Machine learning. Here we try to give a overview of the concepts 
+        needed to understand the machine learning models we employ in this thesis. 
             We also give physics-based arguments for why the Long Short-Term Memory 
-            (LSTM) model is a good fit for this kind of physical system.
+            (LSTM) model is a good fit for hydrological modelling.
     \end{enumerate}
     \item Data. Here we give a brief explanation of how the CAMELS and CAMELS-GB 
-    datasets are structured so that the Method and Results chapters is more easily followed.
+    datasets are structured so that the Method and Results chapters are more easily followed.
     \item Method. Here we describe in detail how we structure our model, what programming 
-        frameworks we use and how we analyze our results. An explanation of the 
+        frameworks we use and how we analyse our results. An explanation of the 
         code used to derive our results is also included.
-    \item Results. Here we present our most interesting results and give initial comments.
+    \item Results. Here we present our most interesting results and state initial 
+        observations.
     \item Discussion. This chapter presents analysis of our results. We try to 
         find potential ways to connect our results to the goals of this thesis.
     \item Conclusion. A short summary of our most interesting findings along with 
-        what we feel will be a logical next step for further research.
+        what we feel could be logical next steps for further research.
 \end{enumerate}
-In addition the thesis includes a couple more details in the appendix, such as 
-minimal running examples of the CamelsML python package along with documentation.
+In addition, the appendix contains documentation of the code used in this thesis.
 \nocite{4160265}
 \nocite{mckinney-proc-scipy-2010}
 \nocite{2020NumPy-Array}
