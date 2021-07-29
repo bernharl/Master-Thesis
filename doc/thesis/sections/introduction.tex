@@ -5,7 +5,7 @@ companies in the field of hydrology. Improving the prediction of runoff/streamfl
 based on historic data could lead to more accurate prediction of power generation 
 in hydro power plants, flood forecasting and general water resource management.
 
-Today there exist several models for this usage, some with less focus on physics: 
+Today there exists several models for this usage, some with less focus on physics: 
 conceptual models, and some with a larger focus on physics: process-driven models. \citationneeded
 A drawback of these models is that they have many parameters that have to be 
 calibrated for each basin individually. 
@@ -22,18 +22,24 @@ With the explosive increase of observational data in recent years (mostly from
 improvement in sensor and satellite techniques) and the increase in computational 
 power, new methods for streamflow forecasting can be explored. The new data could 
 lessen the need to do on-site probing to model the complex physical system that is 
-subsurface flow. Implementing new data in existing mdoels is hard, the most realistic 
+subsurface flow. Implementing new data in existing mdoels is hard, a simpler 
 way to implement it is instead to use purely data-driven models. Machine learning 
 models have shown potential for predicting on catchments described in the CAMELS 
-dataset \citep{CAMELS_US}. The potential usage of this dataset in addition to several, 
+dataset \citep{lstm_first_paper, CAMELS_US}. The potential for using this dataset in addition to several, 
 newer datasets from other regions of the world to train generalizable 
-machine learning models is higher than ever. Being able to do ungauged prediction 
-(predictions on a basin without callibrating on it) would bring a plethora of benefits.
+machine learning models is higher. Being able to perform ungauged prediction 
+(predictions on a basin without callibrating on it) could yield the benefit of 
+getting approximate prediction of a catchment where no streamflow measurements 
+have been performed.
 
 The downside of using machine learning models (as well as other purely data-driven 
 models) is that the models are less interpretable. Even conceptual models, being 
 less physically based than process-driven models, are somewhat consistent with 
-how a catchment works in the real world. Despite this, machine learning models 
+how a catchment works in the real world. This, for instance, makes it easier to 
+discover when a model is predicting non-physicaly consistent results, as one 
+can look at the outcome of each individual process in the model. For machine learning 
+models, there is no such structure, making this a much harder task.
+Despite this, machine learning models 
 can still be used to gain an understanding of which attributes contained in 
 large scale datasets carry the most information, therefore narrowing down the 
 process of using them to improve process-driven models.
@@ -68,7 +74,7 @@ sections.
     \item Rainfall-runoff modelling. This section describes the relevant theory 
         for understanding the physics captured in today's popular rainfall-runoff 
             models. We give a brief overview of a popular conceptual model known 
-            as SACramento Soil Moisture Accounting (SAC-SMA) and 
+            as SACramento Soil Moisture Accounting (SAC-SMA), and 
             the process driven models Variable Infiltration Capacity (VIC) and 
             National Water Model (NWM), as well as drawbacks and limitations 
             of these models. 
@@ -96,4 +102,3 @@ In addition, the appendix contains documentation of the code used in this thesis
 \nocite{2020SciPy-NMeth}
 \nocite{NEURIPS2019_9015}
 \nocite{Prechelt1998}
-\nocite{elemstatlearn}
