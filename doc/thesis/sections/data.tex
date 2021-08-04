@@ -1,13 +1,18 @@
 In this chapter we briefly describe the two datasets used to get all results in 
 this thesis. We introduce the CAMELS dataset \citep{CAMELS_US} first as it is the 
-older dataset and is used as the basis for the analysis of \citet{lstm_first_paper, lstm_second_paper, lstm_third_paper}.
+older dataset and is used as the basis for the analysis of 
+\citet{lstm_first_paper, lstm_second_paper, lstm_third_paper}, and then CAMELS-GB 
+\cite{CAMELS_GB}.
 \section{The CAMELS dataset}
 The Catchment Attributes and Meteorology for Large-sample Studies (CAMELS) dataset \citep{CAMELS_US}
 is a dataset compiled from several previous hydrological datasets in an attempt to 
 improve the availability of data for large-scale hydrological modelling. It includes 
-data for 671 basins across the United States. 
+data for 671 basins across the United States, with time series spanning from 
+approximately the year of 1980 to 2008.
 
-As CAMELS consists of several datasets, we choose to focus on the time series data 
+
+
+We choose to focus on the time series data 
 used by \citet{lstm_second_paper}. This selection of data consists of an extension 
 of the original Maurer dataset contained in CAMELS provided by \citet{maurer_hydroshare}.
 The time series provided by the extender Maurer dataset that we use as inputs are 
@@ -23,7 +28,7 @@ the following:
 The streamflow data corresponding to the meteorological forcing data mentioned above 
 stems from \citet{usgs_streamflow}.
 
-In addition to time series CAMELS contains several static basin attributes describing 
+In addition to time series, CAMELS contains several static basin attributes describing 
 hydrological, geological and geographical properties of each basin.
 
 Complementing the CAMELS dataset are several hydrological model benchmarks provided 
