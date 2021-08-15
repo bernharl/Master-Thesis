@@ -25,10 +25,15 @@ the following:
 
 The streamflow data corresponding to the meteorological forcing data mentioned above 
 stems from \citet{usgs_streamflow}.
-
 In addition to time series, CAMELS contains several static basin attributes describing 
-climatic indices, hydrological signatures, soil characteristics and land cover 
-characteristics for each basin.
+location and topography, climatic indices, hydrological signatures, soil characteristics, geological 
+characteristics and land cover characteristics for each basin.
+
+Attributes describing location and topography are derived from the USGS part of 
+the N15 dataset and are basin-wise averaged. The attributes of interest here are the topographic ones, as 
+location is not beneficial to physical modelling \footnote{Though it could in theory 
+improve the performance of a statistical model}.
+
 The climatic indices are directly derived from the time series provided by Daymet, 
 another forcing time series dataset contained in CAMELS. The climatic index
 \textbf{\texttt{frac\_snow}} is derived from the fraction of rainfall during 
