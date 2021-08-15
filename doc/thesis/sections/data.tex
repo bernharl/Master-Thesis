@@ -27,7 +27,31 @@ The streamflow data corresponding to the meteorological forcing data mentioned a
 stems from \citet{usgs_streamflow}.
 
 In addition to time series, CAMELS contains several static basin attributes describing 
-climatic indices, hydrological signatures and land cover statistics for each basin.
+climatic indices, hydrological signatures, soil characteristics and land cover 
+characteristics for each basin.
+The climatic indices are directly derived from the time series provided by Daymet, 
+another forcing time series dataset contained in CAMELS. The climatic index
+\textbf{\texttt{frac\_snow}} is derived from the fraction of rainfall during 
+subzero temperature, for instance. 
+
+The hydrological signatures are derived from the streamflow data provided by 
+USGS. These attributes contain info such as the average daily discharge 
+\textbf{\texttt{q\_mean}}.
+
+The land cover statistics describe land cover such as the forest fraction and 
+the dominant land cover class. There is only a land cover fraction for the dominant 
+land cover class for each catchment. The land cover data is derived from the 
+Moderate Resolution Imaging Spectroradiometer (MODIS) data, 
+except for \textbf{\texttt{forest\_frac}}, which is derived from USGS data. MODIS 
+data comes from satellites, making it possible to gather equivalent data from 
+other regions of the world without having to perform on-site measurements.
+
+The soil characteristics describe the soil properties of each catchment in the 
+dataset. These attributes are derived from \citet{SoilData}. There are two 
+attributes for soil depth. One is from the paper just mentioned, and one is defined 
+differently and stems from \citet{pelletier}. In this thesis we use the attribute 
+\textbf{\texttt{soil\_depth\_pelletier}}, as it stems from the same data source as 
+in CAMELS-GB \citep{CAMELS_GB}.
 
 Complementing the CAMELS dataset are several hydrological model benchmarks provided 
 by \citet{CAMELS_hydroshare}. 
