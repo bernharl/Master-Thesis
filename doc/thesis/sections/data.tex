@@ -22,36 +22,32 @@ the following:
     \item Minimum air temperature [C\degree]
     \item Water vapor pressure [Pa]
 \end{itemize}
-
 The streamflow data corresponding to the meteorological forcing data mentioned above 
-stems from \citet{usgs_streamflow}.
+stems from the United States Geological Survey (USGS). It contains streamflow for 
+all the basins in the dataset.
+
 In addition to time series, CAMELS contains several static basin attributes describing 
 location and topography, climatic indices, hydrological signatures, soil characteristics, geological 
 characteristics and land cover characteristics for each basin.
-
 Attributes describing location and topography are derived from the USGS part of 
 the N15 dataset and are basin-wise averaged. The attributes of interest here are the topographic ones, as 
 location is not beneficial to physical modelling \footnote{Though it could in theory 
 improve the performance of a statistical model}.
-
 The climatic indices are directly derived from the time series provided by Daymet, 
 another forcing time series dataset contained in CAMELS. The climatic index
 \textbf{\texttt{frac\_snow}} is derived from the fraction of rainfall during 
 subzero temperature, for instance. 
-
 The hydrological signatures are derived from the streamflow data provided by 
 USGS. These attributes contain info such as the average daily discharge 
 \textbf{\texttt{q\_mean}}.
-
 The land cover statistics describe land cover such as the forest fraction and 
 the dominant land cover class. There is only a land cover fraction for the dominant 
-land cover class for each catchment. The land cover data is derived from the 
+land cover class for each basin. The land cover data is derived from the 
 Moderate Resolution Imaging Spectroradiometer (MODIS) data, 
 except for \textbf{\texttt{forest\_frac}}, which is derived from USGS data. MODIS 
 data comes from satellites, making it possible to gather equivalent data from 
 other regions of the world without having to perform on-site measurements.
-
-The soil characteristics describe the soil properties of each catchment in the 
+The soil characteristics describe the soil properties of each basin in the 
 dataset. These attributes are derived from \citet{SoilData}. There are two 
 attributes for soil depth. One is from the paper just mentioned, and one is defined 
 differently and stems from \citet{pelletier}. In this thesis we use the attribute 
@@ -80,11 +76,8 @@ aimed to be the equivalent to the CAMELS dataset for basins in Great Britain,
 as opposed to American basins in the CAMELS dataset. The dataset is the same in size,
 also containing 671 basins. The time series span from 1970-2015, though, making 
 it span roughly 15 more years than the CAMELS dataset.
- The meteorological time series in addition to the catchment attributes are however 
- not all equivalent with CAMELS, so it is unlikely to get an optimal universal model 
- for both datasets as we need to exclude a significant amount of data from both 
- datasets to make them overlap.
-The time series we use in this thesis are
+
+The forcing time series we use in this thesis are
 \begin{itemize}
     \item Precipitation [mm/day]
     \item Average temperature [C\degree]
@@ -93,11 +86,37 @@ The time series we use in this thesis are
     \item Shortwave radiation [W/m$^2$]
     \item Longwave radiation [W/m$^2$]
 \end{itemize}
-In addition there two more time series which we exclude that describe potential 
+In addition there are two more time series which we exclude that describe potential 
 evapotranspiration for well-watered grass. We exclude these as they are derived 
-features and not measured.
+features and not measured, and they would make the comparison to CAMELS more difficult.
 
+The static attributes in CAMELS-GB are structured similarly to those in CAMELS. 
+There are location and topographic attributes, which describe the geographical 
+location of each basin, as well as the giving a description of the topography. 
+As stated above, the geographical attributes are not of interest to a physical model, 
+and are therefore not used here. The topography attributes are provided by 
+\citet{morris1990digital}.
+The climatic indices are derived from the forcing time series, similarly to CAMELS. 
+They contain average precipitation, aridity, snow fraction and other attributes.
+Hydrologic signatures are derived in the same manner, being processed information 
+derived from the streamflow time series for each basin. 
+The land cover attributes are provided by \citet{rowland2017land}. The classes 
+have been derived using a random forest classifier on satellite images, meaning 
+they suffer from uncertainty from the classification and the original data source. 
+As opposed to CAMELS, there is land cover percentage for each class, not just the 
+dominant class in each basin.
+\textbf{\texttt{root\_depth}} is, like in CAMELS, taken from \citet{pelletier}. 
+All other soil attributes are provided by \citet{hiederer2013mappinga, hiederer2013mappingb}.
+The soil attributes are limited to the top 1.3 meters of soil. CAMELS-GB 
+contains three attribute categories not present in CAMELS: hydrogeological attributes, 
+hydrometry and discharge uncertainty, and human influence attributes. These three 
+categories are not used in this thesis.
 
+The meteorological time series and static attributes in CAMELS-GB are 
+not all equivalent with CAMELS. This makes it difficult to combine the datasets
+for a universal model, as one has to remove and/or modify a significant amount of 
+static attributes to get overlapping datasets.
+ 
 As far as we know there is no currently available traditional model benchmark dataset 
 akin to \cite{CAMELS_hydroshare} for CAMELS-GB. The creation of such a dataset would 
 likely be a challenge because of the time series contained in CAMELS-GB. There is for 
