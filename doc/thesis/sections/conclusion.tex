@@ -2,19 +2,28 @@
 We have shown that LSTM models perform well on CAMELS-GB as well as CAMELS, and 
 also that a single model can perform well on both datasets at the same time, even 
 with less than optimal preprocessing of the mixed dataset.
+In all cases models trained and validated on subsets of the same dataset perform 
+approximately equally during cross validation and on the test sets. 
+The models struggle to model the highest peaks and lowest valleys of streamflow, 
+however. 
 
-Training on CAMELS and validating on CAMELS-GB and vise-versa yielded disappointing, 
+Training on CAMELS and validating on CAMELS-GB and vice-versa yielded disappointing, 
 though not surprising results. We deemed this to be because the datasets cover 
 domains that are too different from one another, as well as lacking equivalent 
 attributes.
 
 Our static attribute analysis yielded no obvious ways to improve the performance 
 of process-driven models, as our models preferred static attributes containing 
-information already used by process-driven models. Improving the performance of and 
+information already used by process-driven models. Better performing 
+machine learning models which are able to extract more information from the time 
+series alone could perhaps alleviate this in the future.Improving the performance of and 
 physical understanding provided by process-driven models is a difficult task.
 
-LSTM models seem to have the potential to both outperform and improve traditional 
-models. In the future we hope this leads to both improved physical understanding, 
+From the fact that LSTM models outperform traditional models on generalization on 
+CAMELS, as well as the fact that we have shown that they perform well on CAMELS-GB, 
+we believe it is possible to claim that machine learning models have the potential 
+to vastly improve the understanding of the physics behind hydrological models. 
+In the future we hope this leads to both improved physical understanding, 
 as well as model quality, in several fields of the physical sciences. Hydrological 
 systems are highly complex, and the need to use large scale data analysis to 
 obtain a better understanding of the inner physical processes has yet to be 
@@ -24,26 +33,34 @@ fulfilled.
 In the previous chapter we mentioned several ways to improve the results of this 
 thesis. Here we give a brief summary.
 
-The simplest way to improve the performance of a machine learning model is to give 
+One of the simplest ways to improve the performance of a machine learning model is to give 
 it more, high quality training data. To our knowledge there now exists three 
 additional datasets we have not used in this dataset \citep{CAMELS_CL, CAMELS_AU, CAMELS_BR}.
+Training LSTM models on these datasets, as well as attempting to combine them with 
+CAMELS and CAMELS-GB is something we believe could improve the generalizability of 
+machine learning models trained for hydrological modelling.
 
-An LSTM based model with a one-dimensional CNN input layer, intended to reduce 
-the number of time steps needed, thus reducing the computational cost of training 
-the LSTM.
+There are likely several ways to improve the performance of our machine learning 
+model through modifying the model architecture. A simple modification to start with 
+could be to implement an LSTM based model with a one-dimensional CNN input layer. 
+This is intended to reduce the number of time steps needed, thus reducing the 
+computational cost of training the model.
 
-Improve the hyperparameter tuning of our models. This could be especially important 
+Another way to improve the performance of a machine learning model is to improve 
+the hyperparameter tuning. This could be especially important 
 for transfer learning, as the reduction of variance is often important for 
 generalization \citep{elemstatlearn}. This could be a more manageable task if 
 the aforementioned CNN layer is implemented to decrease training time.
 
-Introduce a physics based penalty term to the cost function. A simple example of 
+A more experimental approach would be to implement a physics based penalty term 
+in the cost function. A simple example of 
 this is described in the previous chapter. This could improve the interpretability 
 of an LSTM and also increase the consistency of the output, as put by \citet{hybrid_paper}.
 
-Use a hybrid model approach. This could lead to better generalizability and 
-interpretability. There are several ways to do this, the most thorough being to 
-implement an LSTM instead of a given process in a process-driven model. This could 
+A similar, but more advanced approach than stated above is to employ an LSTM as 
+part of a traditional model in a hybrid approach. This could lead to better generalizability and 
+interpretability. There are several ways to do this, one approach could be to implement 
+an LSTM instead of a given process in a process-driven model. This could 
 then be used to compare to the output of said process in the ordinary model versus 
 the hybrid model. This is likely very computationally expensive, as the process-driven 
 models are more expensive than pure LSTM models. A simpler hybrid model discussed 
@@ -51,6 +68,8 @@ in this thesis is a setup where the LSTM is trained to correct the error of
 the output of a traditional model. This way one could leverage the already existing 
 model benchmarks on CAMELS \citep{CAMELS_hydroshare}.
 
+\begin{comment}
 One should also look into the possibility of implementing LSTM models in Statkraft's 
 Shyft\citep{Shyft}, making it much easier to employ these models on many datasets, 
 as well as greatly simplifying the process of comparing with other models.
+\end{comment}
