@@ -1,25 +1,28 @@
 \section{Rainfall-Runoff modelling}
-In this section we give some brief explanations of examples of two different types 
-of classical rainfall-runoff models. These two types are
+In this section we introduce and give brief explanations of two types of 
+rainfall-runoff models. These two types are
 \begin{enumerate}
     \item Conceptual models: These models can often be referred to as so called "grey box" models \citationneeded as many important physical effects are replaced by parametrized models.
     \item Process-based models: These models are more physics-based than the conceptual models. 
+        They are based on physical laws and their parameters are ideally physically 
+        interpretable. 
 \end{enumerate}
-Because they attempt to predict runoff using physically modelled processes process based models
+Because they attempt to predict runoff using physically modelled processes, process based models
 have been referred to as the models of choice when predicting runoff in ungauged 
- (meaning basins where there is no forcing data available for calibration) basins. 
+ (meaning basins where there is no streamflow data available for calibration) basins. 
  \citet{lstm_third_paper} argues that this is not necessarily the case and data driven 
  machine learning models can also give state of the art predictions.
  While this may be the case, the ideal scenario would be having 
  a well performing process-based model. This is because all models are likely to 
  have a selection of outlier basins where they perform exceptionally poorly. A model 
- incorporating physics is in this case likely to be easier interpretable, leading 
+ incorporating physics is in this case likely to be more interpretable, leading 
  to the possibility of being able to know whether one can trust a specific prediction or not. 
- For ungauged basins this is a clear benefit.
+ For ungauged basins this is a clear benefit, as this means one can evaluate 
+ the plausibility of a result without prior data.
 \subsection{Sacramento Soil Moisture Accounting}
 The Sacramento Soil Moisture Accounting (SAC-SMA) \citep{SAC-SMA} rainfall-runoff model is a widely 
 used hydrological and serves the purpose of being a conceptual model in this thesis.
-Originally introduced in 1973 the model has since been modified and improved by 
+Originally introduced in 1973, the model has since been modified and improved by 
 several other papers \citep{SAC-SMA-physics}.
 \begin{align}
     \bm{S}^1(t + \Delta t,x) &= \bm{S}(t,x) + f\left(\bm{S}(t,x),P(t+\Delta t,x),E_p (t+\Delta t, x), \bm{V}(x) \right) \\
