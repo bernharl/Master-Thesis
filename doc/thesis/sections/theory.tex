@@ -25,12 +25,22 @@ have been referred to as the models of choice when predicting runoff in ungauged
  to the possibility of being able to know whether one can trust a specific prediction or not. 
  For ungauged basins this is a clear benefit, as this means one can evaluate 
  the plausibility of a result without prior data.
-\subsection{Sacramento Soil Moisture Accounting}
-The Sacramento Soil Moisture Accounting (SAC-SMA) rainfall-runoff model is a widely 
+\subsection{SACramento Soil Moisture Accounting}
+The SACramento Soil Moisture Accounting (SAC-SMA) rainfall-runoff model is a widely 
 used hydrological and serves the purpose of being a conceptual model in this thesis.
 Originally introduced in 1973 by \citet{SAC-SMA-old}, the model has since been modified and improved by 
 several others \citep{SAC-SMA-physics}. A thorough explanation of 
-the model can be found in \citet{SAC-SMA}
+the model can be found in \citet{SAC-SMA}.
+
+The model focuses on conceptually modelling streamflow, using either real or modelled 
+precipitation and evapotranspiration data as input. It uses relatively simple differential equations to 
+keep track of the water collection in different layers of soil. This is not derived 
+from any physical equation, and is what is often known as a so called "bucket model", 
+i.e. it keeps track of stored water in layers of soil and needs parameters such as 
+drainage coefficients to be optimized to properly be able to model the streamflow 
+in a basin. As well as needing evapotranspiration, the model also needs to be 
+coupled with a snow (and frozen soil) model to be able to function in colder regions.
+The conceptual snow model known as Snow-17 is often used for this \citationneeded.
 \begin{align}
 x = y
 \end{align}
