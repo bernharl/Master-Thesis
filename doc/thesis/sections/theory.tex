@@ -2,10 +2,16 @@
 In this section we introduce and give brief explanations of two types of 
 rainfall-runoff models. These two types are
 \begin{enumerate}
-    \item Conceptual models: These models can often be referred to as so called "grey box" models \citationneeded as many important physical effects are replaced by parametrized models.
-    \item Process-based models: These models are more physics-based than the conceptual models. 
-        They are based on physical laws and their parameters are ideally physically 
-        interpretable. 
+    \item Conceptual models: These models can be referred to as so called 
+		"grey box" models, as many important physical effects are replaced
+		by parameters that have to be optimized. Classically this is viewed as 
+		bad for generalization, as there is no inherent physical meaning behind an 
+		optimized parameter.
+	\item Process-based models: These models are in a larger degree based on physical 
+		laws. They still have parameters, some of which have to be optimized, but 
+		they should ideally be given physical meaning. This in spite of indications 
+		of increased performance from optimizing more parameters, forgoing their 
+		original physical meaning \citep{VICbench,BiasVarianceVIC}.
 \end{enumerate}
 Because they attempt to predict runoff using physically modelled processes, process based models
 have been referred to as the models of choice when predicting runoff in ungauged 
@@ -20,14 +26,13 @@ have been referred to as the models of choice when predicting runoff in ungauged
  For ungauged basins this is a clear benefit, as this means one can evaluate 
  the plausibility of a result without prior data.
 \subsection{Sacramento Soil Moisture Accounting}
-The Sacramento Soil Moisture Accounting (SAC-SMA) \citep{SAC-SMA} rainfall-runoff model is a widely 
+The Sacramento Soil Moisture Accounting (SAC-SMA) rainfall-runoff model is a widely 
 used hydrological and serves the purpose of being a conceptual model in this thesis.
-Originally introduced in 1973, the model has since been modified and improved by 
-several other papers \citep{SAC-SMA-physics}.
+Originally introduced in 1973 by \citet{SAC-SMA-old}, the model has since been modified and improved by 
+several others \citep{SAC-SMA-physics}. A thorough explanation of 
+the model can be found in \citet{SAC-SMA}
 \begin{align}
-    \bm{S}^1(t + \Delta t,x) &= \bm{S}(t,x) + f\left(\bm{S}(t,x),P(t+\Delta t,x),E_p (t+\Delta t, x), \bm{V}(x) \right) \\
-    \bm{S}^{(n+1)}(t+\Delta t,x) &= \bm{S}^{(n)}(t+\Delta t, x) \nonumber \\
-    &+ f\left( \bm{S}^{(n)}(t+\Delta t, x), \bm{q}^{(n+1)}(t+\Delta t,x),P_x(t+\Delta t,x),\bm{V}(x)  \right)
+x = y
 \end{align}
 
 \subsection{The Variable Infiltration Capacity model}
