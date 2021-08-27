@@ -40,10 +40,24 @@ i.e. it keeps track of stored water in layers of soil and needs parameters such 
 drainage coefficients to be optimized to properly be able to model the streamflow 
 in a basin. As well as needing evapotranspiration, the model also needs to be 
 coupled with a snow (and frozen soil) model to be able to function in colder regions.
-The conceptual snow model known as Snow-17 is often used for this \citationneeded.
+The conceptual snow model known as Snow-17 can be used for this \citep{snow-17, VICbench}.
+
+
+The equations guiding the output of SAC-SMA are on the following form:
 \begin{align}
-x = y
+u_c = \left( d_ux_2+\frac{d_1'x_4+d_1''x_5}{1-\mu} \right)\left(1-\beta_1-\beta_2\right)
+ + \phi x_p\beta_2 \nonumber \\ + \left(\frac{x_6-x_1}{x_3^\circ}\right)^2\phi x_p 
+\left(\frac{x_1}{x_1^\circ}\right)^{m_1}\beta_1+\phi x_p 
+\left(\frac{x_1}{x_1^\circ}\right)^{m_1}\left(\frac{x_2}{x_2^\circ}\right)^{m_2}
+\left(1 - \beta_1 - \beta_2 \right) \nonumber \\ + \left[ 1 - \left(1-\frac{x_6-x_1}{x_3^\circ} \right)^2
+\right]\left(\frac{x_2}{x_2^\circ}\right)^{m_2}\left(\frac{x_1}{x_1^\circ}\right)^{m_1}
+\phi x_p \beta_1 .
 \end{align}
+
+While this model's treatment of soil layers as "buckets" is not entirely inconsistent 
+with real world physics, the bucket behaviour is not based on a physical equation. 
+The models also needs to optimize many parameters, making said parameters harder 
+to assign any physical meaning to. 
 
 \subsection{The Variable Infiltration Capacity model}
 \label{VIC}
