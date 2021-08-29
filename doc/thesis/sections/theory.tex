@@ -33,15 +33,24 @@ several others \citep{SAC-SMA-physics}. A thorough explanation of
 the model can be found in \citet{SAC-SMA}.
 
 The model focuses on conceptually modelling streamflow, using either real or modelled 
-precipitation and evapotranspiration data as input. It uses relatively simple differential equations to 
-keep track of the water collection in different layers of soil. This is not derived 
-from any physical equation, and is what is often known as a so called "bucket model", 
-i.e. it keeps track of stored water in layers of soil and needs parameters such as 
-drainage coefficients to be optimized to properly be able to model the streamflow 
-in a basin. As well as needing evapotranspiration, the model also needs to be 
+precipitation and evapotranspiration data as input. As well as needing evapotranspiration,
+ the model also needs to be 
 coupled with a snow (and frozen soil) model to be able to function in colder regions.
 The conceptual snow model known as Snow-17 can be used for this \citep{snow-17, VICbench}.
 
+This is not derived 
+from any physical equation, but can instead be described as a "bucket model", 
+i.e. it treats different layers of soils as buckets with holes in the bottom. This 
+allows some streamflow even when the soil layer is not saturated, but once saturated, 
+most if not all water is allowed to flow past the layer.
+To correctly model a given basin, SAC-SMA needs parameters such as 
+drainage coefficients to be optimized 
+This behaviour is in many ways consistent with the real world. What differentiates 
+SAC-SMA and other conceptual models from process-driven models is that the equations 
+guiding the behaviour of the model aren't directly derived from physical laws.
+Conceptual models model the behaviour of a physical system by being designed to 
+act similarly to said system, without actually being governed by the system's 
+physical laws.
 \begin{comment}
 The equations guiding the output of SAC-SMA are on the following form:
 \begin{align}
@@ -54,10 +63,6 @@ u_c = \left( d_ux_2+\frac{d_1'x_4+d_1''x_5}{1-\mu} \right)\left(1-\beta_1-\beta_
 \phi x_p \beta_1 .
 \end{align}
 \end{comment}
-
-Qualitatively speaking, a conceptual model like SAC-SMA is designed to model the 
-behaviour of the physics behind rainfall-runoff modelling without necessarily 
-using actual physical equations known to describe such a system. 
 \subsection{The Variable Infiltration Capacity model}
 \label{VIC}
 The Variable Infiltration Capacity (VIC) model \citep{VIC} is a process driven model 
@@ -76,11 +81,10 @@ The terms in (\ref{iVIC}) and (\ref{imVIC}) are as follows:
     \item $i$: Infiltration capacity [m]
     \item $i_m$: Maximum infiltration capacity
     \item $A$: Fraction of soil area where $i < i_m$
-    \item $b_i$: Infiltration shape parameter. It is often found using calibration.
+    \item $b_i$: Infiltration shape parameter. Often found using calibration.
     \item $z$: Soil depth.
     \item $\theta_s$: Soil porosity. Related to maximum soil water content with $W^c = \theta_s |z|$
 \end{itemize}
-
 
 The model was created to be used in a GCM (General Circulation Model), but can also 
 instead used for rainfall-runoff modelling using real-world data instead of the inputs 
@@ -90,15 +94,15 @@ area into $N$ land coverage categories and the ground (vertically) into several 
 One thin  upper soil layer and two lower soil layers. This is an attempt at physically 
 representing underground streamflow\footnote{While \citet{VIC} originally used a 
 two layer setup, later versions of the VIC model have introduced more layers. 
-\citet{VIC2L} for instance showed that adding a top smaller layer improved performance 
-significantly. This three layer structure is also what has been used by \citet{VICbench} 
-which is the reason we include VIC as an example process-driven model in this thesis.}
+\citet{VIC2L} for instance showed that adding a smaller layer on top improved performance 
+significantly. This three layer structure is also what has been used by \citet{VICbench}, 
+which is the reason we include VIC as an example of a process-driven model in this thesis.}
 
-The runoff modelling is split into several parts. Some examples are:
+The runoff modelling is split into several parts. Some of which are:
 \begin{enumerate}
     \item Evapotranspiration.
-	\item Surface runoff from bare soil.
-	\item Subsurface runoff from bare soil.
+	\item Surface/direct runoff from bare soil.
+	\item Subsurface runoff/baseflow from bare soil.
 	\item Covered surfaces (Types of land cover, vegetation).
 	\item Snow and frozen soil representations.
 \end{enumerate}
@@ -107,19 +111,24 @@ The volumetric water content of soil layer $i$ is defined as
     \theta_i = \frac{1}{z_i - z_{i-1}} \int_{-z_i}^{-z_{i-1}} \theta dz. \label{theta i}
 \end{equation}
 
-To obtain the direct runoff $Q_d$ [mm/day] Richard's equation which is defined as 
+To obtain the direct runoff $Q_d$ [mm/day], Richard's equation, which is defined as 
 \begin{equation}
     \pdv{\theta}{t} = \pdv{}{z}\left( D(\theta)\pdv{\theta}{z}  \right) + \pdv{K(\theta)}{z}
     \label{richard}
 \end{equation}
-where $D(\theta)$ is the soil water diffusivity [mm$^2$/day]{\Large ??} and $K(\theta)$ is hydraulic
-conductivity [mm/day]
-is numerically integrated from $-z_{2}$ to $0$\footnote{\citet{VIC2L} argues that 
-calculating direct runoff separately for layer 1 and 2 is not beneficial.}, giving \citep{VIC2L}
+where $D(\theta)$ is the soil water diffusivity and $K(\theta)$ is hydraulic
+conductivity [mm/day], is used. Richard's equation describes the flow of water 
+in unsaturated flow, and is the central physical law in VIC. The use of Richard's 
+equation as a physical basis for modelling is what separates VIC, being a process-driven 
+model, from conceptual models such as SAC-SMA.
+Richard's equation is numerically integrated from $-z_{2}$ to $0$\footnote{\citet{VIC2L} argues that 
+calculating direct runoff separately for layer 1 and 2 is not beneficial.}
+This gives
 \begin{equation}
-    \pdv{\theta_2}{t}z_2 = I - E - K(\theta) |_{-z_2}^0 - D(\theta) \pdv{\theta}{z} |_{-z_2}^0.
+    \pdv{\theta_2}{t}z_2 = I - E - K(\theta) |_{-z_2}^0 - D(\theta) \pdv{\theta}{z} |_{-z_2}^0
     \label{richards numerical}
 \end{equation}
+\citep{VIC2L}.
 Here $I = P - Q_d$ is the infiltration rate and $\theta_2$ according to (\ref{theta i}) 
 is $\theta_i = \frac{1}{z_2}\int_{-z_2}^0 \theta dz$.
 Using this value for $\theta_i$, direct runoff $Q_d$ is then modelled as \citep{VIC2L}
@@ -143,7 +152,7 @@ Summing direct runoff and baseflow gives total runoff $Q=Q_d + Q_b$. For other g
 than bare soil the model is slightly modified. We do not present the details of 
 this in this thesis as the point isn't to implement VIC, but rather to give a general 
 idea of the physical effects it employs to model rainfall-runoff processes. We therefore 
-instead shift our focus to the next challenge of the VIC: Frozen soil and snow modelling.
+instead shift our focus to another challenge to the VIC: Frozen soil modelling.
 
 The original VIC did not account 
 properly for frozen soil, the effect of which is important in cold climates.
@@ -156,7 +165,7 @@ is defined as
 C_s\pdv{T}{t}=\pdv{}{z}\left( \kappa \pdv{T}{z} \right) + \rho_i L_f \left( \pdv{\theta_i}{t}\right).
 \label{VIC heat equation}
 \end{equation}
-From (\ref{VIC heat equation}) \citet{VICFrozenSoil} then uses an explicit first order 
+From (\ref{VIC heat equation}), \citet{VICFrozenSoil} then uses an explicit first order 
 finite difference scheme to solve this one dimensional partial differential 
 equation, discretizing $\partial t\approx \Delta t$ and $\partial z \approx \Delta z_i$.
 For the top two layers it is then easy to rewrite the equation on numerical form as
@@ -181,10 +190,10 @@ The terms in (\ref{VIC heat equation}) and (\ref{vic frozen soil pde}) are as fo
     \item $\gamma = (\Delta z_1 - \Delta z_2)$
     \item $f'(z)=(T_{i+1}^t - T_{i-1}^t) / \alpha$
 \end{itemize}
-
-
-Perhaps add equations for $\kappa$ and $C_s$?
-
+Again we see the use of physical equations to model a phenomenon. If this were a 
+conceptual model, it would instead try to model the behaviour of frozen soil 
+using equations that act like frozen soil in the real world, without basing 
+them directly on physical equations such as (\ref{VIC heat equation}).
 
 The unfrozen  water content of layer $i$ when ice is present is then described as 
 \begin{equation}
@@ -214,17 +223,15 @@ motivated values \citep{VICbench}. This could imply that the model does not acco
 for several important physical phenomena.
 
 Speaking in the language of machine learning, the fact that adding more "learn-able" 
-parameters implies a lack of model complexity, complexity in this scenario 
+parameters implies a lack of model complexity, "complexity" in this scenario 
 meaning the ability of a model to fit to a given dataset.
 
-Explain all terms. Try to understand what the next terms mean. Then argue why 
-this model isn't ideal (it is constrained, not that physical, blah blah).
-\subsection{National Water Model}
-\label{NWM}
-The National Water Model (NWA) is a process based hydrological model. For completeness 
-we briefly describe what we deem the most important underlying physics in the model 
-in this section.
-
+Other, more widely used and developed process-driven also exist. One of which is 
+the National Water Model (NWA). The NWM is a coupled meteorological forecast model, 
+the hydrological component of which is known as the Weather Research and Forecasting 
+Hydrological modelling system (WFR-Hydro) \citep{WRF-hydro-guide, WRF-hydro-original}. 
+As a process-driven model, the NWM is more constrained 
+than SAC-SMA, but known to better generalize than conceptual models.
 
 \subsection{Drawbacks}
 The reason we briefly describe several traditional models in this chapter is to 
