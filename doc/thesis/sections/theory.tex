@@ -42,7 +42,7 @@ in a basin. As well as needing evapotranspiration, the model also needs to be
 coupled with a snow (and frozen soil) model to be able to function in colder regions.
 The conceptual snow model known as Snow-17 can be used for this \citep{snow-17, VICbench}.
 
-
+\begin{comment}
 The equations guiding the output of SAC-SMA are on the following form:
 \begin{align}
 u_c = \left( d_ux_2+\frac{d_1'x_4+d_1''x_5}{1-\mu} \right)\left(1-\beta_1-\beta_2\right)
@@ -53,12 +53,11 @@ u_c = \left( d_ux_2+\frac{d_1'x_4+d_1''x_5}{1-\mu} \right)\left(1-\beta_1-\beta_
 \right]\left(\frac{x_2}{x_2^\circ}\right)^{m_2}\left(\frac{x_1}{x_1^\circ}\right)^{m_1}
 \phi x_p \beta_1 .
 \end{align}
+\end{comment}
 
-While this model's treatment of soil layers as "buckets" is not entirely inconsistent 
-with real world physics, the bucket behaviour is not based on a physical equation. 
-The models also needs to optimize many parameters, making said parameters harder 
-to assign any physical meaning to. 
-
+Qualitatively speaking, a conceptual model like SAC-SMA is designed to model the 
+behaviour of the physics behind rainfall-runoff modelling without necessarily 
+using actual physical equations known to describe such a system. 
 \subsection{The Variable Infiltration Capacity model}
 \label{VIC}
 The Variable Infiltration Capacity (VIC) model \citep{VIC} is a process driven model 
@@ -83,9 +82,9 @@ The terms in (\ref{iVIC}) and (\ref{imVIC}) are as follows:
 \end{itemize}
 
 
-The model was created to be used in a GCM (General Circulation Model), but is often 
+The model was created to be used in a GCM (General Circulation Model), but can also 
 instead used for rainfall-runoff modelling using real-world data instead of the inputs 
-from a circulation model \citationneeded. The rainfall-runoff modelling aspect 
+from a circulation model \citep{VICbench}. The rainfall-runoff modelling aspect 
 of the model is presented in short here for context. It works by splitting the catchment 
 area into $N$ land coverage categories and the ground (vertically) into several soil layers. 
 One thin  upper soil layer and two lower soil layers. This is an attempt at physically 
