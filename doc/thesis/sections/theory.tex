@@ -2,16 +2,13 @@
 In this section we introduce and give brief explanations of two types of 
 rainfall-runoff models. These two types are
 \begin{enumerate}
-    \item Conceptual models: These models can be referred to as so called 
-		"grey box" models, as many important physical effects are replaced
-		by parameters that have to be optimized. Classically this is viewed as 
-		bad for generalization, as there is no inherent physical meaning behind an 
-		optimized parameter.
+    \item Conceptual models: This type of model is designed to work in a similar 
+manner to the system it is used to model, without being based on the physical laws 
+actually governing said system. To properly model a system, a conceptual model 
+usually has a large amount of parameters that need to be optimized.
 	\item Process-based models: These models are in a larger degree based on physical 
 		laws. They still have parameters, some of which have to be optimized, but 
-		they should ideally be given physical meaning. This in spite of indications 
-		of increased performance from optimizing more parameters, forgoing their 
-		original physical meaning \citep{VICbench,BiasVarianceVIC}.
+they should ideally be given physical interpretations. 
 \end{enumerate}
 Because they attempt to predict runoff using physically modelled processes, process based models
 have been referred to as the models of choice when predicting runoff in ungauged 
@@ -131,7 +128,7 @@ This gives
 \citep{VIC2L}.
 Here $I = P - Q_d$ is the infiltration rate and $\theta_2$ according to (\ref{theta i}) 
 is $\theta_i = \frac{1}{z_2}\int_{-z_2}^0 \theta dz$.
-Using this value for $\theta_i$, direct runoff $Q_d$ is then modelled as \citep{VIC2L}
+Using this value for $\theta_i$, direct runoff $Q_d$ is then modelled as 
 \begin{equation}
 Q_d\left[ N+1 \right] \cdot \Delta t = 
 \begin{cases}
@@ -140,13 +137,14 @@ Q_d\left[ N+1 \right] \cdot \Delta t =
     \frac{i_0 + P \cdot \Delta t}{i_m} \right]^{l+b_i}, & i_0 + P \cdot \Delta t \leq i_m
 \end{cases} \label{VIC direct runoff}
 \end{equation}
-where $\theta_s=\frac{W_c^i}{z_i}$ and $\theta_i = \frac{W_i}{z_i}$.
+where $\theta_s=\frac{W_c^i}{z_i}$ and $\theta_i = \frac{W_i}{z_i}$ \citep{VIC2L}.
 
-The baseflow $Q_b$ is defined as \citep{VIC2L}
+The baseflow $Q_b$ is defined as 
 \begin{equation}
     \pdv{\theta_3}{t} \left(z_3 - z_2\right) = K(\theta)|_{-z_2} + D(\theta)
-    \pdv{\theta}{z}|_{-z_2} - Q_b. \label{Qb}
+    \pdv{\theta}{z}|_{-z_2} - Q_b \label{Qb}
 \end{equation}
+\citep{VIC2L}.
 
 Summing direct runoff and baseflow gives total runoff $Q=Q_d + Q_b$. For other ground covers 
 than bare soil the model is slightly modified. We do not present the details of 
@@ -219,39 +217,33 @@ generally seems to be physically motivated, it still has a non-trivial amount of
 parameters that need to be set. Many of these parameters are given an a-priori 
 physical meaning, but experiments have shown that the model actually performs 
 significantly better when more parameters are optimized instead of using physically 
-motivated values \citep{VICbench}. This could imply that the model does not account 
+motivated values \citep{VICbench, BiasVarianceVIC}. This could imply that the model does not account 
 for several important physical phenomena.
-
 Speaking in the language of machine learning, the fact that adding more "learn-able" 
-parameters implies a lack of model complexity, "complexity" in this scenario 
-meaning the ability of a model to fit to a given dataset.
+parameters improves performance implies a lack of model complexity, "complexity" in 
+this scenario meaning the ability of a model to fit a given training dataset.
 
 Other, more widely used and developed process-driven also exist. One of which is 
 the National Water Model (NWA). The NWM is a coupled meteorological forecast model, 
 the hydrological component of which is known as the Weather Research and Forecasting 
-Hydrological modelling system (WFR-Hydro) \citep{WRF-hydro-guide, WRF-hydro-original}. 
+Hydrological modelling system (WFR-Hydro) \citep{WRF-hydro-original, WFR-hydro-manual}. 
 As a process-driven model, the NWM is more constrained 
 than SAC-SMA, but known to better generalize than conceptual models.
 
 \subsection{Drawbacks}
 The reason we briefly describe several traditional models in this chapter is to 
 give proper motivation for why it is of interest to see whether the information 
-contained in easily obtainable data such as the static catchment attributes 
-provided by \citet{CAMELS_US} and \citet{CAMELS_GB} has the potential to improve 
+contained in easily obtainable new data has the potential to improve 
 our physical understanding of the relationship between rainfall and runoff. It has 
-been shown by \ref{lstm_third_paper} that one can, using machine learning, extract 
+been shown by \citet{lstm_third_paper} that one can, using machine learning, extract 
 useful information from these attributes. Understanding the limitations of process 
-driven models such as VIC and NWM is important if one is to try finding a 
-meaningful relationship between the physics not currently described fully in these 
-(or other) models and the catchment attributes. If anything, this would at least 
-make the calibration effort of these models a simpler task without sacrificing 
-performance.
-
+driven models is important if one is to try finding a 
+meaningful relationship between the physics not currently described fully in 
+today's process-driven models and new types of data. 
 
 \section{Machine Learning}
 We give a brief explanation of the basics in Machine Learning here for better context 
 before elaborating on the LSTM model central to this thesis.
-The term Machine Learning was coined in \citationneeded by .... 
 Machine Learning is a type of frequentist approach to statistical analysis where 
 one creates a statistical model, often with several million parameters and finds 
 the value of each parameter that makes the model approximate the data in the most 
@@ -290,8 +282,8 @@ from the training process so as to not make the performance metrics of the model
 By "optimistic" what is meant is that the error, for scalar values (\ref{MSE}) is 
 lower on the data the model is trained on than on data the model has not seen under 
 training. The function that is minimized under machine learning is called a 
-cost function, and while (\ref{MSE}) is very commonly used for scalar outcomes 
-there exist many other cost functions all with different characteristics. \citationneeded
+cost function, and while (\ref{MSE}) is very commonly used for scalar outcomes, 
+there exist many other cost functions all with different characteristics. 
 To explain 
 why this is important we need to have a quick look at what is known as the 
 bias variance trade-off.
@@ -345,7 +337,7 @@ specific to the models that are being regularized.
 \subsection{Gradient Descent}
 \label{GD Theory}
 While the simple case of linear regression has an easily attainable analytical solution 
-as seen in (\ref{OLS solution}), more advanced models may not. \citationneeded 
+as seen in (\ref{OLS solution}), more advanced models may not. 
 A generic computational optimization algorithm known as Gradient Descent can therefore 
 be beneficial to employ in such a case \citep{elemstatlearn} \citep{handson}. The 
 fundamental concept of Gradient Descent is to calculate the gradient $\Delta F(\mathbf{x})$ 
@@ -398,7 +390,7 @@ to be used in practice in most cases. They are also the default values of the
 ADAM implementation in the Machine Learning Framework Pytorch \citep{NEURIPS2019_9015}.}.
 $\bm{m}$ and $\bm{s}$ are known as the first and second momentum of the gradient 
 $\bm{g}$ respectively. The learning rate $\eta_i$\\ is here subscripted with the 
-epoch $i$. This is to allow for non-constant learning rates which is often beneficial \citationneeded.
+epoch $i$. This is to allow for non-constant learning rates which is often beneficial 
 \footnote{Although perhaps less needed for the ADAM optimizer as one can tune the 
 $\beta$-constants to achieve a similar effect.}
 The benefits of the ADAM optimizer is that it has low memory requirement and it calculates 
@@ -479,7 +471,7 @@ worse on data is has not seen during training. There is also the problem of the
 optimization algorithm not necessarily hitting a global minimum then converging. 
 The parameter-loss space is a complex high dimensional space often with infinitely 
 many local minima that can lead the model to a worse fit than would be possible 
-otherwise. \citationneeded
+otherwise \citep{elemstatlearn}.
 \subsection{Recurrent Neural Networks}
 \label{RNN Theory}
 \begin{figure}
@@ -515,7 +507,7 @@ are many ways of sending in inputs and getting out outputs from RNN cells. Here 
 only present what is relevant for the model setup in this thesis.}
 \begin{align}
     \bm{h}_t &= \tanh{(\bm{\omega}_{hh}\bm{h}_{t-1} + \bm{\omega}_{xh}\bm{x}_t+\bm{b}_h)} \\
-    \bm{y}_t &= \bm{\omega}_{hy}\bm{h}_t + \bm{b}_y \citationneeded (should probably cite IN5400) \label{RNN output}
+    \bm{y}_t &= \bm{\omega}_{hy}\bm{h}_t + \bm{b}_y  \label{RNN output}
 \end{align}
 Here the variables are as follows:
 \begin{itemize}
@@ -543,7 +535,7 @@ for the model parameters. Because of this, it is common to instead use an algori
 called Trunctated Backpropagation Through Time, where one stops saving values after 
 a pre-defined time sequence. This saves memory but makes the model unable to learn 
 dependencies further in time than the cutoff. It also leads to the introduction of 
-a new hyperparameter which we will refer to as the \textbf{sequence length}. \citationneeded.
+a new hyperparameter which we will refer to as the \textbf{sequence length}. 
 
 \subsection{Long Short-Term Memory}
 \label{LSTM Theory}
@@ -650,7 +642,8 @@ naively treat each static feature as a time series that does not change. This se
 counter-intuitive as it makes the model not see any difference between time series and 
 static features, but it is very easily implementable and memory-wize does not affect 
 the training algorithm too much\footnote{Memory is often the bottleneck of training 
-machine learning models. \citationneeded}. This way we train the exact same type 
+machine learning models due.}. 
+This way we train the exact same type 
 of model and do not need to modify anything.
 
 Recently a small modification to the LSTM model was proposed for this purpose:
