@@ -1,12 +1,13 @@
 Today's process-driven hydrological models struggle to accurately model the complex physical 
-systems the field of catchment hydrology consists of. 
-As others before us, we exploit newly released large-sample datasets as well as the increasing utility 
-of Machine Learning models. 
-We employ LSTM models on time series from two datasets in four configurations. 
-We show that LSTM models are able to generalize and make satisfactory predictions on ungauged basins, also when 
-trained on two different datasets at the same time. 
-In addition to this, we rank the basin attributes using permutation feature importance, 
-based on the four data configurations in this thesis. 
+systems the field of catchment hydrology consists of on a large scale. 
+As others before us, we exploit newly released large-sample datasets that combine 
+hydrological time series and static basin attributes.
+We show that LSTM models are able to generalize and make satisfactory predictions 
+on ungauged basins, also when trained on two different datasets at the same time. 
+An LSTM trained on CAMELS and CAMELS-GB datasets achieves a median validation NSE of 0.66 
+and 0.78 respectively, compared to the NWM, which scores a median of ~0.55 on CAMELS alone.
+We currently know no publicly available NWM benchmarks performed on CAMELS-GB.
+In addition to this, we rank the basin attributes using permutation feature importance.
 The attributes deemed most important by the LSTM models are mostly attributes derived 
 directly from the time series the model already has access to. This indicates that 
 there is potential to improve the long term memory of our machine learning models.
