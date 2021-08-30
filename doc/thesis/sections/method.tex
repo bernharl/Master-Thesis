@@ -256,7 +256,7 @@ on a dataset with an overwhelming amount of
 features. 
  To interpret our models we implement a way to determine feature importance. There 
 are many algorithms to determine feature importance, we choose to use the permutation 
-test for its simplicity and ability to be used on any type of trained model.
+feature importance algorithm for its simplicity, and ability to be used on any type of trained model.
 Given a feature $j$, the permutation importance 
 $i_j$ is equal to 
 \begin{equation}
@@ -289,7 +289,7 @@ To validate that this method is implemented correctly and gives meaningful resul
 in our case we train a model on CAMELS-GB that in addition to the attributes in 
 attribute subset a of Table \ref{attribute table} has access to attributes directly 
 derived from the runoff. This model cannot be used for anything but to validate 
-the permutation test as it having access to parts of the outcome as an input 
+the permutation importance algorithm, as it having access to parts of the outcome as an input 
 compromises it's ability to do predictions on ungauged basins.  The attributes in 
 question are stated in Table 2 in \citet{CAMELS_GB} under the "Hydrologic signatures" 
 class. One of them is for instance q\_mean which is the mean daily discharge (runoff).

@@ -66,13 +66,13 @@ Most of the peaks are undervalued by the prediction made by the model.
 \begin{table}
     \centering
     \caption[Top 20 overfit CAMELS-GB attributes.]{Top 20 (ranked by median importance) attributes of the overfit model described earlier 
-    in this section according to the permutation test. The columns are percentiles.}
+    in this section according to the permutation feature importance algorithm. The columns are percentiles.}
     \input{{tables/results_section/overfit_importance}.tex}
     \label{overfit table}
 \end{table}
 Table \ref{overfit table} shows 5th, 25th, 50th, 75th and 95th percentiles of the 
 importances of the top 20 basin attributes of the overfit model according to the 
-permutation test described in Chapter \ref{Feature selection}. We observe that the 
+permutation algorithm described in Chapter \ref{Feature selection}. We observe that the 
 attribute with the highest importance in all quantiles is \texttt{Q95}, which is the 
 95th percentile runoff derived from the observed runoff time series. \texttt{Q95} has an 
 importance of at least 0.05 for 75\% of the basins in the training set. At the 
@@ -82,12 +82,12 @@ of the basins in the training set.
 \begin{table}
     \centering
     \caption[Top 20 CAMELS-GB attributes.]{Top 20 (ranked by median importance) attributes of GB$_\text{lstm, all}$ 
-    according to the permutation test. The columns are percentiles.}
+    according to the permutation algorithm. The columns are percentiles.}
     \input{{tables/results_section/all_features_concat_seq_len_importance}.tex}
     \label{all concat table}
 \end{table}
 
-The top 20 importances found by US$_\text{lstm, all}$ (cross validated) using the permutation test 
+The top 20 importances found by US$_\text{lstm, all}$ (cross validated) using the permutation algorithm 
 are shown in Table \ref{all concat table}. The top two attributes are \texttt{low\_prec\_dur} 
 and \texttt{low\_prec\_freq}. These have significantly higher 75th percentile and upward 
 importances than all other attributes. The third most important attribute is 
@@ -212,14 +212,14 @@ than that of the model trained on CAMELS. For CAMELS-GB it performs 0.02 lower.
     \centering
     \caption[Common CAMELS and CAMELS-GB attributes ranked.]{Attribute importance ranked by median importance on CAMELS-GB \citep{CAMELS_GB} 
     as found using the permutation 
-    test on Mixed$_\text{lstm}$. Each percentile column is split into two subcolumns, 
+    algorithm on Mixed$_\text{lstm}$. Each percentile column is split into two subcolumns, 
     one for CAMELS \citep{CAMELS_US} and one for CAMELS-GB. }
     \resizebox{\textwidth}{!}{%
         \input{{tables/results_section/mixed_concat_importance}.tex}}
     \label{importance mixed}
 \end{table}
 Table \ref{importance mixed} shows the attributes used by Mixed$_\text{lstm}$ 
-ranked by median importance as found using the permutation test. Sorted by median 
+ranked by median importance as found using the permutation algorithm. Sorted by median 
 importance on basins from CAMELS-GB. The highest median importance attribute on 
 basins from CAMELS is \texttt{pet\_mean}, the highest on CAMELS-GB is \texttt{aridity}. 
 

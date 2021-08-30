@@ -166,7 +166,7 @@ outperforms all other models.
 Because of this, we believe it is 
 safe to assume that an LSTM model can learn which static attributes are 
 the most important in CAMELS-GB, at least in the most obvious case. In addition, 
-it also indicated that the permutation test succeeds at deciding the most important 
+it also indicated that the permutation feature importance algorithm succeeds at deciding the most important 
 static attribute in this case. These assumptions are therefore used to strengthen 
 our confidence in the results from our other, non-overfit models. 
 
@@ -224,7 +224,7 @@ section, we here too
 see that the prediction fails to predict the higher peaks of runoff. 
 This is also something observed by \citet{lstm_first_paper}.
 
-Table \ref{kratzert importance} shows that the permutation test yields different 
+Table \ref{kratzert importance} shows that the permutation algorithm yields different 
 results than the feature ranking done by \citet{lstm_second_paper}. Said paper 
 averaged the normalized sensitivity (derived by what they call the explicit Morris 
 method) of each basin, while we present percentiles and rank based on the median
@@ -258,7 +258,7 @@ significantly higher on CAMELS-GB than those on CAMELS. There is a chance that t
 is due to the model learning to use the attributes to differentiate between the 
 two datasets, without actually extracting important information.
 
-An interesting detail is that the permutation test yields negative importance 
+An interesting detail is that the permutation algorithm yields negative importance 
 for some basins. This happens for all models mentioned in this section. 
 This implies that our LSTM models actually perform worse 
 on some basins because of the inclusion of static attributes, perhaps due to a 
@@ -272,12 +272,12 @@ uses a different method altogether, the results of which \cite{lstm_second_paper
 agree with. To our knowledge there exists no feature ranking results on CAMELS-GB 
 apart from what is shown in this thesis, 
 so these two other methods should also be attempted on CAMELS-GB in addition 
-to the permutation test employed in this thesis to get further context and comparability.
+to the permutation feature importance algorithm employed in this thesis to get further context and comparability.
 
 \subsection{Transfer learning}
 The results in Section \ref{Transfer learning section} show that the models trained 
 for transfer learning do not benefit from adding static attributes. Therefore, we 
-do not include a permutation test for this case, We also see 
+do not include a permutation algorithm for this case, We also see 
 that the case of US$\rightarrow$GB significantly improves when removing attributes. This makes 
 sense as Great Britain has much smaller climatic variance than the United States 
 (see for instance Figure \ref{attribute comparison}). We believe these two phenomena could be related. It is likely 
