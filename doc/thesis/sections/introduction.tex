@@ -6,10 +6,10 @@ based on historic data could lead to more accurate prediction of power generatio
 in hydro power plants, flood forecasting and general water resource management.
 
 Today there exists several models for this usage, some with less focus on physics: 
-conceptual models, and some with a larger focus on physics: process-driven models. \citationneeded
+conceptual models, and some with a larger focus on physics: process-driven models. 
 A drawback of these models is that they have many parameters that have to be 
-calibrated for each basin individually. 
-This makes leads to the models failing to generalize, as well as leading to the 
+calibrated for each basin individually \citep{VICbench, BiasVarianceVIC, lstm_third_paper}. 
+This leads to the models failing to generalize, as well as leading to the 
 reduction of physical interpetability. Process-driven models with physical interpretations 
 of their parameters have been shown to perform better once one forgoes the expected 
 values of said parameters, and instead callibrate these as well \citep[e.g.][]{VICbench, BiasVarianceVIC}.

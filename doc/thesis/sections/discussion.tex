@@ -148,7 +148,7 @@ simple way to surpass this could be to implement a one-dimensional
 Convolutional Neural Network (CNN) layer as the first layer of our model. This 
 layer could then be used to reduce the time resolution of the data, still retaining 
 information. The usage of CNNs for time series prediction is becoming increasingly
-widespread \citationneeded. We still argue that LSTM models fit the type of
+widespread \citep{CNN-timeseries}. We still argue that LSTM models fit the type of
 physical system modelled in this thesis very well and is logically consistent 
 with the way rainfall-runoff 
 models are typically structured, but using a CNN layer to improve performance 
@@ -280,7 +280,7 @@ for transfer learning do not benefit from adding static attributes. Therefore, w
 do not include a permutation test for this case, We also see 
 that the case of US$\rightarrow$GB significantly improves when removing attributes. This makes 
 sense as Great Britain has much smaller climatic variance than the United States 
-\citationneeded. We believe these two phenomena could be related. It is likely 
+(see for instance Figure \ref{attribute comparison}). We believe these two phenomena could be related. It is likely 
 that the relatively lower performance from using static attributes comes from the 
 fact that the datasets have different climatic conditions. There could also be 
 room for improvement in how we preprocess both the attributes and the time series. 
@@ -291,11 +291,11 @@ T_\text{average} \approx  \frac{T_\text{min}+T_\text{max}}{2}. \label{dumb assum
 \end{equation}
 Ideally, we need to have temperature as a time series for a given model to be able 
 to properly model snow and frozen soil accumulation, which is very important for 
-hydrologic models \citationneeded. The fact that models trained on both datasets 
+hydrologic models. The fact that models trained on both datasets 
 still perform comparably to models trained on only one dataset seems to suggest 
 that (\ref{dumb assumption}) is not entirely destructive, however.
 In the later stages of this thesis it was discovered that the average temperature 
-is actually present in CAMELS. The older forcing data \citationneeded contains 
+is actually present in CAMELS. The older forcing data \citep{maurer} contains 
 this information stored as duplicates in the maximum and minimum temperature time 
 series. Due to time constraints, we are unable to train models utilizing this. 
 This is likely a good start for those looking to improve transfer learning performance. 
@@ -355,14 +355,15 @@ basin is from based on underlying signatures in either the time series or the
 static attributes. Perhaps this differentiation could stem from differences in 
 data collection practice. 
 
-One of many reasons why LSTM models perform better than traditional models on CAMELS in general
-(CHECK IF OTHERS ALSO CLAIM THIS) \citationneeded could be that the LSTM 
+One of many reasons why LSTM models perform better than traditional models on CAMELS in general 
+could be that the LSTM 
 models are better at modelling basins with special conditions leading to 
 a rainfall-runoff ratio different from 1. When the rainfall-runoff ratio is lower 
 than one it usually implies that the rainfall is either stored as snow or frozen 
-soil, or that it is vaporized through photosynthesis in local vegetation \citationneeded. 
+soil, that it is vaporized through photosynthesis in local vegetation, or that there 
+is some difficult to model complexity to the subsurface flow in the area. 
 These processes are difficult to model compared to runoff directly caused by 
-rainfall \citationneeded.
+rainfall \citep{process-driven-history}.
 Our results may indicate that this could be the case.
 Figure \ref{runoff ratio} shows that only the traditional models have 
 a statistically significant linear relationship between performance and 

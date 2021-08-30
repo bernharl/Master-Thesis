@@ -31,7 +31,7 @@ is shown here:
     \item Split the training data basin-wise into five parts of equal size.
     \item Repeat the following five times, each time using a different 1/5 of the 
         split data as the validation set: \begin{enumerate}
-            \item Initialize LSTM model with random weights and zero biases, except for the bias of the forget gate $\bm{b}_f$ which is initialized as $\bm{b}_f=\bm{5}$ to make the initial model either forget or remember idk (fix this later!!!) \citationneeded
+            \item Initialize LSTM model with random weights and zero biases, except for the bias of the forget gate $\bm{b}_f$, which is initialized as $\bm{b}_f=\bm{5}$.
         \item Split each training time seres into several parts, the length 
             of which is decided by the sequence length variable $s$. A mini batch 
             consists of a batch size $b$ amount of these $s$ long time series. This 
@@ -204,7 +204,7 @@ per day. To include temperature as a feature we therefore make the assumption th
 where $\hat{t}_\text{daily}$ is the day-averaged temperature, $t_\text{min, daily}$ is 
 the day-minimum temperature and $t_\text{max, daily}$ is the day-maximum temperature.
 The assumption in (\ref{average temp}) only holds when the daily temperature maxima 
-and minima vary symmetrically around an equilibrium  \citationneeded.
+and minima vary symmetrically around an equilibrium.
 Most of the basin attributes we include in the combined dataset have natural equivalents 
 in both datasets, but there are two exceptions. We get an equivalent of the attribute 
 forest\_frac in CAMELS in CAMELS-GB by assuming that
@@ -319,7 +319,7 @@ impact the model performance, as previously stated in Section \ref{GD Theory}.
 However, as long as the amount of mini batches is sufficiently smaller than the number of data points we 
 still get an acceptable amount of stochasticity in the training process. As an increase 
 in batch size is often directly correlated to the speed of training, the batch size usually set as high as the hardware supports. This is in most cases fine as long 
-as the total size of training data is much larger than the available RAM (if training on CPU) or VRAM (if training on GPU) \citationneeded.
+as the total size of training data is much larger than the available RAM (if training on CPU) or VRAM (if training on GPU).
 Still, in an ideal situation we would use the same hardware for all training runs.
 %but in this case we are limited by queue times on Simula's eX3 cluster in addition 
 %to the as of Q4 2020 $\rightarrow$ Q2 2021 silicon shortage making the acquisition of 
