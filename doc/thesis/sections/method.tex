@@ -300,8 +300,8 @@ are recurrent neural networks they are not as parallelizable as other machine le
 models (see Section \ref{RNN Theory} and \ref{LSTM Theory}). This means that the only way for us to fully exploit 
 an increase in VRAM is to parallelize data-wise. To do this we increase the batch size.
 The three hardware configurations are listed as follows \footnote{Note that we only 
-state the used graphics card as this is the only important difference, we run no 
-calculations on processors and do not use a significant amount of ordinary RAM.}:
+state the graphics card used, as this is the only important difference. We run no 
+calculations on CPU and do not use a significant amount of ordinary RAM.}:
 \begin{enumerate}
     \item Nvidia\textregistered  GTX\texttrademark  980 ti: This has 6 GB of VRAM. We find a batch size of $b\in{1024, 1536}$ 
      depending on the model size to be a sweet spot here.
