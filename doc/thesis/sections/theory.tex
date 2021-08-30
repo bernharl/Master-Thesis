@@ -392,8 +392,6 @@ ADAM implementation in the Machine Learning Framework Pytorch \citep{NEURIPS2019
 $\bm{m}$ and $\bm{s}$ are known as the first and second momentum of the gradient 
 $\bm{g}$ respectively. The learning rate $\eta_i$\\ is here subscripted with the 
 epoch $i$. This is to allow for non-constant learning rates which is often beneficial 
-\footnote{Although perhaps less needed for the ADAM optimizer as one can tune the 
-$\beta$-constants to achieve a similar effect.}
 The benefits of the ADAM optimizer is that it has low memory requirement and it calculates 
 individual learning rates for for different parameters of a learning algorithm. 
 This makes the learning rate $\lambda$ a bit more ambiguous as it is weighed 
@@ -643,7 +641,7 @@ naively treat each static feature as a time series that does not change. This se
 counter-intuitive as it makes the model not see any difference between time series and 
 static features, but it is very easily implementable and memory-wize does not affect 
 the training algorithm too much\footnote{Memory is often the bottleneck of training 
-machine learning models due.}. 
+machine learning models.}. 
 This way we train the exact same type 
 of model and do not need to modify anything.
 
@@ -662,9 +660,9 @@ indicates that this modified LSTM performs worse than the naive approach, going
 from a median NSE of 0.76 to 0.74 on the CAMELS dataset \citep{CAMELS_US}. 
 This may not always be the case, though. 
 The EA-LSTM has fewer model parameters than an ordinary LSTM and can therefore 
-be described as less complex. This may lead to better generalization in some cases as it could 
+be described as less complex. This may lead to better generalization in some cases, as it could 
 function as a form of regularization.
-
+\begin{comment}
 \subsection{Hyperparameters}
 \label{Hyperparameters}
 This sections needs expansion. I think renaming it to mention regularization makes sense 
@@ -683,7 +681,6 @@ LSTM the most relevant hyperparameters are:
     \item Gradient norm clip threshold
 \end{itemize}
 
-\iffalse
 A way around this is to first remove unneeded correlated features so that the model 
 contains as little duplicate information as possible. Reducing the amount of 
 features also has the added benefit of reducing the model variance because of 
@@ -721,27 +718,27 @@ represent the same information. A problem with this method is that there is no
 automatic way to determine which features to actually choose. Often this is done at 
 random, but it could for instance be an idea to use some existing domain knowledge 
 for this decision.
-\fi
-
+\end{comment}
 \subsection{Addressing common criticisms of Machine Learning}
 There are several common criticisms of machine learning and other data driven 
 approaches to physical modelling. Two common ones are:
 \begin{enumerate}
     \item Machine learning models are hard to analyze as they essentially are just a collection of arbitrary parameters that are optimized based on a dataset. It is therefore difficult to say whether a machine learning model actually "learns" any physics\footnote{Though this is a question of definition. What does "learning physics"actually mean?}.
-    \item Machine learning models are unable to include all the knowledge already present in a scientific field.
+    \item Machine learning models are unable to include the a-priori knowledge 
+	already present in most scientific fields.
 \end{enumerate}
 We believe both these criticisms are valid and need to be addressed. First off: 
-While analyzing machine learning models can be very difficult, that is not necessarily 
+While analysing machine learning models can be very difficult, that is not necessarily 
 always the case. It depends greatly on how complex the model is how much different 
 data the model uses among other things. A linear regression model is easy to interpret, 
 but it becomes much less easy to interpret if it needs several thousand different 
 inputs \citep{elemstatlearn}. This is the reason we employ feature selection here 
 in this thesis. Our goal is not to just get the highest performing model, but rather 
 to use the model as a tool for physical discovery and as a supplement to traditional models. This also addresses point 2: 
-We  are in fact not looking to use LSTM models as replacements for physical models, 
+We are in fact not looking to use LSTM models as replacements for physical models, 
 but instead we look to explore options for improving traditional models.
 It is important to remember that the best performing 
-classical rainfall-runoff models also include lots of trained/optimized parameters 
+classical rainfall-runoff models also include many optimized parameters 
 that do not necessarily represent any physical phenomena. We agree with \citet{hybrid_paper} 
 that the power of machine learning when it comes to leveraging data should be 
 used in a way that improves our understanding of the underlying system we are modelling. 

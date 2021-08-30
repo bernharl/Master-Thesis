@@ -25,7 +25,7 @@ package as well as a minimal running example.
     \caption[A mini batch.]{A mini batch. $\bm{x}_{i,t}$ represents the input parameters $\bm{x}$ at time step $t$ for time series $i \in [0, b]$ where $b$ is the batch size. A mini batch consists of $b \times t$ FP32 numbers.}
 \label{mini batch}
 \end{figure}
-The training algorithm excluding mathematical details shown in Chapter \ref{LSTM Theory} 
+The training algorithm, excluding the mathematical details shown in Chapter \ref{LSTM Theory} 
 is shown here:
 \begin{enumerate}
     \item Split the training data basin-wise into five parts of equal size.
@@ -50,7 +50,7 @@ We evaluate models using the Nash–Sutcliffe model efficiency coefficient (NSE)
 This metric is essentially a hydrological interpretation of the well known $R^2$ score.
 It is defined as 
 \begin{equation}
-    \text{NSE} = 1 - \frac{\sum_{t=0}^T\left( y^t - \hat{y}^t\right)}{\sum_{t=0}^T\left(y^t - \bar{\hat{y}}\right)} \label{NSE}
+    \text{NSE} = 1 - \frac{\sum_{t=0}^T\left( y^t - \hat{y}^t\right)}{\sum_{t=0}^T\left(y^t - \bar{\hat{y}}\right)}. \label{NSE}
 \end{equation}
 
 Here $T$ is the amount of time steps in a time series, $y^t$ is the observed runoff 
@@ -134,7 +134,7 @@ as mentioned earlier in this chapter. To give further context for the chosen sub
         \citep{CAMELS_GB} that are not derived from the outcome (runoff). 
     \item \textbf{\textit{b}}: This is a smaller subset of the static attributes contained in CAMELS-GB. 
         This subset was created with emphasis on perceived importance with respect 
-        to known physical processes. As many process-driven models (see Section \ref{VIC} and \ref{NWM}) have a high 
+        to known physical processes. As many process-driven models (see Section \ref{VIC}) have high 
         emphasis on radiation (from vegetation), soil types and land cover we have 
         included all attributes related to soil, water content, vegetation and general land cover. 
         The geographical layout of a basin is also of interest and elevation attributes 
@@ -292,7 +292,7 @@ derived from the runoff. This model cannot be used for anything but to validate
 the permutation importance algorithm, as it having access to parts of the outcome as an input 
 compromises it's ability to do predictions on ungauged basins.  The attributes in 
 question are stated in Table 2 in \citet{CAMELS_GB} under the "Hydrologic signatures" 
-class. One of them is for instance q\_mean which is the mean daily discharge (runoff).
+class. One of them is for instance q\_mean, which is the mean daily discharge (runoff).
 \section{Hardware}
 The models are run on three different hardware configurations. The important difference 
 between these hardware configurations is the amount of available VRAM. As LSTM models 

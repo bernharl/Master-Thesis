@@ -66,10 +66,7 @@ underperform compared to SAC-SMA on some basins. Here the paper compares SAC-SMA
 to an LSTM trained on all basins, training and validation split time series-wise 
 and not basin-wise. SAC-SMA is a conceptual model and is therefore not usually seen 
 as a purely "physical" model, but it is based more on physical arguments than a 
-generalized machine learning method.
-\begin{Huge}
-    Remember to elaborate after writing theory
-\end{Huge}
+generalized machine learning method, as it is "conceptually" based on the real world.
 Still, both SAC-SMA and the LSTM are essentially 
 parameter based models, without clear physical interpretations of most parameters. 
 Because of this, we are unsure whether the argument that this is evidence for physical 
@@ -266,8 +263,8 @@ lack of training data representing similar basins in the dataset. This is likely
 alleviated by introducing more data. We believe other ways to rank attributes 
 should also be attempted 
 in the future. \citet{lstm_second_paper} used a robustness test which 
-involves gradually adding Gaussian noise to a feature and checking how much it 
-affects model performance (DOUBLE CHECK THIS!!!). \citet{OrigCAMELSRanking} 
+involves gradually adding Gaussian noise to a feature and evaluating how it 
+affects model performance. \citet{OrigCAMELSRanking} 
 uses a different method altogether, the results of which \cite{lstm_second_paper} 
 agree with. To our knowledge there exists no feature ranking results on CAMELS-GB 
 apart from what is shown in this thesis, 
@@ -298,7 +295,8 @@ In the later stages of this thesis it was discovered that the average temperatur
 is actually present in CAMELS. The older forcing data \citep{maurer} contains 
 this information stored as duplicates in the maximum and minimum temperature time 
 series. Due to time constraints, we are unable to train models utilizing this. 
-This is likely a good start for those looking to improve transfer learning performance. 
+This is likely a good start for those looking to improve transfer learning 
+performance. 
 The best outcome is likely to come from finding maximum and minimum temperatures 
 for CAMELS-GB, however.
 
@@ -306,9 +304,9 @@ It seems to us that there are several angles to further tackle the issue of tran
 learning between these datasets. One of which we stated above: Find maximum and minimum time series for 
 CAMELS-GB. A second way is to improve the preprocessing of static attributes to 
 the point where one would hopefully see better performance with attributes than 
-without. 
+without.  
 
-While we state earlier in this chapter that we see no clear signs of overfitting, this is not 
+While we stated earlier in this chapter that we see no clear signs of overfitting, this is not 
 the case for transfer learning. Figure 
 \ref{training progress transfer} indicates that Transfer$_\text{GB, none}$ 
 and Transfer$_\text{US, none}$ start overfitting on their respective training 

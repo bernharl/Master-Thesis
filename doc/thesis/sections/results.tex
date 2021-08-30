@@ -50,7 +50,6 @@ LSTM models, apart from $GB_{lstm, all}$ which performs with a negative NSE valu
 for a smaller fraction of the basins.
  All other ungauged  models perform with a negative NSE value for 
 approximately 10\% of the basins.
-
 \begin{figure}
     \centering
     \includegraphics{results_section/camels_gb/prediction_best_all_concat_seq_len_cv.pdf}
@@ -58,7 +57,8 @@ approximately 10\% of the basins.
     GB$_\text{lstm, all}$ compared to the observed outcome. "Obs" is observed runoff, 
     "Sim" is predicted runoff. The basin data is taken from CAMELS-GB \citep{CAMELS_GB}.}
     \label{best prediction all concat seq len}
-\end{figure}
+\end{figure} 
+
 The highest scoring validation set prediction made using GB$_\text{lstm, all}$ is 
 shown in Figure \ref{best prediction all concat seq len}. It has an NSE score of $\approx 0.96$. 
 Most of the peaks are undervalued by the prediction made by the model.
@@ -128,7 +128,7 @@ hydrological models. Table \ref{all models} contains more details on the LSTM mo
 calibrated on CAMELS. "SAC-SMA" is the SACramento Soil Moisture Accounting 
 model calibrated on CAMELS. 
 These benchmarks are provided by \citet{CAMELS_hydroshare} and are originally 
-created by \citet{VICbench} and are trained per-basin as opposed to the other 
+created by \citet{VICbench}, and are trained per-basin as opposed to the other 
 models.
 "NWM" is a benchmark of the National Water Model run on CAMELS. 
 This benchmark is available without any licensing at 
@@ -166,7 +166,7 @@ or underestimated.
 The permutation importances of the static basin attributes used by US$_\text{Kratzert}$ 
 ranked by median importance are shown in Table \ref{kratzert importance}. Three 
 out of the four top ranked attributes are also ranked in the top four by \cite{lstm_second_paper} 
-using the same attribute subset but a different ranking method. 
+using the same attribute subset, but a different ranking method. 
 \section{Models trained on CAMELS and CAMELS-GB}
 \label{Mixed results}
 In this section we present results related to model selection and feature importance 
@@ -266,9 +266,9 @@ while the green lines indicate the mean NSEs.}
 \label{training progress transfer}
 \end{figure}
 Figure \ref{transfer CDF validation} shows the cross validated performance of  
-Transfer$_\text{US, ea-lstm}$, Transfer$_\text{US, lstm}$, Transfer$_\text{US, none}$, 
-Transfer$_\text{GB, ea-lstm}$, Transfer$_\text{GB, lstm}$ and Transfer$_\text{GB, none}$ 
+all models
 trained on CAMELS and validated on CAMELS-GB and vice-versa. 
+These models are denoted as Transfer$_\text{GB/US, model-type}$
 For more information on the models, see Table \ref{all models}.
 No models trained on CAMELS-GB perform at a satisfactory level 
 on basins from CAMELS. The models trained on CAMELS all perform at a lower level 
