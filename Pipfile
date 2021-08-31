@@ -4,8 +4,9 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-camelsml = {editable = true, path = "/home/bernhard/git/ealstm_regional_modeling_camels_gb"}
-jupyterlab = "*"
+# camelsml = {editable = true, path = "/home/bernhard/git/ealstm_regional_modeling_camels_gb"}
+camelsml = "*"
+jupyterlab = "==2.2.9"
 nb-black = "*"
 netcdf4 = "*"
 
