@@ -1,10 +1,11 @@
 In this chapter we briefly describe the two datasets used to get all results in 
-this thesis. We introduce the CAMELS dataset \citep{CAMELS_US} first as it is the 
+this thesis. We introduce the Catchment Attributes and Meteorology for Large-sample Studies 
+(CAMELS) dataset \citep{CAMELS_US} first, as it is the 
 older dataset and is used as the basis for the analysis of 
-\citet{lstm_first_paper, lstm_second_paper, lstm_third_paper}, and then CAMELS-GB 
-\cite{CAMELS_GB}.
+\citet{lstm_first_paper, lstm_second_paper, lstm_third_paper}, and then the CAMELS-GB 
+dataset \cite{CAMELS_GB}.
 \section{The CAMELS dataset}
-The Catchment Attributes and Meteorology for Large-sample Studies (CAMELS) dataset \citep{CAMELS_US}
+The CAMELS dataset \citep{CAMELS_US}
 is a dataset compiled from several previous hydrological datasets in an attempt to 
 improve the availability of data for large-scale hydrological modelling. It includes 
 data for 671 basins across the United States, with time series spanning from 
@@ -13,7 +14,7 @@ approximately the year of 1980 to 2008.
 We choose to focus on the time series data 
 used by \citet{lstm_second_paper}. This selection of data consists of an extension 
 of the original Maurer dataset contained in CAMELS provided by \citet{maurer_hydroshare}.
-The time series provided by the extender Maurer dataset that we use as inputs are 
+The time series provided by the extended Maurer dataset that we use as inputs are 
 the following:
 \begin{itemize}
     \item Precipitation [mm/day]
@@ -30,7 +31,8 @@ In addition to time series, CAMELS contains several static basin attributes desc
 location and topography, climatic indices, hydrological signatures, soil characteristics, geological 
 characteristics and land cover characteristics for each basin.
 Attributes describing location and topography are derived from the USGS part of 
-the N15 dataset and are basin-wise averaged. The attributes of interest here are the topographic ones, as 
+the dataset described in \citet{usgs_streamflow}, and are basin-wise averaged. 
+The attributes of interest here are the topographic ones, as 
 location is not beneficial to physical modelling \footnote{Though it could in theory 
 improve the performance of a statistical model}.
 The climatic indices are directly derived from the time series provided by Daymet, 
@@ -52,7 +54,9 @@ dataset. These attributes are derived from \citet{SoilData}. There are two
 attributes for soil depth. One is from the paper just mentioned, and one is defined 
 differently and stems from \citet{pelletier}. In this thesis we use the attribute 
 \textbf{\texttt{soil\_depth\_pelletier}}, as it stems from the same data source as 
-in CAMELS-GB \citep{CAMELS_GB}.
+in CAMELS-GB \citep{CAMELS_GB}. For a complete list of attributes in CAMELS, see 
+Table 1 - 6 in \citet{CAMELS_US}. All attributes used in this thesis are shown in 
+the upcoming chapter, in Table \ref{attribute table}.
 
 Complementing the CAMELS dataset are several hydrological model benchmarks provided 
 by \citet{CAMELS_hydroshare}. 
@@ -67,13 +71,12 @@ is released with no license and can as of April 2021  be found at
 The preprocessed version is available on \citet{lstm_third_paper}'s 
 Github page: \url{https://github.com/kratzert/lstm_for_pub/blob/master/data/nwm/nwm_daily.pkl}.
 
-
 \section{The CAMELS-GB dataset}
 As per the Open Government License v3 the dataset is distributed under, we are required 
 to include the statement "Contains data supplied by Natural Environment Research Council."
 The CAMELS-GB dataset \citep{CAMELS_GB} is inspired by the CAMELS dataset and is 
 aimed to be the equivalent to the CAMELS dataset for basins in Great Britain, 
-as opposed to American basins in the CAMELS dataset. The dataset is the same in size,
+as opposed to North American (United Stated) basins in the CAMELS dataset. The dataset is the same in size,
 also containing 671 basins. The time series span from 1970-2015, though, making 
 it span roughly 15 more years than the CAMELS dataset.
 
@@ -110,7 +113,9 @@ All other soil attributes are provided by \citet{hiederer2013mappinga, hiederer2
 The soil attributes are limited to the top 1.3 meters of soil. CAMELS-GB 
 contains three attribute categories not present in CAMELS: hydrogeological attributes, 
 hydrometry and discharge uncertainty, and human influence attributes. These three 
-categories are not used in this thesis.
+categories are not used in this thesis. For a complete list of all the static 
+attributes in CAMELS-GB, see Table 2 in \citet{CAMELS_GB}. As stated above, all 
+attributes used in this thesis are also shown in Table \ref{attribute table}.
 
 The meteorological time series and static attributes in CAMELS-GB are 
 not all equivalent with CAMELS. This makes it difficult to combine the datasets
