@@ -1,0 +1,92 @@
+Aside from dropout in the final layer, we employ no regularization methods on 
+our models. \citet{lstm_third_paper} 
+argue that there is evidence that adding so-called "physical constraints" to 
+models used on CAMELS could be helpful. This is argued because the LSTM models 
+underperform compared to SAC-SMA on some basins. Here the paper compares SAC-SMA 
+to an LSTM trained on all basins, training and validation split time series-wise 
+and not basin-wise. SAC-SMA is a conceptual model and is therefore not usually seen 
+as a purely "physical" model, but it is based more on physical arguments than a 
+generalized machine learning method, as it is "conceptually" based on the real world.
+Still, both SAC-SMA and the LSTM are essentially 
+parameter based models, without clear physical interpretations of most parameters. 
+Because of this, we are unsure whether the argument that this is evidence for physical 
+constraints is sufficient. More research is needed on the topic. Regularization in 
+the form of physical constraints may yield several benefits, some of which could be
+\citep{hybrid_paper}:
+\begin{itemize}
+\item Interpretability: Physical constraints could improve the physical interpretability 
+of the LSTM.
+\item Improved generalization: The goal of most machine learning regularization is 
+to improve performance by increasing bias and decreasing variance (see Figure 
+\ref{Bias Variance rainfall}). Increasing bias using physical laws would fit well 
+into the narrative of \citet{BiasVarianceVIC} and \citet{VICbench}, although from 
+the opposite angle. These papers argue that process-driven models are often too 
+statistically constrained, due to them being driven almost entirely by interpretable 
+physical processes. \citet{VICbench} showed that VIC performs at a higher level 
+when tuning more parameters than usual, as these parameters are often pre-set based 
+on physical a-priori knowledge. This is analogous to the bias-variance trade-off 
+in machine learning. An LSTM is much less constrained and therefore performs better, 
+agreeing with the results of the aforementioned papers. Making LSTM models 
+slightly more constrained (as worded by \citet{BiasVarianceVIC}) could then make 
+them generalize successfully to more basins while still being powerful enough to 
+learn necessary relationships between input variables.
+\end{itemize}
+In the spirit of \citet{hybrid_paper}'s argument for increasing the physical consistency 
+of models, we propose a simple semi-physical constraint:
+\begin{equation}
+\bm{\hat{y}} = \text{LSTM}(\bm{x}),
+\end{equation}
+where $\bm{\hat{y}}$ now consists of three outputs: $\bm{y}_\text{discharge}$, 
+$\bm{y}_\text{frost}$ and $\bm{y}_\text{radiation}$. These represent runoff, 
+frost/snow and radiated water respectively. Only $\bm{y}_\text{discharge}$ would 
+be treated as the actual input when calculating the original cost function 
+(\ref{NSE loss}). We then introduce a long term frost storage variable $\bm{W}^t_\text{frost}$.
+For each time step this storage variable is updated by 
+\begin{equation}
+    \bm{W}_\text{frost}^{t+1} = \bm{W}_\text{frost}^t + \bm{y}_\text{frost},
+\end{equation}
+where $t$ is the current time step.
+When calculating the loss function, we now add a new term to (\ref{NSE loss}):
+\begin{equation}
+    L = \text{NSE}^* + \gamma \left|(\bm{y_\text{discharge}} - \bm{x}_\text{precipitation} 
+    - \bm{y}_\text{radiation} - (\bm{y}_\text{frost} - \bm{W}_\text{frost}))\right|
+    \label{physical constraint}.
+\end{equation}
+Here $\gamma$ is a hyperparameter that needs to be tuned. Our reasoning 
+behind (\ref{physical constraint}) is that this cost function penalizes models for 
+making predictions where there is more runoff than available precipitation, 
+snow and frost. Our hypothesis is that this penalty should lead to less complex 
+models that are less likely to predict unphysical behaviors, leading to 
+fewer NSE scores below zero. It could also improve interpretability of the model's 
+output. Whether this or a similar constraint behaves as intended remains to be seen.
+
+\begin{figure}
+\centering
+\input{{figures/tikz/simple_hybrid}.tex}
+    \caption[Potential simple hybrid model.]{Sketch of how a simple hybrid model could be implemented. The traditional model and the LSTM model are completely separate, making it unnecessary to calculate gradients for the traditional model. The idea here would be for the LSTM model to learn the phenomena lacking in traditional models.}
+\label{figure simple hybrid}
+\end{figure}
+Sticking to the topic of increased generalizability and interpretability, we 
+believe it to be of interest to implement a hybrid model, i. e. a machine learning 
+model implemented alongside or as part of a 
+traditional model. The machine learning model either replaces parts of or supplements 
+the predictions of a traditional model. A very simple implementation of this is shown 
+in Figure \ref{figure simple hybrid}. This model would take the same inputs as 
+the models trained in this thesis, but the cost function would be calculated on 
+the sum of the output of the traditional model and the machine learning model. 
+This means that the machine learning model learns to correct 
+the errors of a given traditional model instead of doing actual prediction.
+
+This thesis and earlier research done by \citet{lstm_first_paper,lstm_second_paper,lstm_third_paper} 
+are all limited to simple LSTM models. LSTM models are, due to their recurrent nature, 
+notoriously slow. Graphics cards and similar highly parallel computational devices 
+are not optimized for recurrent calculation. A relatively 
+simple way to surpass this could be to implement a one-dimensional 
+Convolutional Neural Network (CNN) layer as the first layer of our model. This 
+layer could then be used to reduce the time resolution of the data, still retaining 
+information. The usage of CNNs for time series prediction is becoming increasingly
+widespread \citep{CNN-timeseries}. We still argue that LSTM models fit the type of
+physical system modelled in this thesis very well and is logically consistent 
+with the way rainfall-runoff 
+models are typically structured, but using a CNN layer to improve performance 
+should not detract from this.
