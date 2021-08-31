@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 plt.style.use("../../../figstyle.mplstyle")
 
 fig, ax = plt.subplots(1, 1)
-ax.set_title("The bias-variance tradeoff")
+# ax.set_title("The bias-variance tradeoff")
 x = np.linspace(-2, 2, 1000)
 
 bias = np.exp(-x)
