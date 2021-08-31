@@ -113,14 +113,21 @@ because of the nature of training and validating on different datasets.
 \end{landscape}
 
 Table \ref{all models} shows all trained models from which results are presented in this 
-thesis. The largest differences between these models are often which basin attributes 
+thesis. The largest differences between these models are which basin attributes 
 are included in the training process. Other relevant hyperparameters are set equal 
-to the model configuration in \citet{lstm_second_paper}. For CAMELS-GB the dates included 
+to the model configuration in \citet{lstm_second_paper}. For CAMELS-GB, the dates included 
 in the training process are time daily time steps from October 10th 1971 to September 
 30th 2015.
-For CAMELS the dates used are January 1st 1980 to December 31st 2008.
+For CAMELS, the dates used are January 1st 1980 to December 31st 2008.
+The models in Table \ref{all models} are split into four categories, 
+one for each experiment (hence the names GB, US, Mixed and Transfer). This way we 
+can measure and analyse the performance of LSTM models on CAMELS-GB, CAMELS 
+(recreating the results of \citet{lstm_third_paper} with a differently configured 
+cross validation), Mixed (both CAMELS and CAMELS-GB at the same time) and Transfer 
+(training on CAMELS-GB and predicting on CAMELS, and vice-versa).
 One should be able to reproduce the results 
-of this work using CamelsML Table \ref{attribute transfer}, \ref{all models} and \ref{attribute table}. 
+of this work using CamelsML, Table \ref{attribute transfer}, \ref{all models} and \ref{attribute table}. Alternatively one could find all the needed model configurations 
+along with seeds on the Github page of this thesis: \url{https://github.com/bernharl/Master-Thesis}.
 Doing exhaustive validation to decide which subset of attributes to use is not 
 feasible with the amount of attributes present in the data of interest. What we instead 
 do to end up with the subsets in Table \ref{attribute table} is a mix of a priori 

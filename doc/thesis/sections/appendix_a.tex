@@ -1,20 +1,36 @@
-\section{Installation REMEMBER TO ADD TO PYPI, IF NOT, CHANGE THE INSTALLATION INSTRUCTION!!!}
+\section{Installation}
 \label{camelsml documentation}
 Requirements:
 \begin{itemize}
-    \item Cuda if using an Nvidia GPU. ROCm should in theory also work if on a AMD Radeon GPU, but needs a specialized version of Pytorch called Pytorch-ROCm. The author has not been successful when trying to run this on an AMD RX 6800 XT.
+    \item Cuda if using an Nvidia GPU. ROCm should in theory also work if using an 
+    AMD Radeon GPU, but needs a specialized version of Pytorch called Pytorch-ROCm. 
+    The author has not been successful when trying to run this on an AMD Radeon 
+    RX 6800 XT graphics card.
     \item GNU/Linux (Other operating systems have not been tested)
-    \item Python $>=$ 3.6
+    \item Python 3.8
     \item It is also possible to run machine learning algorithms on CPUs, therefore bypassing the need for CUDA or equivalents, but this is not recommended as it is significantly slower and computationally inefficient to do so.
 \end{itemize}
 In the terminal, run:
 \mint{bash}|pip install camelsml|
 NB: The author recommends using a dependency resolver better suited than pip. 
 Pipenv (\url{https://pypi.org/project/pipenv/}) is what is being used in this thesis.
-For a Pipfile that is confirmed to work on Ubuntu $>=$ 20.04 and an updated installation of Arch Linux at the time this thesis was submitted, 
+For a Pipfile that is confirmed to work on Ubuntu $>=$ 20.04, as well as an updated 
+installation of Arch Linux at the time this thesis was submitted, 
 see the root of the github repository for this thesis at \url{https://github.com/bernharl/Master-Thesis}.
+CamelsML itself is stored at \url{https://github.com/bernharl/camelsml}
+If you want to install the package using Pipenv, run:
+\mint{bash}|pipenv install camelsml --python 3.8|
+If you run into an error message mentioning Black, try running:
+\mint{bash}|pipenv lock --pre|
+\mint{bash}|pipenv sync|
+
+This is caused by the package Black as of the submission date of this thesis not 
+having a stable release that is resolvable with the other packages. Locking with 
+\texttt{--pre} allows the use of pre-releases.
+
 \section{Usage}
 Here we show a minimum example of how to train an LSTM with CamelsML. 
+The minimal code needed to train an LSTM model is shown in Listing \ref{example code}. 
 \begin{listing}
 \begin{pythoncode}
 from camelsml import load_config, train
@@ -23,12 +39,13 @@ cfg = load_config(cfg_file="run_config.txt", device="cpu", num_workers=24)
 train(cfg)
 \end{pythoncode}
     \caption[Minimal running example CamelsML.]{Minimal running example of CamelsML}
+    \label{example code}
 \end{listing}
 As seen here, the CamelsML package needs a variable called "cfg", which is a dictionary 
 containing the model configuration, how the train-validation-test split is defined, 
 and so on. 
 A simple example of a configuration file could be this, which trains an ordinary 
-LSTM for 30 epochs using a batch size of 1024 is shown below:
+LSTM for 30 epochs using a batch size of 1024 is shown in Listing \ref{example config}
 \begin{listing}
 \begin{cfgcode}
 run_dir: <path> # Folder to save runs in
@@ -56,9 +73,11 @@ val_basin_file:  <path> # Plain text list of basins to use for validation
 test_basin_file: <path> # Plain text list of basins to use for testing
 \end{cfgcode}
     \caption[Example configuration file CamelsML.]{Example configuration file of an LSTM model trained on CAMELS-GB without using static features.}
+    \label{example config}
 \end{listing}
+
 For more examples, all the models trained in this thesis along with scripts for 
 setting up train-test splits and cross validation are contained in the "runs" directory at the 
 Github page for this thesis (\url{https://github.com/bernharl/Master-Thesis/tree/master/runs}).
-If you are reading this some time after the thesis is submitted, there may be updated 
-documentation for CamelsML on the Github page (\url{https://github.com/bernharl/ealstm_regional_modeling_camels_gb})
+If you are reading this some time after the thesis was submitted, there may be updated 
+documentation for CamelsML on the Github page (\url{https://github.com/bernharl/camelsml}).
