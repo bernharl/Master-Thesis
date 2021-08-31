@@ -6,8 +6,8 @@ interpretability.
 \section{Model Selection}
 \label{discuss model selection}
 The results presented in Section \ref{CAMELS-GB results}-\ref{Mixed results} 
-all agree that performance is increased when introducing static attributes. In 
-addition to this, we see that the ordinary LSTM models that treat the static 
+all agree that performance is increased when introducing static attributes. 
+In addition to this, we see that the ordinary LSTM models that treat the static 
 attributes as time series are the highest performing models. We find it likely that 
 this is due  to the decrease in model complexity in an EA-LSTM compared to an LSTM. 
 For example, Mixed$_\text{ea-lstm}$ has 205057 trainable parameters (weights and 
@@ -80,7 +80,10 @@ is approximately $0.82$ cross validated, with a test score of $0.80$.
 This performance is vastly superior to that found by \citet{lstm_third_paper}, and 
 is even better than gauged prediction on CAMELS, such as \citet{lstm_second_paper}. 
 This makes sense when one considers the relatively low variance in climate in Great 
-Britain, compared to the United States. 
+Britain, compared to the United States. CAMELS-GB consists of the same amount 
+of basins as CAMELS, but with less variance this means the basins in the validation 
+sets will be more similar to the ones in the training set, making it less critical 
+for the model to generalize.
 As far as the author knows, there are no published benchmarks using traditional models on 
 CAMELS-GB. Creating such a benchmark in the future is necessary for us to properly 
 assess model performance.
@@ -94,15 +97,22 @@ very acceptable manner.
 As the results presented in Table \ref{all concat table}
 indicate that the many of the important static attributes in CAMELS-GB (as perceived by 
 GB$_\text{lstm, all}$) are derived directly from the 
-input time series, it is likely that we cannot extract much new information from 
+input time series (the most important attribute being \textbf{\texttt{low\_prec\_dur}}, for instance), 
+it is likely that we cannot extract much new information from 
 these, as this information should be available in the time series already used by 
-the models. The reason for this is being the case is likely connected to the 
+the models.
+If this were the case for CAMELS-GB only, one could perhaps assume it being caused 
+by CAMELS-GB having more similar basins, but later we see that this is also the 
+case for models predicting on CAMELS.
+The reason for this being the case is likely connected to the 
 nature of the LSTM training process and the sequence length. Ways 
 to further improve the long-term memory of an LSTM should be further explored 
 in the future. The biggest examples of this type of attribute are the top two ranked 
-attributes: \textbf{\texttt{low\_prec\_dur}} and \textbf{\texttt{low\_prec\_freq}}. 
+attributes: \textbf{\texttt{low\_prec\_freq}} and \textbf{\texttt{low\_prec\_dur}}. 
 These severely outrank all other static attributes, especially for the 75th percentile 
 of importances, and they are directly derived from the precipitation time series.
+They are defined as the frequency of days with $\leq 1$ mm$/$day precipitations, and 
+the average duration of these dry periods respectively.
 Other than derived features, the model ranks the other attributes relatively similarly 
 for the upper 75th percentile. These other attributes mostly contain information 
 about land cover and elevation levels, which is information an LSTM cannot access 
@@ -134,7 +144,7 @@ averaged the normalized sensitivity (derived by what they call the explicit Morr
 method) of each basin, while we present percentiles and rank based on the median
 \footnote{Also note that we predict on ungauged basins, in contrast to said paper. 
 This could differentiate important attributes.}. 
-Looking our median scores, we see that the majority of basins do not benefit 
+Looking at our median scores, we see that the majority of basins do not benefit 
 from the inclusion of static attributes. Looking at the upper percentiles, the 
 most important attributes in our case still somewhat agree with those of 
 \citet{lstm_second_paper}. Topological information and climatic indices are important. 
@@ -161,6 +171,9 @@ the median importances, and especially the 75th percentile and above importances
 significantly higher on CAMELS-GB than those on CAMELS. There is a chance that this 
 is due to the model learning to use the attributes to differentiate between the 
 two datasets, without actually extracting important information.
+This could also be because CAMELS-GB is more homogeneous, and shuffling the 
+attributes in CAMELS-GB therefore has a lesser effect than shuffling those of 
+CAMELS.
 
 An interesting detail is that the permutation algorithm yields negative importance 
 for some basins. This happens for all models mentioned in this section. 
